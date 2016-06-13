@@ -10,7 +10,7 @@ For more information (like usage, and setting up your own bot), head to the
 # License
 The MIT License (MIT)
 
-Copyright (c) 2016 Jose A Lerma III
+Copyright (c) 2016 Jose A Lerma III  
 Copyright (c) 2014 Giuseppe Ranieri
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
