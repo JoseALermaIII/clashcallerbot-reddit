@@ -6,13 +6,14 @@
 
 import praw
 import OAuth2Util
-import re
 import MySQLdb
 import ConfigParser
 import time
-from datetime import datetime, timedelta
+import logging
+import logging.config
+from datetime import datetime
 from requests.exceptions import HTTPError, ConnectionError, Timeout
-from praw.errors import ExceptionList, APIException, InvalidCaptcha, InvalidUser, RateLimitExceeded
+from praw.errors import APIException, InvalidUser, RateLimitExceeded
 from socket import timeout
 from pytz import timezone
 
@@ -22,19 +23,27 @@ from pytz import timezone
 
 # Reads the config file
 config = ConfigParser.ConfigParser()
-config.read("remindmebot.cfg")
+config.read("clashcallerbot.cfg")
 
-#Reddit info
-reddit = praw.Reddit("RemindMeB0tReply")
+# Reddit info
+reddit = praw.Reddit("ClashCallerB0t Reply: v0.1")
 o = OAuth2Util.OAuth2Util(reddit, print_log=True)
 o.refresh(force=True)
 # DB Info
 DB_USER = config.get("SQL", "user")
 DB_PASS = config.get("SQL", "passwd")
+DB_NAME = config.get("SQL", "name")
+
+# Logger
+logging.config.fileConfig('logging.conf', disable_existing_loggers=False)
+logging.raiseExceptions = False # Production mode
+logger = logging.getLogger('reply')
+
 
 # =============================================================================
 # CLASSES
 # =============================================================================
+
 
 class Connect(object):
     """
@@ -45,32 +54,26 @@ class Connect(object):
 
     def __init__(self):
         self.connection = MySQLdb.connect(
-            host="localhost", user=DB_USER, passwd=DB_PASS, db="bot"
+            host="localhost", user=DB_USER, passwd=DB_PASS, db=DB_NAME
         )
         self.cursor = self.connection.cursor()
 
-class Reply(object):
 
+class Reply(object):
     def __init__(self):
         self._queryDB = Connect()
-        self._replyMessage =(
-            "RemindMeBot private message here!" 
+        self._replyMessage = (
+            "ClashCallerBot private message here!"
             "\n\n**The message:** \n\n>{message}"
             "\n\n**The original comment:** \n\n>{original}"
             "\n\n**The parent comment from the original comment or its submission:** \n\n>{parent}"
-            "\n\n#Would you like to be reminded of the original comment again? Just set your time again after the RemindMe! command. [CLICK HERE]"
-            "(http://www.reddit.com/message/compose/?to=RemindMeBot&subject=Reminder&message=[{original}]"
-            "%0A%0ARemindMe!)"
             "\n\n_____\n\n"
-            "|[^([FAQs])](http://www.reddit.com/r/RemindMeBot/comments/24duzp/remindmebot_info/)"
-            "|[^([Custom])](http://www.reddit.com/message/compose/?to=RemindMeBot&subject=Reminder&message="
-                "[LINK INSIDE SQUARE BRACKETS else default to FAQs]%0A%0A"
-                "NOTE: Don't forget to add the time options after the command.%0A%0ARemindMe!)"
-            "|[^([Your Reminders])](http://www.reddit.com/message/compose/?to=RemindMeBot&subject=List Of Reminders&message=MyReminders!)"
-            "|[^([Feedback])](http://www.reddit.com/message/compose/?to=RemindMeBotWrangler&subject=Feedback)"
-            "|[^([Code])](https://github.com/SIlver--/remindmebot-reddit)"
+            "|[^([FAQs])](https://www.reddit.com/r/ClashCallerBot/comments/4e9vo7/clashcallerbot_info/)"
+            "|[^([Your Calls])](http://www.reddit.com/message/compose/?to=ClashCallerBot&subject=List Of Calls&message=MyCalls!)"
+            "|[^([Feedback])](http://www.reddit.com/message/compose/?to=ClashCallerBotDbuggr&subject=ClashCallerBot Feedback)"
+            "|[^([Code])](https://github.com/JoseALermaIII/clashcallerbot-reddit)"
             "\n|-|-|-|-|-|"
-            )
+        )
 
     def parent_comment(self, dbPermalink):
         """
@@ -83,17 +86,17 @@ class Reply(object):
                 return _force_utf8(commentObj.submission.permalink)
             else:
                 return _force_utf8(reddit.get_info(thing_id=commentObj.parent_id).permalink)
-        except IndexError as err:
-            print "parrent_comment error"
+        except IndexError:
+            logger.exception("parent_comment error")
             return "It seems your original comment was deleted, unable to return parent comment."
         # Catch any URLs that are not reddit comments
-        except Exception  as err:
-            print "HTTPError/PRAW parent comment"
+        except Exception:
+            logger.exception("HTTPError/PRAW parent comment")
             return "Parent comment not required for this URL."
 
     def time_to_reply(self):
         """
-        Checks to see through SQL if net_date is < current time
+        Checks to see through SQL if new_date is < current time
         """
 
         # get current time to compare
@@ -115,10 +118,10 @@ class Reply(object):
             if row[0] not in alreadyCommented:
                 flagDelete = False
                 # MySQl- permalink, message, reddit user
-                flagDelete = self.new_reply(row[1],row[2], row[4])
+                flagDelete = self.new_reply(row[1], row[2], row[4])
                 # removes row based on flagDelete
                 if flagDelete:
-                    cmd = "DELETE FROM message_date WHERE id = %s" 
+                    cmd = "DELETE FROM message_date WHERE id = %s"
                     self._queryDB.cursor.execute(cmd, [row[0]])
                     self._queryDB.connection.commit()
                     alreadyCommented.append(row[0])
@@ -129,57 +132,59 @@ class Reply(object):
     def new_reply(self, permalink, message, author):
         """
         Replies a second time to the user after a set amount of time
-        """ 
+        """
         """
         print self._replyMessage.format(
                 message,
                 permalink
             )
         """
-        print "---------------"
-        print author
-        print permalink        
+        logger.info("---------------")
+        logger.info(str(author))
+        logger.info(str(permalink))
         try:
             reddit.send_message(
-                recipient=str(author), 
-                subject='Hello, ' + _force_utf8(str(author)) + ' RemindMeBot Here!', 
+                recipient=str(author),
+                subject='Hello, ' + _force_utf8(str(author)) + ' ClashCallerBot Here!',
                 message=self._replyMessage.format(
                     message=_force_utf8(message),
                     original=_force_utf8(permalink),
-                    parent= self.parent_comment(permalink)
+                    parent=self.parent_comment(permalink)
                 ))
-            print "Did It"
-            return True    
-        except InvalidUser as err:
-            print "InvalidUser", err
+            logger.info("Did It")
             return True
-        except APIException as err:
-            print "APIException", err
+        except InvalidUser:
+            logger.exception("InvalidUser")
+            return True
+        except APIException:
+            logger.exception("APIException")
             return False
-        except IndexError as err:
-            print "IndexError", err
+        except IndexError:
+            logger.exception("IndexError")
             return False
-        except (HTTPError, ConnectionError, Timeout, timeout) as err:
-            print "HTTPError", err
+        except (HTTPError, ConnectionError, Timeout, timeout):
+            logger.exception("HTTPError")
             time.sleep(10)
             return False
-        except RateLimitExceeded as err:
-            print "RateLimitExceeded", err
+        except RateLimitExceeded:
+            logger.exception("RateLimitExceeded")
             time.sleep(10)
             return False
-        except praw.errors.HTTPException as err:
-            print"praw.errors.HTTPException"
+        except praw.errors.HTTPException:
+            logger.exception("praw.errors.HTTPException")
             time.sleep(10)
             return False
+
 
 """
 From Reddit's Code 
 https://github.com/reddit/reddit/blob/master/r2/r2/lib/unicode.py
 Brought to attention thanks to /u/13steinj
 """
-def _force_unicode(text):
 
-    if text == None:
+
+def _force_unicode(text):
+    if text is None:
         return u''
 
     if isinstance(text, unicode):
@@ -203,6 +208,7 @@ def _force_utf8(text):
 # =============================================================================
 
 def main():
+
     while True:
         checkReply = Reply()
         checkReply.time_to_reply()
@@ -213,6 +219,6 @@ def main():
 # =============================================================================
 # RUNNER
 # =============================================================================
-print "start"
+logger.info('Start')
 if __name__ == '__main__':
     main()

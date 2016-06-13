@@ -14,10 +14,10 @@ import time
 import urllib
 import requests
 import parsedatetime.parsedatetime as pdt
-from datetime import datetime, timedelta
-from requests.exceptions import HTTPError, ConnectionError, Timeout
-from praw.errors import ExceptionList, APIException, InvalidCaptcha, InvalidUser, RateLimitExceeded, Forbidden
-from socket import timeout
+import logging
+import logging.config
+from datetime import datetime
+from praw.errors import APIException, RateLimitExceeded, Forbidden
 from pytz import timezone
 from threading import Thread
 
@@ -27,21 +27,30 @@ from threading import Thread
 
 # Reads the config file
 config = ConfigParser.ConfigParser()
-config.read("remindmebot.cfg")
+config.read("clashcallerbot.cfg")
 
-#Reddit info
-reddit = praw.Reddit(user_agent= "RemindMes")
-o = OAuth2Util.OAuth2Util(reddit, print_log = True)
+# Reddit info
+reddit = praw.Reddit(user_agent="ClashCallerB0tSearch: v0.1")
+o = OAuth2Util.OAuth2Util(reddit, print_log=True)
 o.refresh(force=True)
 
 DB_USER = config.get("SQL", "user")
 DB_PASS = config.get("SQL", "passwd")
+DB_NAME = config.get("SQL", "name")
 
 # Time when program was started
 START_TIME = time.time()
+
+# Logger
+logging.config.fileConfig('logging.conf', disable_existing_loggers=False)
+logging.raiseExceptions = False  # Production mode
+logger = logging.getLogger('search')
+
+
 # =============================================================================
 # CLASSES
 # =============================================================================
+
 
 class Connect(object):
     """
@@ -52,51 +61,50 @@ class Connect(object):
 
     def __init__(self):
         self.connection = MySQLdb.connect(
-            host="localhost", user=DB_USER, passwd=DB_PASS, db="bot"
+            host="localhost", user=DB_USER, passwd=DB_PASS, db=DB_NAME
         )
         self.cursor = self.connection.cursor()
 
+
 class Search(object):
-    commented = [] # comments already replied to
-    subId = [] # reddit threads already replied in
-    
+    commented = []  # comments already replied to
+
     # Fills subId with previous threads. Helpful for restarts
     database = Connect()
     cmd = "SELECT list FROM comment_list WHERE id = 1"
     database.cursor.execute(cmd)
     data = database.cursor.fetchall()
-    subId = ast.literal_eval("[" + data[0][0] + "]")
+    subId = ast.literal_eval("[" + data[0][0] + "]")  # reddit threads already replied in
     database.connection.commit()
     database.connection.close()
 
     endMessage = (
         "\n\n_____\n\n"
-        "|[^([FAQs])](http://www.reddit.com/r/RemindMeBot/comments/24duzp/remindmebot_info/)"
-        "|[^([Custom])](http://www.reddit.com/message/compose/?to=RemindMeBot&subject=Reminder&message="
-            "[LINK INSIDE SQUARE BRACKETS else default to FAQs]%0A%0A"
-            "NOTE: Don't forget to add the time options after the command.%0A%0ARemindMe!)"
-        "|[^([Your Reminders])](http://www.reddit.com/message/compose/?to=RemindMeBot&subject=List Of Reminders&message=MyReminders!)"
-        "|[^([Feedback])](http://www.reddit.com/message/compose/?to=RemindMeBotWrangler&subject=Feedback)"
-        "|[^([Code])](https://github.com/SIlver--/remindmebot-reddit)"
+        "|[^([FAQs])](https://www.reddit.com/r/ClashCallerBot/comments/4e9vo7/clashcallerbot_info/)"
+        "|[^([Your Calls])](http://www.reddit.com/message/compose/?to=ClashCallerBot"
+        "&subject=List Of Calls&message=MyCalls!)"
+        "|[^([Feedback])](http://www.reddit.com/message/compose/?to=ClashCallerBotDbuggr"
+        "&subject=ClashCallerBot Feedback)"
+        "|[^([Code])](https://github.com/JoseALermaIII/clashcallerbot-reddit)"
         "\n|-|-|-|-|-|"
-        )
+    )
 
     def __init__(self, comment):
         self._addToDB = Connect()
-        self.comment = comment # Reddit comment Object
+        self.comment = comment  # reddit comment Object
         self._messageInput = '"Hello, I\'m here to remind you to see the parent comment!"'
         self._storeTime = None
         self._replyMessage = ""
         self._replyDate = None
         self._privateMessage = False
-        
+
     def run(self, privateMessage=False):
         self._privateMessage = privateMessage
         self.parse_comment()
         self.save_to_db()
         self.build_message()
         self.reply()
-        if self._privateMessage == True:
+        if self._privateMessage:
             # Makes sure to marks as read, even if the above doesn't work
             self.comment.mark_as_read()
             self.find_bot_child_comment()
@@ -107,7 +115,7 @@ class Search(object):
         Parse comment looking for the message and time
         """
 
-        if self._privateMessage == True:
+        if self._privateMessage:
             permalinkTemp = re.search('\[(.*?)\]', self.comment.body)
             if permalinkTemp:
                 self.comment.permalink = permalinkTemp.group()[1:-1]
@@ -115,13 +123,15 @@ class Search(object):
                 try:
                     urllib.urlopen(self.comment.permalink)
                 except IOError:
-                    self.comment.permalink = "http://www.reddit.com/r/RemindMeBot/comments/24duzp/remindmebot_info/"
+                    self.comment.permalink = "https://www.reddit.com/r/ClashCallerBot/comments/" \
+                                             "4e9vo7/clashcallerbot_info/"
             else:
                 # Defaults when the user doesn't provide a link
-                self.comment.permalink = "http://www.reddit.com/r/RemindMeBot/comments/24duzp/remindmebot_info/"
+                self.comment.permalink = "https://www.reddit.com/r/ClashCallerBot/comments/" \
+                                         "4e9vo7/clashcallerbot_info/"
 
-        # remove RemindMe! or !RemindMe (case insenstive)
-        match = re.search(r'(?i)(!*)RemindMe(!*)', self.comment.body)
+        # remove ClashCaller! or !ClashCaller (case insensitive)
+        match = re.search(r'(?i)(!*)ClashCaller(!*)', self.comment.body)
         # and everything before
         tempString = self.comment.body[match.start():]
 
@@ -129,88 +139,97 @@ class Search(object):
         tempString = tempString.split("\n")[0]
         # adds " at the end if only 1 exists
         if (tempString.count('"') == 1):
-            tempString = tempString + '"'
+            tempString += '"'
 
-        # Use message default if not found
+        # Checks for message
         messageInputTemp = re.search('(["].{0,9000}["])', tempString)
-        if messageInputTemp:
+        if messageInputTemp is None:
+            reddit.send_message(self.comment.author, 'Hello, ' + str(self.comment.author) + ' no message was inlcuded',
+                                "A message is required.\n\n Go to https://www.reddit.com/r/ClashCallerBot/comments/"
+                                "4e9vo7/clashcallerbot_info for usage.")
+            self.commented.append(self.comment.id)  # Add to handled comments.
+            logger.exception('No Message from %s', self.comment.author)
+            raise Exception('No Message')
+        else:
             self._messageInput = messageInputTemp.group()
+
         # Fix issue with dashes for parsedatetime lib
         tempString = tempString.replace('-', "/")
-        # Remove RemindMe!
+        # Remove ClashCaller!
         self._storeTime = re.sub('(["].{0,9000}["])', '', tempString)[9:]
-    
+
     def save_to_db(self):
         """
         Saves the permalink comment, the time, and the message to the DB
         """
 
         cal = pdt.Calendar()
-        holdTime = cal.parse(self._storeTime)
+        holdTime = cal.parse(self._storeTime, datetime.now(timezone('UTC')))
         if holdTime[1] == 0:
             # default time
-            holdTime = cal.parse("1 day", datetime.now(timezone('UTC')))
-            self._replyMessage = "**Defaulted to one day.**\n\n"
+            holdTime = cal.parse("1 hour", datetime.now(timezone('UTC')))
+            self._replyMessage = "**Defaulted to one hour.**\n\n"
         # Converting time
-        #9999/12/31 HH/MM/SS
+        # 9999/12/31 HH/MM/SS
         self._replyDate = time.strftime('%Y-%m-%d %H:%M:%S', holdTime[0])
         cmd = "INSERT INTO message_date (permalink, message, new_date, userID) VALUES (%s, %s, %s, %s)"
         self._addToDB.cursor.execute(cmd, (
-                        self.comment.permalink.encode('utf-8'), 
-                        self._messageInput.encode('utf-8'), 
-                        self._replyDate, 
-                        self.comment.author))
+            self.comment.permalink.encode('utf-8'),
+            self._messageInput.encode('utf-8'),
+            self._replyDate,
+            self.comment.author))
         self._addToDB.connection.commit()
         # Info is added to DB, user won't be bothered a second time
         self.commented.append(self.comment.id)
 
     def build_message(self):
         """
-        Buildng message for user
+        Building message for user
         """
         permalink = self.comment.permalink
-        self._replyMessage +=(
+        self._replyMessage += (
             "I will be messaging you on [**{0} UTC**](http://www.wolframalpha.com/input/?i={0} UTC To Local Time)"
             " to remind you of [**this link.**]({commentPermalink})"
-            "{remindMeMessage}")
+            "{clashCallMessage}")
 
         try:
             self.sub = reddit.get_submission(self.comment.permalink)
-        except Exception as err:
-            print "link had http"
+        except Exception:
+            logger.exception("link had http")
         if self._privateMessage == False and self.sub.id not in self.subId:
-            remindMeMessage = (
-                "\n\n[**CLICK THIS LINK**](http://www.reddit.com/message/compose/?to=RemindMeBot&subject=Reminder&message="
-                "[{permalink}]%0A%0ARemindMe! {time}) to send a PM to also be reminded and to reduce spam."
+            clashCallMessage = (
                 "\n\n^(Parent commenter can ) [^(delete this message to hide from others.)]"
-                "(http://www.reddit.com/message/compose/?to=RemindMeBot&subject=Delete Comment&message=Delete! ____id____)").format(
-                    permalink=permalink,
-                    time=self._storeTime.replace('\n', '')
-                )
+                "(http://www.reddit.com/message/compose/?to=ClashCallerBot"
+                "&subject=Delete Comment&message=Delete! ____id____)").format(
+                permalink=permalink,
+                time=self._storeTime.replace('\n', '')
+            )
         else:
-            remindMeMessage = ""
+            clashCallMessage = ""
 
         self._replyMessage = self._replyMessage.format(
-                self._replyDate,
-                remindMeMessage=remindMeMessage,
-                commentPermalink=permalink)
+            self._replyDate,
+            clashCallMessage=clashCallMessage,
+            commentPermalink=permalink)
         self._replyMessage += Search.endMessage
 
     def reply(self):
         """
-        Messages the user letting as a confirmation
+        Messages the user as a confirmation
         """
 
         author = self.comment.author
+
         def send_message():
-            reddit.send_message(author, 'Hello, ' + str(author) + ' RemindMeBot Confirmation Sent', self._replyMessage)
+            reddit.send_message(author, 'Hello, ' + str(author) + ' ClashCallerBot Confirmation Sent',
+                                self._replyMessage)
 
         try:
-            if self._privateMessage == False:
-                # First message will be a reply in a thread
-                # afterwards are PM in the same thread
+            if not self._privateMessage:
+                # Messages will be a reply in a thread
+                # identical messages are PM in the same thread
+                newcomment = self.comment.reply(self._replyMessage)
                 if (self.sub.id not in self.subId):
-                    newcomment = self.comment.reply(self._replyMessage)
                     self.subId.append(self.sub.id)
                     # adding it to database as well
                     database = Connect()
@@ -220,30 +239,31 @@ class Search(object):
                     database.connection.commit()
                     database.connection.close()
                     # grabbing comment just made
-                    reddit.get_info( 
-                            thing_id='t1_'+str(newcomment.id)
-                            # edit comment with self ID so it can be deleted
-                        ).edit(self._replyMessage.replace('____id____', str(newcomment.id))) 
+                    reddit.get_info(
+                        thing_id='t1_' + str(newcomment.id)
+                        # edit comment with self ID so it can be deleted
+                    ).edit(self._replyMessage.replace('____id____', str(newcomment.id)))
                 else:
                     send_message()
             else:
-                print str(author)
+                logger.info(str(author))
                 send_message()
-        except RateLimitExceeded as err:
-            print err
+        except RateLimitExceeded:
+            logger.exception("RateLimitExceeded")
             # PM when I message too much
             send_message()
             time.sleep(10)
-        except Forbidden as err:
+        except Forbidden:
+            logger.exception("Forbidden")
             send_message()
-        except APIException as err: # Catch any less specific API errors
-            print err
-        #else:
-            #print self._replyMessage
+        except APIException:  # Catch any less specific API errors
+            logger.exception("APIException")
+            # else:
+            # print self._replyMessage
 
     def find_bot_child_comment(self):
         """
-        Finds the remindmebot comment in the child
+        Finds the clashcallerbot comment in the child
         """
         try:
             # Grabbing all child comments
@@ -252,12 +272,12 @@ class Search(object):
             commentfound = ""
             if replies:
                 for comment in replies:
-                    if str(comment.author) == "RemindMeBot":
+                    if str(comment.author) == "ClashCallerBot":
                         commentfound = comment
                 self.comment_count(commentfound)
-        except Exception as err:
+        except Exception:
             pass
-            
+
     def comment_count(self, commentfound):
         """
         Posts edits the count if found
@@ -267,40 +287,44 @@ class Search(object):
         data = self._addToDB.cursor.fetchall()
         # Grabs the tuple within the tuple, a number/the count
         count = str(data[0][0])
-        comment = reddit.get_info(thing_id='t1_'+str(commentfound.id))
+        comment = reddit.get_info(thing_id='t1_' + str(commentfound.id))
         body = comment.body
         # Adds the count to the post
-        body = re.sub(r'(\d+ OTHERS |)CLICK(ED|) THIS LINK', 
-            count + " OTHERS CLICKED THIS LINK", 
-            body)
+        body = re.sub(r'(\d+ OTHERS |)CLICK(ED|) THIS LINK',
+                      count + " OTHERS CLICKED THIS LINK",
+                      body)
         comment.edit(body)
 
-def grab_list_of_reminders(username):
+
+def grab_list_of_calls(username):
     """
-    Grabs all the reminders of the user
+    Grabs all the calls of the user
     """
     database = Connect()
     query = "SELECT permalink, message, new_date, id FROM message_date WHERE userid = %s ORDER BY new_date"
     database.cursor.execute(query, [username])
     data = database.cursor.fetchall()
     table = (
-            "[**Click here to delete all your reminders at once quickly.**]"
-            "(http://www.reddit.com/message/compose/?to=RemindMeBot&subject=Reminder&message=RemoveAll!)\n\n"
-            "|Permalink|Message|Date|Remove|\n"
-            "|-|-|-|:-:|")
+        "[**Click here to delete all your calls at once quickly.**]"
+        "(http://www.reddit.com/message/compose/?to=ClashCallerBot&subject=Call&message=RemoveAll!)\n\n"
+        "|Permalink|Message|Date|Remove|\n"
+        "|-|-|-|:-:|")
     for row in data:
         date = str(row[2])
         table += (
-            "\n|" + row[0] + "|" +   row[1] + "|" + 
-            "[" + date  +"](http://www.wolframalpha.com/input/?i=" + str(row[2]) + ")|"
-            "[[X]](https://www.reddit.com/message/compose/?to=RemindMeBot&subject=Remove&message=Remove!%20"+ str(row[3]) + ")|"
-            )
-    if len(data) == 0: 
-        table = "Looks like you have no reminders. Click the **[Custom]** button below to make one!"
+            "\n|" + row[0] + "|" + row[1] + "|" +
+            "[" + date + "](http://www.wolframalpha.com/input/?i=" + str(row[2]) + ")|"
+            "[[X]](https://www.reddit.com/message/compose/?to=ClashCallerBot&subject=Remove&message=Remove!%20" + str(
+                row[3]) + ")|"
+        )
+    if len(data) == 0:
+        table = "Looks like you have no calls. Click the **[Custom]** button below to make one!"
     elif len(table) > 9000:
-        table = "Sorry the comment was too long to display. Message /u/RemindMeBotWrangler as this was his lazy error catching."
+        table = "Sorry the comment was too long to display. Message /u/ClashCallerBotDbuggr " \
+                "as this was his lazy error catching."
     table += Search.endMessage
     return table
+
 
 def remove_reminder(username, idnum):
     """
@@ -320,13 +344,13 @@ def remove_reminder(username, idnum):
             database.cursor.execute(cmd, [idnum])
             deleteFlag = True
 
-    
     database.connection.commit()
     return deleteFlag
 
+
 def remove_all(username):
     """
-    Deletes all reminders at once
+    Deletes all calls at once
     """
     database = Connect()
     query = "SELECT * FROM message_date where userid = %s"
@@ -338,85 +362,88 @@ def remove_all(username):
 
     return count
 
+
 def read_pm():
     try:
         for message in reddit.get_unread(unset_has_mail=True, update_user=True):
             prawobject = isinstance(message, praw.objects.Message)
-            if (("remindme!" in message.body.lower() or "!remindme" in message.body.lower()) and prawobject):
-                redditPM = Search(message)
-                redditPM.run(privateMessage=True)
+            if (("clashcaller!" in message.body.lower() or "!clashcaller" in message.body.lower()) and prawobject):
+                message.reply("Apologies, I cannot be invoked via PM. Please make a comment in the sub.")
                 message.mark_as_read()
-            elif (("delete!" in message.body.lower() or "!delete" in message.body.lower()) and prawobject):  
+            elif (("delete!" in message.body.lower() or "!delete" in message.body.lower()) and prawobject):
                 givenid = re.findall(r'delete!\s(.*?)$', message.body.lower())[0]
-                givenid = 't1_'+givenid
+                givenid = 't1_' + givenid
                 comment = reddit.get_info(thing_id=givenid)
                 try:
                     parentcomment = reddit.get_info(thing_id=comment.parent_id)
                     if message.author.name == parentcomment.author.name:
                         comment.delete()
-                except ValueError as err:
+                except ValueError:
                     # comment wasn't inside the list
                     pass
-                except AttributeError as err:
+                except AttributeError:
                     # comment might be deleted already
                     pass
                 message.mark_as_read()
-            elif (("myreminders!" in message.body.lower() or "!myreminders" in message.body.lower()) and prawobject):
-                listOfReminders = grab_list_of_reminders(message.author.name)
-                message.reply(listOfReminders)
+            elif (("mycalls!" in message.body.lower() or "!mycalls" in message.body.lower()) and prawobject):
+                listOfCalls = grab_list_of_calls(message.author.name)
+                message.reply(listOfCalls)
                 message.mark_as_read()
             elif (("remove!" in message.body.lower() or "!remove" in message.body.lower()) and prawobject):
                 givenid = re.findall(r'remove!\s(.*?)$', message.body.lower())[0]
                 deletedFlag = remove_reminder(message.author.name, givenid)
-                listOfReminders = grab_list_of_reminders(message.author.name)
+                listOfCalls = grab_list_of_calls(message.author.name)
                 # This means the user did own that reminder
-                if deletedFlag == True:
-                    message.reply("Reminder deleted. Your current Reminders:\n\n" + listOfReminders)
+                if deletedFlag:
+                    message.reply("Call deleted. Your current Calls:\n\n" + listOfCalls)
                 else:
-                    message.reply("Try again with the current IDs that belong to you below. Your current Reminders:\n\n" + listOfReminders)
+                    message.reply(
+                        "Try again with the current IDs that belong to you below. Your current Calls:\n\n" + listOfCalls)
                 message.mark_as_read()
             elif (("removeall!" in message.body.lower() or "!removeall" in message.body.lower()) and prawobject):
                 count = str(remove_all(message.author.name))
-                listOfReminders = grab_list_of_reminders(message.author.name)
-                message.reply("I have deleted all **" + count + "** reminders for you.\n\n" + listOfReminders)
+                listOfCalls = grab_list_of_calls(message.author.name)
+                message.reply("I have deleted all **" + count + "** calls for you.\n\n" + listOfCalls)
                 message.mark_as_read()
-    except Exception as err:
-        print traceback.format_exc()
+    except Exception:
+        logger.exception(str(traceback.format_exc()))
+
 
 def check_comment(comment):
     redditCall = Search(comment)
-    if (("remindme!" in comment.body.lower() or
-        "!remindme" in comment.body.lower()) and 
-        redditCall.comment.id not in redditCall.commented and
-        'RemindMeBot' != str(comment.author) and
-        START_TIME < redditCall.comment.created_utc):
-            print "in"
-            t = Thread(target=redditCall.run())
-            t.start()
+    if (("clashcaller!" in comment.body.lower() or
+                 "!clashcaller" in comment.body.lower()) and
+                redditCall.comment.id not in redditCall.commented and
+                'ClashCallerBot' != str(comment.author) and
+                START_TIME < redditCall.comment.created_utc):
+        logger.info("in")
+        t = Thread(target=redditCall.run())
+        t.start()
+
 
 # =============================================================================
 # MAIN
 # =============================================================================
 
 def main():
-    print "start"
+    logger.info("start")
 
     while True:
         try:
             # grab the request
-            request = requests.get('https://api.pushshift.io/reddit/search?q=%22RemindMe%22&limit=100')
+            request = requests.get('https://api.pushshift.io/reddit/search?q=%22ClashCaller%22&limit=100')
             json = request.json()
-            comments =  json["data"]
-            read_pm()   
+            comments = json["data"]
+            read_pm()
             for rawcomment in comments:
                 # object constructor requires empty attribute
                 rawcomment['_replies'] = ''
                 comment = praw.objects.Comment(reddit, rawcomment)
                 check_comment(comment)
-            print "----"
+            logger.info("----")
             time.sleep(30)
-        except Exception as err:
-            print traceback.format_exc()           
+        except Exception:
+            logger.exception(str(traceback.format_exc()))
             time.sleep(30)
         """
         Will add later if problem with api.pushshift
@@ -424,9 +451,11 @@ def main():
         try:
             for comment in praw.helpers.comment_stream(reddit, 'all', limit = 1, verbosity = 0):
                 check_comment(comment)
-        except Exception as err:
-           print err
+        except Exception:
+           logger.exception(str(traceback.format_exc()))
         """
+
+
 # =============================================================================
 # RUNNER
 # =============================================================================

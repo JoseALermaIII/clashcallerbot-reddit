@@ -1,9 +1,14 @@
-What is the point of RemindMeBot?
+Have you tried using the clash caller website only to have someone go rogue on you and mess everything up?
+Does no one stick to what they called or do they forget what they called?
 
-RemindMeBot was made as a way to remind the user about a comment or thread for later use.
-For example, someone on AskReddit posts a list of cool movies to watch. Although you don't have time to watch it now, you make a comment to remember to view a movie from the list later.
-However, you forget about the comment you made because you always find the cool things before sleeping and you have a short attention span to view your previously made comments.
-Think of RemindMe! as an improved and automatic "saved" for later
+ClashCallerBot is here to help keep everything in reddit. Clans can start a war thread and participants can call
+their bases on their own. ClashCallerBot will let them know that they need to attack before they lose their spot.
 
 
-For more info: http://www.reddit.com/r/RemindMeBot/comments/24duzp/remindmebot_info/
+Stay tuned while I figure out how github, python, PRAW, and MySQL/MariaDB work.
+
+For more information (like usage, and setting up your own bot), head to the
+[Wiki](../../wiki/).
+
+# License
+MIT License
