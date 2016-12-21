@@ -17,7 +17,8 @@ import parsedatetime.parsedatetime as pdt
 import logging
 import logging.config
 from datetime import datetime
-from praw.errors import APIException, RateLimitExceeded, Forbidden
+from praw.exceptions import APIException
+from prawcore import Forbidden
 from pytz import timezone
 from threading import Thread
 
@@ -30,9 +31,13 @@ config = ConfigParser.ConfigParser()
 config.read("clashcallerbot.cfg")
 
 # Reddit info
-reddit = praw.Reddit(user_agent="ClashCallerB0tSearch: v0.1")
-o = OAuth2Util.OAuth2Util(reddit, print_log=True)
-o.refresh(force=True)
+reddit = praw.Reddit(client_id=config.get("Reddit", "client_id"),
+                     client_secret=config.get("Reddit", "client_secret"),
+                     username=config.get("Reddit", "username"),
+                     password=config.get("Reddit", "password"),
+                     user_agent="Python:ClashCallerB0tSearch:v1.0 (by /u/ClashCallerBotDbuggr)")
+# o = OAuth2Util.OAuth2Util(reddit, print_log=True)
+# o.refresh(force=True)
 
 DB_USER = config.get("SQL", "user")
 DB_PASS = config.get("SQL", "passwd")
