@@ -252,11 +252,6 @@ class Search(object):
             else:
                 logger.info(str(author))
                 send_message()
-        except APIException.error_type("RATELIMIT"):
-            logger.exception("RateLimitExceeded")
-            # PM when I message too much
-            send_message()
-            time.sleep(10)
         except Forbidden:
             logger.exception("Forbidden")
             send_message()
