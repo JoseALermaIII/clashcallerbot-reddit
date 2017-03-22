@@ -32,8 +32,10 @@ config = ConfigParser.ConfigParser()
 config.read("praw.ini")
 
 # Reddit info
-reddit = praw.Reddit("Reddit",
-                     user_agent="Python:ClashCallerB0tSearch:v1.0 (by /u/ClashCallerBotDbuggr)")
+reddit = praw.Reddit(site_name="Reddit",
+                     user_agent="Python:ClashCallerB0tSearch:v1.1 (by /u/ClashCallerBotDbuggr)")
+subreddit = reddit.subreddit('all')
+
 #o = OAuth2Util.OAuth2Util(reddit, print_log=True)
 #o.refresh(force=True)
 
@@ -364,7 +366,7 @@ def remove_all(username):
 
 def read_pm():
     try:
-        for message in reddit.inbox.unread(mark_read=True, update_user=True):
+        for message in reddit.inbox.unread(mark_read=True):
             prawobject = isinstance(message, praw.models.Message)
             if (("clashcaller!" in message.body.lower() or "!clashcaller" in message.body.lower()) and prawobject):
                 message.reply("Apologies, I cannot be invoked via PM. Please make a comment in the sub.")
@@ -427,19 +429,21 @@ def check_comment(comment):
 
 def main():
     logger.info("start")
-
     while True:
         try:
-            # grab the request
-            request = requests.get('https://api.pushshift.io/reddit/search?q=%22ClashCaller%22&limit=100')
-            json = request.json()
-            comments = json["data"]
             read_pm()
-            for rawcomment in comments:
-                # object constructor requires empty attribute
-                rawcomment['_replies'] = ''
-                comment = praw.models.Comment(reddit, rawcomment)
+            for comment in subreddit.stream.comments():
                 check_comment(comment)
+            # grab the request
+            #request = requests.get('https://api.pushshift.io/reddit/search?q=%22ClashCaller%22&limit=100')
+            #json = request.json()
+            #comments = json["data"]
+            #read_pm()
+            #for rawcomment in comments:
+                # object constructor requires empty attribute
+            #    rawcomment['_replies'] = ''
+            #    comment = praw.models.Comment(reddit, rawcomment)
+            #    check_comment(comment)
             logger.info("----")
             time.sleep(30)
         except Exception:
