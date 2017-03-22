@@ -18,6 +18,7 @@ import logging
 import logging.config
 from datetime import datetime
 from praw.exceptions import APIException
+from praw.models import Message, Comment
 from prawcore import Forbidden
 from pytz import timezone
 from threading import Thread
@@ -368,17 +369,18 @@ def remove_all(username):
 
 def read_pm():
     try:
-        for message in reddit.get_unread(unset_has_mail=True, update_user=True):
-            prawobject = isinstance(message, praw.objects.Message)
+        for message in reddit.inbox.unread(mark_read=True, update_user=True):
+            prawobject = isinstance(message, praw.models.Message)
             if (("clashcaller!" in message.body.lower() or "!clashcaller" in message.body.lower()) and prawobject):
                 message.reply("Apologies, I cannot be invoked via PM. Please make a comment in the sub.")
                 message.mark_as_read()
             elif (("delete!" in message.body.lower() or "!delete" in message.body.lower()) and prawobject):
                 givenid = re.findall(r'delete!\s(.*?)$', message.body.lower())[0]
                 givenid = 't1_' + givenid
-                comment = reddit.get_info(thing_id=givenid)
+                comment = reddit.comment(id=givenid)
                 try:
-                    parentcomment = reddit.get_info(thing_id=comment.parent_id)
+                    #parentcomment = reddit.comment(id=comment.parent_id)
+                    parentcomment = comment.parent()
                     if message.author.name == parentcomment.author.name:
                         comment.delete()
                 except ValueError:
@@ -441,7 +443,7 @@ def main():
             for rawcomment in comments:
                 # object constructor requires empty attribute
                 rawcomment['_replies'] = ''
-                comment = praw.objects.Comment(reddit, rawcomment)
+                comment = praw.models.Comment(reddit, rawcomment)
                 check_comment(comment)
             logger.info("----")
             time.sleep(30)
