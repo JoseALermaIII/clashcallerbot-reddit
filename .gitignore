@@ -216,6 +216,6 @@ pip-log.txt
 
 #Misc
 /oauth.ini
-/clashcallerbot.cfg
+/praw.ini
 /logging.conf
 *.log.*

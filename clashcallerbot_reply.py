@@ -23,7 +23,7 @@ from pytz import timezone
 
 # Reads the config file
 config = ConfigParser.ConfigParser()
-config.read("clashcallerbot.cfg")
+config.read("praw.ini")
 
 # Reddit info
 reddit = praw.Reddit("ClashCallerB0t Reply: v0.1")

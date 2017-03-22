@@ -28,16 +28,13 @@ from threading import Thread
 
 # Reads the config file
 config = ConfigParser.ConfigParser()
-config.read("clashcallerbot.cfg")
+config.read("praw.ini")
 
 # Reddit info
-reddit = praw.Reddit(client_id=config.get("Reddit", "client_id"),
-                     client_secret=config.get("Reddit", "client_secret"),
-                     username=config.get("Reddit", "username"),
-                     password=config.get("Reddit", "password"),
+reddit = praw.Reddit("Reddit",
                      user_agent="Python:ClashCallerB0tSearch:v1.0 (by /u/ClashCallerBotDbuggr)")
-# o = OAuth2Util.OAuth2Util(reddit, print_log=True)
-# o.refresh(force=True)
+#o = OAuth2Util.OAuth2Util(reddit, print_log=True)
+#o.refresh(force=True)
 
 DB_USER = config.get("SQL", "user")
 DB_PASS = config.get("SQL", "passwd")
@@ -149,7 +146,7 @@ class Search(object):
         # Checks for message
         messageInputTemp = re.search('(["].{0,9000}["])', tempString)
         if messageInputTemp is None:
-            reddit.send_message(self.comment.author, 'Hello, ' + str(self.comment.author) + ' no message was inlcuded',
+            reddit.redditor(self.comment.author).message('Hello, ' + str(self.comment.author) + ' no message was inlcuded',
                                 "A message is required.\n\n Go to https://www.reddit.com/r/ClashCallerBot/comments/"
                                 "4e9vo7/clashcallerbot_info for usage.")
             self.commented.append(self.comment.id)  # Add to handled comments.
@@ -198,7 +195,7 @@ class Search(object):
             "{clashCallMessage}")
 
         try:
-            self.sub = reddit.get_submission(self.comment.permalink)
+            self.sub = reddit.submission(url=self.comment.permalink)
         except Exception:
             logger.exception("link had http")
         if self._privateMessage == False and self.sub.id not in self.subId:
@@ -226,7 +223,7 @@ class Search(object):
         author = self.comment.author
 
         def send_message():
-            reddit.send_message(author, 'Hello, ' + str(author) + ' ClashCallerBot Confirmation Sent',
+            reddit.redditor(str(author)).message('Hello, ' + str(author) + ' ClashCallerBot Confirmation Sent',
                                 self._replyMessage)
 
         try:
@@ -244,8 +241,9 @@ class Search(object):
                     database.connection.commit()
                     database.connection.close()
                     # grabbing comment just made
-                    reddit.get_info(
-                        thing_id='t1_' + str(newcomment.id)
+                    reddit.comment(
+                        id=str(newcomment.id)
+                        #thing_id='t1_' + str(newcomment.id)
                         # edit comment with self ID so it can be deleted
                     ).edit(self._replyMessage.replace('____id____', str(newcomment.id)))
                 else:
@@ -253,7 +251,7 @@ class Search(object):
             else:
                 logger.info(str(author))
                 send_message()
-        except RateLimitExceeded:
+        except APIException.error_type("RATELIMIT"):
             logger.exception("RateLimitExceeded")
             # PM when I message too much
             send_message()
@@ -272,7 +270,7 @@ class Search(object):
         """
         try:
             # Grabbing all child comments
-            replies = reddit.get_submission(url=self.comment.permalink).comments[0].replies
+            replies = reddit.submission(url=self.comment.permalink).comments[0].replies
             # Look for bot's reply
             commentfound = ""
             if replies:
@@ -292,7 +290,7 @@ class Search(object):
         data = self._addToDB.cursor.fetchall()
         # Grabs the tuple within the tuple, a number/the count
         count = str(data[0][0])
-        comment = reddit.get_info(thing_id='t1_' + str(commentfound.id))
+        comment = reddit.comment(id=str(commentfound.id))
         body = comment.body
         # Adds the count to the post
         body = re.sub(r'(\d+ OTHERS |)CLICK(ED|) THIS LINK',
