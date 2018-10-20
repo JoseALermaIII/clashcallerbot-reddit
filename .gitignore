@@ -217,5 +217,4 @@ pip-log.txt
 #Misc
 /oauth.ini
 /praw.ini
-/logging.conf
 *.log.*
