@@ -38,9 +38,14 @@ def main():
     subreddit = reddit.subreddit('ClashCallerBot')  # Limit scope for testing purposes
 
     # Search recent comments for ClashCaller! string
-    clashcaller_re = re.compile(r'[!|\s]?[C|c]lash[C|c]aller[!|\s]')  # Space after string required
+    clashcaller_re = re.compile(r'''
+                                [!|\s]?             # prefix ! or space (optional)
+                                [C|c]lash[C|c]aller # upper or lowercase ClashCaller
+                                [!|\s]              # suffix ! or space (required)
+                                ''', re.VERBOSE)
     for comment in subreddit.stream.comments():
-        if clashcaller_re.search(comment.body) and comment.author.name != 'ClashCallerBot':
+        match = clashcaller_re.search(comment.body)
+        if match and comment.author.name != 'ClashCallerBot':
             logger.info(comment.author.name + ' ' + comment.body)
             # TODO: If found, parse username, comment date, message, and expiration time (if any)
 
