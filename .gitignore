@@ -218,3 +218,4 @@ pip-log.txt
 /oauth.ini
 /praw.ini
 *.log.*
+/database.ini
