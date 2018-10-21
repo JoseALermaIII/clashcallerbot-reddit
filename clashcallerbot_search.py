@@ -76,6 +76,10 @@ def main():
                 if exp_unit in minute_tokens:
                     timedelta = datetime.timedelta(minutes=exp_digit)
                 else:
+                    if exp_digit >= 24:  # ignore days
+                        logging.error('Expiration time is >= 1 day.')
+                        # TODO: Send message and ignore comment
+                        continue
                     timedelta = datetime.timedelta(hours=exp_digit)
                 # Strip expiration time
                 comment.body = comment.body[match.end():].strip()
