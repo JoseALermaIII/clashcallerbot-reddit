@@ -47,7 +47,7 @@ def main():
     for comment in subreddit.stream.comments():
         match = clashcaller_re.search(comment.body)
         if match and comment.author.name != 'ClashCallerBot':
-            logger.info(f'In from {comment.author.name}')
+            logger.info(f'In from {comment.author.name}: {comment}')
             # TODO: If found, parse username, comment date, message, permalink, and expiration time (if any)
 
             # Strip everything before and including ClashCaller! string
