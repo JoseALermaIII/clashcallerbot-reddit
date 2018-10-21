@@ -49,6 +49,15 @@ def main():
             logger.info(f'In from {comment.author.name}: {comment.body}')
             # TODO: If found, parse username, comment date, message, permalink, and expiration time (if any)
 
+            # Check for expiration time
+            expiration_re = re.compile(r'''
+                                       (\d){1,2}(\s)? # single or double digit (space after optional)
+                                       (minute(s)?\s| # minute(s) (space after required)
+                                       min\s|         # minute abbr. (space after required)
+                                       hour(s)?\s|    # hour(s) (space after required)
+                                       hr\s           # hour abbr. (space after required)
+                                       )+''', re.VERBOSE)
+
     # TODO: Apply default, or provided expiration time to comment date
 
     # TODO: Save comment data to MySQL-compatible database
