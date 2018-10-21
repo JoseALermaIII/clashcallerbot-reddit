@@ -9,10 +9,11 @@ applied, then all the comment data is saved to a MySQL-compatible database."""
 
 import configparser  # TODO: Remove configparser
 import logging.config
+import re
+import datetime
 
 import praw
 import mysql.connector as mysql
-import re
 
 
 def main():
@@ -55,14 +56,32 @@ def main():
 
             # Check for expiration time
             expiration_re = re.compile(r'''
-                                       (\d){1,2}(\s)? # single or double digit (space after optional)
-                                       (minute(s)?\s| # minute(s) (space after required)
-                                       min\s|         # minute abbr. (space after required)
-                                       hour(s)?\s|    # hour(s) (space after required)
-                                       hr\s           # hour abbr. (space after required)
-                                       )+''', re.VERBOSE)
+                                       (?P<exp_digit>\d){1,2}(\s)? # single or double digit (space after optional)
+                                       (?P<exp_unit>minute(s)?\s|  # minute(s) (space after required)
+                                       min\s|                      # minute abbr. (space after required)
+                                       hour(s)?\s|                 # hour(s) (space after required)
+                                       hr\s                        # hour abbr. (space after required)
+                                       )+''', re.VERBOSE | re.IGNORECASE)  # case-insensitive
+            minute_tokens = ('min', 'minute', 'minutes')
+            match = expiration_re.search(comment.body)
+            if not match:
+                timedelta = datetime.timedelta(hours=1)  # Default to 1 hour
+            else:
+                exp_digit = int(match.group('exp_digit').strip())
+                if exp_digit == 0:  # ignore zeros
+                    logging.error('Expiration time is zero.')
+                    # TODO: Send message and ignore comment
+                    continue
+                exp_unit = match.group('exp_unit').strip().lower()
+                if exp_unit in minute_tokens:
+                    timedelta = datetime.timedelta(minutes=exp_digit)
+                else:
+                    timedelta = datetime.timedelta(hours=exp_digit)
+                # Strip expiration time
+                comment.body = comment.body[match.end():].strip()
+            logger.debug(f'timedelta = {timedelta.seconds} seconds')
 
-    # TODO: Apply default, or provided expiration time to comment date
+    # TODO: Apply expiration time to comment date
 
     # TODO: Save comment data to MySQL-compatible database
 
