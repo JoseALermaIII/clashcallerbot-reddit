@@ -12,6 +12,7 @@ import logging.config
 
 import praw
 import mysql.connector as mysql
+import re
 
 
 def main():
@@ -36,9 +37,12 @@ def main():
     reddit = praw.Reddit('clashcaller')  # Section name in praw.ini
     subreddit = reddit.subreddit('ClashCallerBot')  # Limit scope for testing purposes
 
-    # TODO: Search recent comments for ClashCaller! string
-
-    # TODO: If found, parse username, comment date, message, and expiration time (if any)
+    # Search recent comments for ClashCaller! string
+    clashcaller_re = re.compile(r'[!|\s]?[C|c]lash[C|c]aller[!|\s]')  # Space after string required
+    for comment in subreddit.stream.comments():
+        if clashcaller_re.search(comment.body) and comment.author.name != 'ClashCallerBot':
+            logger.info(comment.author.name + ' ' + comment.body)
+            # TODO: If found, parse username, comment date, message, and expiration time (if any)
 
     # TODO: Apply default, or provided expiration time to comment date
 
