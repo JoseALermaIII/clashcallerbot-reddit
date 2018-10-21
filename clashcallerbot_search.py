@@ -7,13 +7,13 @@ for the ClashCaller! string. If found, the username, comment time, message, and
 expiration time (if any) are parsed. The default, or provided, expiration time is
 applied, then all the comment data is saved to a MySQL-compatible database."""
 
+import praw
+import mysql.connector as mysql
+
 import configparser  # TODO: Remove configparser
 import logging.config
 import re
 import datetime
-
-import praw
-import mysql.connector as mysql
 
 
 def main():
