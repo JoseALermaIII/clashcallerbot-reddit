@@ -2,11 +2,17 @@ clashcallerbot-reddit
 =====================
 **Bot to help plan Clan Wars in reddit.**
 
-Have you tried using the clash caller website only to have someone alter or delete data?
-Do some members attack other bases than what they called or forget what they called?
+**ClashCallerBot** was made to help `/r/ClashOfClans <https://np.reddit.com/r/ClashOfClans>`_ clans
+to coordinate attacks during war from within reddit.
 
-**ClashCallerBot** is here to help keep everything in reddit. Clans can start a war thread and participants can call
-their bases on their own. **ClashCallerBot** will let them know that they need to attack before they lose their spot.
+For example, someone wants to attack base 1 and 7, but they haven't posted an update in over an hour
+and those two bases still haven't been attacked. Is it okay to attack those bases? Did your fellow
+clan member die? Who knows‽
+
+Well, if s/he (or someone on their behalf) had called those bases for a set period of time, you would
+know for certain.
+
+Think of **ClashCallerBot** as an independent time keeper that runs entirely within reddit.
 
 Documentation
 -------------
