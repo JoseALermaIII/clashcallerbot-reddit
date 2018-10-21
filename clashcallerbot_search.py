@@ -102,7 +102,11 @@ def main():
             message = comment.body
             logger.debug(f'message = {message}')
 
-    # TODO: Apply expiration time to comment date
+            # Apply expiration time to comment date
+            comment_datetime = datetime.datetime.fromtimestamp(comment.created_utc, datetime.timezone.utc)
+            logger.info(f'comment_datetime = {comment_datetime}')
+            expiration_datetime = comment_datetime + timedelta
+            logger.info(f'expiration_datetime = {expiration_datetime}')
 
     # TODO: Save comment data to MySQL-compatible database
 
