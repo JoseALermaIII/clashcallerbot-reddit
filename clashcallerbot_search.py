@@ -46,7 +46,7 @@ def main():
     for comment in subreddit.stream.comments():
         match = clashcaller_re.search(comment.body)
         if match and comment.author.name != 'ClashCallerBot':
-            logger.info(comment.author.name + ' ' + comment.body)
+            logger.info(f'In from {comment.author.name}: {comment.body}')
             # TODO: If found, parse username, comment date, message, permalink, and expiration time (if any)
 
     # TODO: Apply default, or provided expiration time to comment date
