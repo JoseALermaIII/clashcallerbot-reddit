@@ -47,11 +47,15 @@ def main():
         match = clashcaller_re.search(comment.body)
         if match and comment.author.name != 'ClashCallerBot':
             logger.info(comment.author.name + ' ' + comment.body)
-            # TODO: If found, parse username, comment date, message, and expiration time (if any)
+            # TODO: If found, parse username, comment date, message, permalink, and expiration time (if any)
 
     # TODO: Apply default, or provided expiration time to comment date
 
     # TODO: Save comment data to MySQL-compatible database
+
+    # TODO: Compose message for comment and PM
+
+    # TODO: If not already commented, comment and send PM
 
 
 # If run directly, instead of imported as a module, run main():
