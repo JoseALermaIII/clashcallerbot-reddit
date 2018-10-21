@@ -214,6 +214,9 @@ pip-log.txt
 #Pycharm
 /.idea
 
+#Virtual environments
+/venv*/
+
 #Misc
 /oauth.ini
 /praw.ini
