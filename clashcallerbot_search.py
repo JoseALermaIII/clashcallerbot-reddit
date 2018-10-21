@@ -56,7 +56,8 @@ def main():
 
             # Check for expiration time
             expiration_re = re.compile(r'''
-                                       (?P<exp_digit>\d){1,2}(\s)? # single or double digit (space after optional)
+                                       (?P<exp_digit>(\d){1,2})    # single or double digit
+                                       (\s)?                       # optional space
                                        (?P<exp_unit>minute(s)?\s|  # minute(s) (space after required)
                                        min\s|                      # minute abbr. (space after required)
                                        hour(s)?\s|                 # hour(s) (space after required)
