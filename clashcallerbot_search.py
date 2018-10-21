@@ -85,6 +85,22 @@ def main():
                 comment.body = comment.body[match.end():].strip()
             logger.debug(f'timedelta = {timedelta.seconds} seconds')
 
+            # Evaluate message
+            message_re = re.compile(r'''
+                                    (\s)*     # optional space
+                                    base      # required string: base
+                                    [\W|\s]*  # optional non-word character or space
+                                    (\d){1,2} # required single or double digit
+                                    ''', re.VERBOSE | re.IGNORECASE)  # case-insensitive
+            match = message_re.search(comment.body)
+            if not match:
+                logger.error('Message not properly formatted.')
+                # TODO: send message and ignore comment
+                continue
+
+            message = comment.body
+            logger.debug(f'message = {message}')
+
     # TODO: Apply expiration time to comment date
 
     # TODO: Save comment data to MySQL-compatible database
