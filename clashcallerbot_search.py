@@ -11,6 +11,7 @@ import configparser  # TODO: Remove configparser
 import logging.config
 
 import praw
+import mysql.connector as mysql
 
 
 def main():
@@ -27,7 +28,9 @@ def main():
     DB_PASS = config.get("SQL", "passwd")
     DB_NAME = config.get("SQL", "name")
 
-    # TODO: Setup MySQL-compatible database
+    # Setup MySQL-compatible database
+    mysql_connection = mysql.connect(user=DB_USER, password=DB_PASS, database=DB_NAME)
+    cursor = mysql_connection.cursor()
 
     # Generate reddit instance
     reddit = praw.Reddit('clashcaller')  # Section name in praw.ini
