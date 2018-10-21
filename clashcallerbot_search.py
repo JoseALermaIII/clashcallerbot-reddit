@@ -49,6 +49,10 @@ def main():
             logger.info(f'In from {comment.author.name}: {comment.body}')
             # TODO: If found, parse username, comment date, message, permalink, and expiration time (if any)
 
+            # Strip everything before and including ClashCaller! string
+            comment.body = comment.body[match.end():].strip()
+            logger.debug(f'Stripped comment body: {comment.body}')
+
             # Check for expiration time
             expiration_re = re.compile(r'''
                                        (\d){1,2}(\s)? # single or double digit (space after optional)
