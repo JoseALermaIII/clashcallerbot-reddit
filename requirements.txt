@@ -5,6 +5,7 @@ chardet==3.0.4
 cryptography==2.3.1
 future==0.16.0
 idna==2.7
+mysql-connector==2.1.6
 ndg-httpsclient==0.5.1
 parsedatetime==2.4
 praw==6.0.0
