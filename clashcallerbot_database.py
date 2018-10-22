@@ -10,6 +10,7 @@ import mysql.connector as mysql
 
 import configparser
 import logging.config
+import datetime
 
 
 def main():
@@ -96,6 +97,40 @@ def main():
             cursor.execute(cmd)
         except mysql.Error as err:
             logger.error(f'Grant bot permission err: {err}')
+
+
+def save_comment_data(csr: mysql.connection.MySQLCursor, link: str, msg: str, exp: datetime, uid: str) -> bool:
+    """Saves given comment data into message_date table.
+
+    Function uses given inputs to create a dictionary to quicksave
+    data to the message_date table.
+
+    Args:
+        csr:    MySQL.connection cursor object.
+        link:   Comment permalink.
+        msg:    Comment message.
+        exp:   Expiration datetime object.
+        uid:    Comment author UserID.
+
+    Returns:
+        True for success, false otherwise.
+    """
+    try:
+        add_comment = 'INSERT INTO message_date (permalink, message, new_date, userID) ' \
+                      'VALUES (%(l)s, %(m)s, %(d)s, %(u)s)'
+        comment_data = {
+            'l': link,
+            'm': msg,
+            'd': exp,
+            'u': uid
+        }
+
+        csr.execute(add_comment, comment_data)
+        csr.commit()
+    except mysql.Error as err:
+        logger.error(f'save_comment_data: {err}')
+        return False
+    return True
 
 
 # If run directly, instead of imported as a module, run main():
