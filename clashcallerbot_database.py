@@ -74,8 +74,8 @@ def main():
     local_cursor.execute('DESCRIBE comment_list;')
     print(local_cursor.fetchall())
 
-    # Fetch comment_ids column from comment_list
-    local_cursor.execute('SELECT comment_ids FROM comment_list;')
+    # Fetch rows from comment_list as tuple of tuples
+    local_cursor.execute(f'SELECT * FROM comment_list GROUP BY id;')
     print(local_cursor.fetchall())
 
     # Grant database bot permissions
@@ -119,7 +119,7 @@ def get_tables(db_name: str) -> list:
     """
     table_names = []
     try:
-        cursor.execute(f'USE {db_name}')
+        cursor.execute(f'USE {db_name};')
         cursor.execute('SHOW TABLES;')
         tables = cursor.fetchall()
 
@@ -237,7 +237,7 @@ def save_message(link: str, msg: str, exp: datetime, uid: str) -> bool:
     """
     try:
         add_row = f'INSERT INTO message_data (permalink, message, new_date, userID) ' \
-                  f'VALUES ({link}, {msg}, {exp}, {uid})'
+                  f'VALUES ({link}, {msg}, {exp}, {uid});'
         cursor.execute(add_row)
         mysql_connection.commit()
 
@@ -259,7 +259,7 @@ def save_comment_id(cid: str) -> bool:
         True for success, false otherwise.
     """
     try:
-        add_comment_id = f'INSERT INTO comment_list (comment_ids) VALUES ({cid})'
+        add_comment_id = f'INSERT INTO comment_list (comment_ids) VALUES ({cid});'
 
         cursor.execute(add_comment_id)
         mysql_connection.commit()
@@ -282,17 +282,20 @@ def find_comment_id(cid: str) -> bool:
         True for success, false otherwise.
     """
     try:
-        query = 'SELECT comment_ids FROM comment_list;'
+        query = f'SELECT * FROM comment_list WHERE comment_ids={cid} GROUP BY id;'
         cursor.execute(query)
 
-        ids = cursor.fetchall()
-        if cid not in ids:
+        rows = cursor.fetchall()
+        if rows == ():
             return False
+        for row in rows:
+            if cid in row[1]:
+                return True
 
     except mysql.Error as err:
         logger.error(f'find_comment_id: {err}')
         return False
-    return True
+    return False
 
 
 # If run directly, instead of imported as a module, run main():
