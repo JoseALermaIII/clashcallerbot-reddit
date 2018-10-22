@@ -74,13 +74,7 @@ def main():
 
     # Grant database bot permissions
     if root_user:
-        try:
-            cmd = f'GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX, ALTER, ' \
-                  f'CREATE TEMPORARY TABLES, LOCK TABLES ON {DB_NAME}.* TO \'{bot_name}\'@localhost ' \
-                  f'IDENTIFIED BY \'{bot_passwd}\';'
-            cursor.execute(cmd)
-        except mysql.Error as err:
-            logger.error(f'Grant bot permission err: {err}')
+        grant_permissions(DB_NAME, bot_name, bot_passwd)
 
 
 def create_database(db_name: str) -> bool:
@@ -138,8 +132,8 @@ def create_table(db_name: str, tbl_name: str, cols: str) -> bool:
 
     Example:
         ::
-            db_name = database
-            tbl_name = table
+            db_name = 'database'
+            tbl_name = 'table'
             cols = 'id INT UNSIGNED NOT NULL AUTO_INCREMENT, ' \
                    'permalink VARCHAR(100), message VARCHAR(100), new_date DATETIME, ' \
                    'userID VARCHAR(20), PRIMARY KEY(id)'
@@ -156,6 +150,39 @@ def create_table(db_name: str, tbl_name: str, cols: str) -> bool:
 
     except mysql.Error as err:
         logger.error(f'create_table: {err}')
+        return False
+    return True
+
+
+def grant_permissions(db_name: str, usr_name: str, usr_passwd: str) -> bool:
+    """Grants user permissions to database.
+
+    Function grants given user permissions to given database. However,
+    only database root user can grant database permissions.
+
+    Args:
+        db_name:    Database to grant permissions to.
+        usr_name:   User receiving permissions.
+        usr_passwd: User's database authentication password.
+
+    Example:
+        ::
+            db_name = 'database'
+            usr_name = 'user'
+            usr_passwd = 'not_my_password'
+
+            create_table(db_name, usr_name, usr_passwd)
+
+    Returns:
+        True if successful, False otherwise.
+    """
+    try:
+        cmd = f'GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX, ALTER, ' \
+              f'CREATE TEMPORARY TABLES, LOCK TABLES ON {db_name}.* TO \'{usr_name}\'@localhost ' \
+              f'IDENTIFIED BY \'{usr_passwd}\';'
+        cursor.execute(cmd)
+    except mysql.Error as err:
+        logger.error(f'grant_permissions: {err}')
         return False
     return True
 
