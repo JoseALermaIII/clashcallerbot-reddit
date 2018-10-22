@@ -200,17 +200,11 @@ def save_comment_data(link: str, msg: str, exp: datetime, uid: str) -> bool:
         True for success, false otherwise.
     """
     try:
-        add_comment = 'INSERT INTO message_date (permalink, message, new_date, userID) ' \
-                      'VALUES (%(l)s, %(m)s, %(d)s, %(u)s)'
-        comment_data = {
-            'l': link,
-            'm': msg,
-            'd': exp,
-            'u': uid
-        }
-
-        cursor.execute(add_comment, comment_data)
+        add_values = f'INSERT INTO message_date (permalink, message, new_date, userID) ' \
+                     f'VALUES ({link}, {msg}, {exp}, {uid})'
+        cursor.execute(add_values)
         mysql_connection.commit()
+
     except mysql.Error as err:
         logger.error(f'save_comment_data: {err}')
         return False
@@ -233,6 +227,7 @@ def save_comment_id(cid: str) -> bool:
 
         cursor.execute(add_comment_id, cid)
         mysql_connection.commit()
+
     except mysql.Error as err:
         logger.error(f'save_comment_id: {err}')
         return False
