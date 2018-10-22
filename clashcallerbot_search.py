@@ -98,7 +98,7 @@ def main():
                 logger.error('Message not properly formatted.')
                 # TODO: send message and ignore comment
                 continue
-
+            # TODO: Message cannot be longer than 100 char
             message = comment.body
             logger.debug(f'message = {message}')
 
