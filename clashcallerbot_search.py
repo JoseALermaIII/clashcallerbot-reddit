@@ -10,7 +10,7 @@ applied, then all the comment data is saved to a MySQL-compatible database."""
 import praw
 import mysql.connector as mysql
 
-import configparser  # TODO: Remove configparser
+import configparser
 import logging.config
 import re
 import datetime
@@ -24,11 +24,11 @@ def main():
 
     # Read database.ini file
     config = configparser.ConfigParser()
-    config.read("database.ini")
+    config.read('database.ini')
 
-    DB_USER = config.get("SQL", "user")
-    DB_PASS = config.get("SQL", "passwd")
-    DB_NAME = config.get("SQL", "name")
+    DB_USER = config.get('bot', 'user')
+    DB_PASS = config.get('bot', 'password')
+    DB_NAME = config.get('bot', 'database')
 
     # Setup MySQL-compatible database
     mysql_connection = mysql.connect(user=DB_USER, password=DB_PASS, database=DB_NAME)
