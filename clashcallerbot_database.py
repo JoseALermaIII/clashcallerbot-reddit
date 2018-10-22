@@ -42,16 +42,15 @@ cursor = mysql_connection.cursor()
 def main():
     # Create the clashcaller database
     try:
-        cursor.execute('CREATE DATABASE clashcaller;')
+        cursor.execute(f'CREATE DATABASE {DB_NAME};')
     except mysql.Error as err:
         logger.error(f'Create database err: {err}')
 
     # Select the clashcaller database
-    cursor.execute('USE clashcaller;')
+    cursor.execute(f'USE {DB_NAME};')
 
     # Show the tables
-    cursor.execute('SHOW TABLES;')
-    logger.info(f'Database tables: {cursor.fetchall()}')
+    print(get_tables(DB_NAME))
 
     # Create message table
     try:
@@ -97,6 +96,30 @@ def main():
             cursor.execute(cmd)
         except mysql.Error as err:
             logger.error(f'Grant bot permission err: {err}')
+
+
+def get_tables(db_name: str) -> list:
+    """Return table list of given database.
+
+    Function returns a list with the names of the tables.
+
+    Args:
+        db_name:    Database to get list of tables.
+
+    Returns:
+        table_names: List of table names.
+    """
+    table_names = []
+    try:
+        cursor.execute(f'USE {db_name}')
+        cursor.execute('SHOW TABLES;')
+        tables = cursor.fetchall()
+
+        for table in tables:
+            table_names.append(str(table[0]))
+    except mysql.Error as err:
+        logger.error(f'get_tables: {err}')
+    return table_names
 
 
 def save_comment_data(link: str, msg: str, exp: datetime, uid: str) -> bool:
