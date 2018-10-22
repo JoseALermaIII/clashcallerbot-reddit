@@ -53,10 +53,10 @@ def main():
     col = 'id INT UNSIGNED NOT NULL AUTO_INCREMENT, ' \
           'permalink VARCHAR(100), message VARCHAR(100), new_date DATETIME, ' \
           'userID VARCHAR(20), PRIMARY KEY(id)'
-    create_table(DB_NAME, 'message_date', col)
+    create_table(DB_NAME, 'message_data', col)
 
     # Describe message table
-    cursor.execute('DESCRIBE message_date;')
+    cursor.execute('DESCRIBE message_data;')
     print(cursor.fetchall())
 
     # Create comment list table
