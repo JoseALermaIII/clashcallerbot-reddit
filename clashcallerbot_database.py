@@ -99,14 +99,13 @@ def main():
             logger.error(f'Grant bot permission err: {err}')
 
 
-def save_comment_data(csr: mysql.connection.MySQLCursor, link: str, msg: str, exp: datetime, uid: str) -> bool:
+def save_comment_data(link: str, msg: str, exp: datetime, uid: str) -> bool:
     """Saves given comment data into message_date table.
 
     Function uses given inputs to create a dictionary to quicksave
     data to the message_date table.
 
     Args:
-        csr:    MySQL.connection cursor object.
         link:   Comment permalink.
         msg:    Comment message.
         exp:    Expiration datetime object.
@@ -125,8 +124,8 @@ def save_comment_data(csr: mysql.connection.MySQLCursor, link: str, msg: str, ex
             'u': uid
         }
 
-        csr.execute(add_comment, comment_data)
-        csr.commit()
+        cursor.execute(add_comment, comment_data)
+        mysql_connection.commit()
     except mysql.Error as err:
         logger.error(f'save_comment_data: {err}')
         return False
