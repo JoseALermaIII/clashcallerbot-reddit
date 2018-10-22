@@ -76,7 +76,7 @@ def main():
 
     # Fetch rows from comment_list as tuple of tuples
     local_cursor.execute(f'SELECT * FROM comment_list GROUP BY id;')
-    print(local_cursor.fetchall())
+    print(tuple(local_cursor.fetchall()))
 
     # Grant database bot permissions
     if root_user:
@@ -282,11 +282,11 @@ def find_comment_id(cid: str) -> bool:
         True for success, false otherwise.
     """
     try:
-        query = f'SELECT * FROM comment_list WHERE comment_ids={cid} GROUP BY id;'
+        query = f'SELECT * FROM comment_list WHERE comment_ids=\'{cid}\' GROUP BY id;'
         cursor.execute(query)
 
         rows = cursor.fetchall()
-        if rows == ():
+        if not rows:
             return False
 
     except mysql.Error as err:
