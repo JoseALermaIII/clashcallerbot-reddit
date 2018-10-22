@@ -75,7 +75,7 @@ def main():
               'PRIMARY KEY(id));'
         cursor.execute(cmd)
 
-        cmd = 'INSERT INTO comment_list VALUES (1, "\'0\'");'  # Initialize list column
+        cmd = 'INSERT INTO comment_list (list) VALUES (\'0\');'  # Initialize list column
         cursor.execute(cmd)
     except mysql.Error as err:
         logger.error(f'Create comment_list err: {err}')
