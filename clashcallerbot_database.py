@@ -154,6 +154,33 @@ def save_comment_id(cid: str) -> bool:
     return True
 
 
+def find_comment_id(cid: str) -> bool:
+    """Check comment_list table for comment id.
+
+    Function checks comment_list table for given comment id.
+
+    Args:
+        cid:    Comment id to search for.
+
+    Returns:
+        True for success, false otherwise.
+    """
+    try:
+        query = 'SELECT list FROM comment_list;'
+
+        cursor.execute(query)
+        mysql_connection.commit()
+
+        ids = cursor.fetchall()
+        if cid not in ids:
+            return False
+
+    except mysql.Error as err:
+        logger.error(f'find_comment_id: {err}')
+        return False
+    return True
+
+
 # If run directly, instead of imported as a module, run main():
 if __name__ == '__main__':
     main()
