@@ -278,9 +278,7 @@ def find_comment_id(cid: str) -> bool:
     """
     try:
         query = 'SELECT list FROM comment_list;'
-
         cursor.execute(query)
-        mysql_connection.commit()
 
         ids = cursor.fetchall()
         if cid not in ids:
