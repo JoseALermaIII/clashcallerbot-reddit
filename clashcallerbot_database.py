@@ -2,8 +2,13 @@
 # -*- coding: utf-8 -*-
 """Setup the MySQL-compatible database.
 
-This module provides various functions for managing the MySQL-compatible database.
-The database and tables can be created. Table data and properties can also be viewed.
+This module provides various functions for managing the MySQL-compatible database:
+
+* Create database and tables.
+* View table data and properties.
+* Grant user permissions (if logged into database as root).
+* Add rows to tables.
+* Delete tables.
 """
 
 import mysql.connector as mysql
