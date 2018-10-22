@@ -20,24 +20,24 @@ logging.config.fileConfig('logging.conf', disable_existing_loggers=False)
 logging.raiseExceptions = True  # Production mode if False (no console sys.stderr output)
 logger = logging.getLogger('search')
 
+# Read database.ini file
+config = configparser.ConfigParser()
+config.read('database.ini')
+
+DB_USER = config.get('bot', 'user')
+DB_PASS = config.get('bot', 'password')
+DB_NAME = config.get('bot', 'database')
+
+# Setup MySQL-compatible database
+mysql_connection = mysql.connect(user=DB_USER, password=DB_PASS, database=DB_NAME)
+cursor = mysql_connection.cursor()
+
+# Generate reddit instance
+reddit = praw.Reddit('clashcaller')  # Section name in praw.ini
+subreddit = reddit.subreddit('ClashCallerBot')  # Limit scope for testing purposes
+
 
 def main():
-    # Read database.ini file
-    config = configparser.ConfigParser()
-    config.read('database.ini')
-
-    DB_USER = config.get('bot', 'user')
-    DB_PASS = config.get('bot', 'password')
-    DB_NAME = config.get('bot', 'database')
-
-    # Setup MySQL-compatible database
-    mysql_connection = mysql.connect(user=DB_USER, password=DB_PASS, database=DB_NAME)
-    cursor = mysql_connection.cursor()
-
-    # Generate reddit instance
-    reddit = praw.Reddit('clashcaller')  # Section name in praw.ini
-    subreddit = reddit.subreddit('ClashCallerBot')  # Limit scope for testing purposes
-
     # Search recent comments for ClashCaller! string
     clashcaller_re = re.compile(r'''
                                 [!|\s]?             # prefix ! or space (optional)
