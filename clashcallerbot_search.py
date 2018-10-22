@@ -75,6 +75,10 @@ def main():
             logger.debug(f'timedelta = {timedelta.seconds} seconds')
 
             # Evaluate message
+            if len(comment.body) > 100:
+                logger.error('Message length > 100 characters.')
+                # TODO: send message and ignore comment
+                continue
             message_re = re.compile(r'''
                                     (\s)*     # optional space
                                     base      # required string: base
@@ -86,7 +90,7 @@ def main():
                 logger.error('Message not properly formatted.')
                 # TODO: send message and ignore comment
                 continue
-            # TODO: Message cannot be longer than 100 char
+
             message = comment.body
             logger.debug(f'message = {message}')
 
