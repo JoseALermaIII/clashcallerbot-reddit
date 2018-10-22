@@ -288,14 +288,11 @@ def find_comment_id(cid: str) -> bool:
         rows = cursor.fetchall()
         if rows == ():
             return False
-        for row in rows:
-            if cid in row[1]:
-                return True
 
     except mysql.Error as err:
         logger.error(f'find_comment_id: {err}')
         return False
-    return False
+    return True
 
 
 # If run directly, instead of imported as a module, run main():
