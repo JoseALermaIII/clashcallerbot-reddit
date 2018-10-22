@@ -122,6 +122,30 @@ def get_tables(db_name: str) -> list:
     return table_names
 
 
+def drop_table(db_name: str, tbl_name: str) -> bool:
+    """Drop table from database.
+
+    Function drops given table from given database.
+
+    Args:
+        db_name:    Database to drop table from.
+        tbl_name:   Table to drop.
+
+    Returns:
+        True if successful, False otherwise.
+    """
+    try:
+        cursor.execute(f'USE {db_name};')
+        cursor.execute(f'DROP TABLE IF EXISTS {tbl_name};')
+
+        if tbl_name in get_tables(db_name):
+            return False
+    except mysql.Error as err:
+        logger.error(f'drop_table: {err}')
+        return False
+    return True
+
+
 def save_comment_data(link: str, msg: str, exp: datetime, uid: str) -> bool:
     """Saves given comment data into message_date table.
 
