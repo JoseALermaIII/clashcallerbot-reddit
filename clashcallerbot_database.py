@@ -17,29 +17,29 @@ logging.config.fileConfig('logging.conf', disable_existing_loggers=False)
 logging.raiseExceptions = True  # Production mode if False (no console sys.stderr output)
 logger = logging.getLogger('database')
 
+# Read database.ini file
+config = configparser.ConfigParser()
+config.read("database.ini")
+
+root_user = False  # Change to True if first time setup
+if root_user:
+    DB_USER = config.get('root', 'user')
+    DB_PASS = config.get('root', 'password')
+
+    bot_name = config.get('bot', 'user')
+    bot_passwd = config.get('bot', 'password')
+    DB_NAME = config.get('bot', 'database')
+else:
+    DB_USER = config.get('bot', 'user')
+    DB_PASS = config.get('bot', 'password')
+    DB_NAME = config.get('bot', 'database')
+
+# Setup MySQL-compatible database
+mysql_connection = mysql.connect(user=DB_USER, password=DB_PASS, database=DB_NAME)
+cursor = mysql_connection.cursor()
+
 
 def main():
-    # Read database.ini file
-    config = configparser.ConfigParser()
-    config.read("database.ini")
-
-    root_user = False  # Change to True if first time setup
-    if root_user:
-        DB_USER = config.get('root', 'user')
-        DB_PASS = config.get('root', 'password')
-
-        bot_name = config.get('bot', 'user')
-        bot_passwd = config.get('bot', 'password')
-        DB_NAME = config.get('bot', 'database')
-    else:
-        DB_USER = config.get('bot', 'user')
-        DB_PASS = config.get('bot', 'password')
-        DB_NAME = config.get('bot', 'database')
-
-    # Setup MySQL-compatible database
-    mysql_connection = mysql.connect(user=DB_USER, password=DB_PASS, database=DB_NAME)
-    cursor = mysql_connection.cursor()
-
     # Create the clashcaller database
     try:
         cursor.execute('CREATE DATABASE clashcaller;')
