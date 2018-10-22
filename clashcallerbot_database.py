@@ -184,11 +184,10 @@ def drop_table(db_name: str, tbl_name: str) -> bool:
     return True
 
 
-def save_comment_data(link: str, msg: str, exp: datetime, uid: str) -> bool:
+def save_message(link: str, msg: str, exp: datetime, uid: str) -> bool:
     """Saves given comment data into message_date table.
 
-    Function uses given inputs to create a dictionary to quicksave
-    data to the message_date table.
+    Function saves given inputs in message_date table as a row.
 
     Args:
         link:   Comment permalink.
@@ -200,9 +199,9 @@ def save_comment_data(link: str, msg: str, exp: datetime, uid: str) -> bool:
         True for success, false otherwise.
     """
     try:
-        add_values = f'INSERT INTO message_date (permalink, message, new_date, userID) ' \
-                     f'VALUES ({link}, {msg}, {exp}, {uid})'
-        cursor.execute(add_values)
+        add_row = f'INSERT INTO message_date (permalink, message, new_date, userID) ' \
+                  f'VALUES ({link}, {msg}, {exp}, {uid})'
+        cursor.execute(add_row)
         mysql_connection.commit()
 
     except mysql.Error as err:
