@@ -12,13 +12,13 @@ import configparser
 import logging.config
 import datetime
 
+# Logger
+logging.config.fileConfig('logging.conf', disable_existing_loggers=False)
+logging.raiseExceptions = True  # Production mode if False (no console sys.stderr output)
+logger = logging.getLogger('database')
+
 
 def main():
-    # Logger
-    logging.config.fileConfig('logging.conf', disable_existing_loggers=False)
-    logging.raiseExceptions = True  # Production mode if False (no console sys.stderr output)
-    logger = logging.getLogger('database')
-
     # Read database.ini file
     config = configparser.ConfigParser()
     config.read("database.ini")
