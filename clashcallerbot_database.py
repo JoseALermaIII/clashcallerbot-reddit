@@ -81,6 +81,10 @@ def main():
     if root_user:
         grant_permissions(DB_NAME, bot_name, bot_passwd)
 
+    # Close database connections
+    cursor.close()
+    mysql_connection.close()
+
 
 def create_database(db_name: str) -> bool:
     """Create database
