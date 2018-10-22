@@ -45,11 +45,12 @@ cursor = mysql_connection.cursor()
 
 
 def main():
+    local_cursor = mysql_connection.cursor()
     # Create the clashcaller database
     create_database(DB_NAME)
 
     # Select the clashcaller database
-    cursor.execute(f'USE {DB_NAME};')
+    local_cursor.execute(f'USE {DB_NAME};')
 
     # Show the tables
     print(get_tables(DB_NAME))
@@ -61,28 +62,28 @@ def main():
     create_table(DB_NAME, 'message_data', col)
 
     # Describe message table
-    cursor.execute('DESCRIBE message_data;')
-    print(cursor.fetchall())
+    local_cursor.execute('DESCRIBE message_data;')
+    print(local_cursor.fetchall())
 
-    # Create comment list table
-    col = 'id MEDIUMINT NOT NULL AUTO_INCREMENT, list VARCHAR(35), ' \
+    # Create comment_list table
+    col = 'id MEDIUMINT NOT NULL AUTO_INCREMENT, comment_ids VARCHAR(35), ' \
           'PRIMARY KEY(id)'
     create_table(DB_NAME, 'comment_list', col)
 
     # Describe comment list table
-    cursor.execute('DESCRIBE comment_list;')
-    print(cursor.fetchall())
+    local_cursor.execute('DESCRIBE comment_list;')
+    print(local_cursor.fetchall())
 
-    # Fetch list column from comment_list
-    cursor.execute('SELECT list FROM comment_list;')
-    print(cursor.fetchall())
+    # Fetch comment_ids column from comment_list
+    local_cursor.execute('SELECT comment_ids FROM comment_list;')
+    print(local_cursor.fetchall())
 
     # Grant database bot permissions
     if root_user:
         grant_permissions(DB_NAME, bot_name, bot_passwd)
 
     # Close database connections
-    cursor.close()
+    local_cursor.close()
     mysql_connection.close()
 
 
@@ -221,7 +222,7 @@ def drop_table(db_name: str, tbl_name: str) -> bool:
 
 
 def save_message(link: str, msg: str, exp: datetime, uid: str) -> bool:
-    """Saves given comment data into message_date table.
+    """Saves given comment data into message_data table.
 
     Function saves given inputs in message_date table as a row.
 
@@ -235,7 +236,7 @@ def save_message(link: str, msg: str, exp: datetime, uid: str) -> bool:
         True for success, false otherwise.
     """
     try:
-        add_row = f'INSERT INTO message_date (permalink, message, new_date, userID) ' \
+        add_row = f'INSERT INTO message_data (permalink, message, new_date, userID) ' \
                   f'VALUES ({link}, {msg}, {exp}, {uid})'
         cursor.execute(add_row)
         mysql_connection.commit()
@@ -258,7 +259,7 @@ def save_comment_id(cid: str) -> bool:
         True for success, false otherwise.
     """
     try:
-        add_comment_id = f'INSERT INTO comment_list (list) VALUES ({cid})'
+        add_comment_id = f'INSERT INTO comment_list (comment_ids) VALUES ({cid})'
 
         cursor.execute(add_comment_id)
         mysql_connection.commit()
@@ -281,7 +282,7 @@ def find_comment_id(cid: str) -> bool:
         True for success, false otherwise.
     """
     try:
-        query = 'SELECT list FROM comment_list;'
+        query = 'SELECT comment_ids FROM comment_list;'
         cursor.execute(query)
 
         ids = cursor.fetchall()
