@@ -59,8 +59,6 @@ def main():
               'userID VARCHAR(20), PRIMARY KEY(id));'
         cursor.execute(cmd)
 
-        cmd = 'ALTER TABLE message_date AUTO_INCREMENT=1;'
-        cursor.execute(cmd)
     except mysql.Error as err:
         logger.error(f'Create message_table err: {err}')
 
@@ -70,12 +68,10 @@ def main():
 
     # Create comment list table
     try:
-        cmd = 'CREATE TABLE comment_list (id MEDIUMINT NOT NULL, list VARCHAR(35), ' \
+        cmd = 'CREATE TABLE comment_list (id MEDIUMINT NOT NULL AUTO_INCREMENT, list VARCHAR(35), ' \
               'PRIMARY KEY(id));'
         cursor.execute(cmd)
 
-        cmd = 'INSERT INTO comment_list (list) VALUES (\'0\');'  # Initialize list column
-        cursor.execute(cmd)
     except mysql.Error as err:
         logger.error(f'Create comment_list err: {err}')
 
