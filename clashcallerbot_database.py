@@ -295,6 +295,18 @@ def find_comment_id(cid: str) -> bool:
     return True
 
 
+def close_database() -> None:
+    """Close database connections.
+
+    Function closes global database cursor and connection.
+
+    Returns:
+         None
+    """
+    cursor.close()
+    mysql_connection.close()
+
+
 # If run directly, instead of imported as a module, run main():
 if __name__ == '__main__':
     main()
