@@ -13,7 +13,7 @@ import logging.config
 import re
 import datetime
 
-from . import clashcallerbot_database as db
+import clashcallerbot_database as db
 
 # Logger
 logging.config.fileConfig('logging.conf', disable_existing_loggers=False)
@@ -96,8 +96,8 @@ def main():
             expiration_datetime = comment_datetime + timedelta
             logger.info(f'expiration_datetime = {expiration_datetime}')
 
-    # TODO: Save comment data to MySQL-compatible database
-
+            # TODO: Save comment data to MySQL-compatible database
+            print(comment.permalink)
     # TODO: Compose message for comment and PM
 
     # TODO: If not already commented, comment and send PM
