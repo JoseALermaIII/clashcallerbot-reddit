@@ -8,9 +8,7 @@ expiration time (if any) are parsed. The default, or provided, expiration time i
 applied, then all the comment data is saved to a MySQL-compatible database."""
 
 import praw
-import mysql.connector as mysql
 
-import configparser
 import logging.config
 import re
 import datetime
@@ -19,18 +17,6 @@ import datetime
 logging.config.fileConfig('logging.conf', disable_existing_loggers=False)
 logging.raiseExceptions = True  # Production mode if False (no console sys.stderr output)
 logger = logging.getLogger('search')
-
-# Read database.ini file
-config = configparser.ConfigParser()
-config.read('database.ini')
-
-DB_USER = config.get('bot', 'user')
-DB_PASS = config.get('bot', 'password')
-DB_NAME = config.get('bot', 'database')
-
-# Setup MySQL-compatible database
-mysql_connection = mysql.connect(user=DB_USER, password=DB_PASS, database=DB_NAME)
-cursor = mysql_connection.cursor()
 
 # Generate reddit instance
 reddit = praw.Reddit('clashcaller')  # Section name in praw.ini
