@@ -65,6 +65,10 @@ def main():
     local_cursor.execute('DESCRIBE message_data;')
     print(local_cursor.fetchall())
 
+    # Fetch rows from message_data as tuple of tuples
+    local_cursor.execute(f'SELECT * FROM message_data GROUP BY id;')
+    print(tuple(local_cursor.fetchall()))
+
     # Create comment_list table
     col = 'id MEDIUMINT NOT NULL AUTO_INCREMENT, comment_ids VARCHAR(35), ' \
           'PRIMARY KEY(id)'
