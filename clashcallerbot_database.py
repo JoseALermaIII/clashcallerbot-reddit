@@ -240,8 +240,9 @@ def save_message(link: str, msg: str, exp: datetime, uid: str) -> bool:
         True for success, false otherwise.
     """
     try:
+        exp = exp.strftime('%Y-%m-%d %H:%M:%S')  # Convert to MySQL datetime
         add_row = f'INSERT INTO message_data (permalink, message, new_date, userID) ' \
-                  f'VALUES ({link}, {msg}, {exp}, {uid});'
+                  f'VALUES (\'{link}\', \'{msg}\', \'{exp}\', \'{uid}\');'
         cursor.execute(add_row)
         mysql_connection.commit()
 
