@@ -13,7 +13,7 @@ import logging.config
 import re
 import datetime
 
-from . import clashcallerbot_database as database
+from . import clashcallerbot_database as db
 
 # Logger
 logging.config.fileConfig('logging.conf', disable_existing_loggers=False)
