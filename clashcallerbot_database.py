@@ -50,27 +50,19 @@ def main():
     print(get_tables(DB_NAME))
 
     # Create message table
-    try:
-        cmd = 'CREATE TABLE message_date (id INT UNSIGNED NOT NULL AUTO_INCREMENT, ' \
-              'permalink VARCHAR(100), message VARCHAR(100), new_date DATETIME, ' \
-              'userID VARCHAR(20), PRIMARY KEY(id));'
-        cursor.execute(cmd)
-
-    except mysql.Error as err:
-        logger.error(f'Create message_table err: {err}')
+    cmd = 'CREATE TABLE message_date (id INT UNSIGNED NOT NULL AUTO_INCREMENT, ' \
+          'permalink VARCHAR(100), message VARCHAR(100), new_date DATETIME, ' \
+          'userID VARCHAR(20), PRIMARY KEY(id));'
+    create_table(DB_NAME, cmd)
 
     # Describe message table
     cursor.execute('DESCRIBE message_date;')
     print(cursor.fetchall())
 
     # Create comment list table
-    try:
-        cmd = 'CREATE TABLE comment_list (id MEDIUMINT NOT NULL AUTO_INCREMENT, list VARCHAR(35), ' \
-              'PRIMARY KEY(id));'
-        cursor.execute(cmd)
-
-    except mysql.Error as err:
-        logger.error(f'Create comment_list err: {err}')
+    cmd = 'CREATE TABLE comment_list (id MEDIUMINT NOT NULL AUTO_INCREMENT, list VARCHAR(35), ' \
+          'PRIMARY KEY(id));'
+    create_table(DB_NAME, cmd)
 
     # Describe comment list table
     cursor.execute('DESCRIBE comment_list;')
@@ -132,6 +124,37 @@ def get_tables(db_name: str) -> list:
     except mysql.Error as err:
         logger.error(f'get_tables: {err}')
     return table_names
+
+
+def create_table(db_name: str, specs: str) -> bool:
+    """Create table in database.
+
+    Function creates table in given database with given command.
+
+    Args:
+        db_name:    Database to make table in.
+        specs:    Instructions containing table specifications.
+
+    Example:
+        ::
+            specs = 'CREATE TABLE message_date (id INT UNSIGNED NOT NULL AUTO_INCREMENT, ' \
+                    'permalink VARCHAR(100), message VARCHAR(100), new_date DATETIME, ' \
+                    'userID VARCHAR(20), PRIMARY KEY(id));'
+            db_name = database
+
+            create_table(db_name, specs)
+
+    Returns:
+        True if successful, False otherwise.
+    """
+    try:
+        cursor.execute(f'USE {db_name}')
+        cursor.execute(specs)
+
+    except mysql.Error as err:
+        logger.error(f'create_table: {err}')
+        return False
+    return True
 
 
 def drop_table(db_name: str, tbl_name: str) -> bool:
