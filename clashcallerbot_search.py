@@ -15,13 +15,13 @@ import logging.config
 import re
 import datetime
 
+# Logger
+logging.config.fileConfig('logging.conf', disable_existing_loggers=False)
+logging.raiseExceptions = True  # Production mode if False (no console sys.stderr output)
+logger = logging.getLogger('search')
+
 
 def main():
-    # Logger
-    logging.config.fileConfig('logging.conf', disable_existing_loggers=False)
-    logging.raiseExceptions = True  # Production mode if False (no console sys.stderr output)
-    logger = logging.getLogger('search')
-
     # Read database.ini file
     config = configparser.ConfigParser()
     config.read('database.ini')
