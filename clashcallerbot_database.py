@@ -237,7 +237,7 @@ def save_message(link: str, msg: str, exp: datetime, uid: str) -> bool:
         mysql_connection.commit()
 
     except mysql.Error as err:
-        logger.error(f'save_comment_data: {err}')
+        logger.error(f'save_message: {err}')
         return False
     return True
 
