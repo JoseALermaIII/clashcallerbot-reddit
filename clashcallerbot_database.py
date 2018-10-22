@@ -41,10 +41,7 @@ cursor = mysql_connection.cursor()
 
 def main():
     # Create the clashcaller database
-    try:
-        cursor.execute(f'CREATE DATABASE {DB_NAME};')
-    except mysql.Error as err:
-        logger.error(f'Create database err: {err}')
+    create_database(DB_NAME)
 
     # Select the clashcaller database
     cursor.execute(f'USE {DB_NAME};')
@@ -92,6 +89,25 @@ def main():
             cursor.execute(cmd)
         except mysql.Error as err:
             logger.error(f'Grant bot permission err: {err}')
+
+
+def create_database(db_name: str) -> bool:
+    """Create database
+
+    Function creates database with given database name.
+
+    Args:
+        db_name:    Name to give new database.
+
+    Returns:
+        True if successful, False otherwise.
+    """
+    try:
+        cursor.execute(f'CREATE DATABASE {db_name};')
+    except mysql.Error as err:
+        logger.error(f'create_database: {err}')
+        return False
+    return True
 
 
 def get_tables(db_name: str) -> list:
