@@ -132,6 +132,28 @@ def save_comment_data(link: str, msg: str, exp: datetime, uid: str) -> bool:
     return True
 
 
+def save_comment_id(cid: str) -> bool:
+    """Saves comment id into comment_list table.
+
+    Function saves given comment id into the comment_list table.
+
+    Args:
+        cid:    Comment id to save.
+
+    Returns:
+        True for success, false otherwise.
+    """
+    try:
+        add_comment_id = 'INSERT INTO comment_list (list) VALUES (%s)'
+
+        cursor.execute(add_comment_id, cid)
+        mysql_connection.commit()
+    except mysql.Error as err:
+        logger.error(f'save_comment_id: {err}')
+        return False
+    return True
+
+
 # If run directly, instead of imported as a module, run main():
 if __name__ == '__main__':
     main()
