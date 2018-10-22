@@ -109,7 +109,7 @@ def save_comment_data(csr: mysql.connection.MySQLCursor, link: str, msg: str, ex
         csr:    MySQL.connection cursor object.
         link:   Comment permalink.
         msg:    Comment message.
-        exp:   Expiration datetime object.
+        exp:    Expiration datetime object.
         uid:    Comment author UserID.
 
     Returns:
