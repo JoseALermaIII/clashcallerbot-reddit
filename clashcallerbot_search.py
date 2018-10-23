@@ -168,9 +168,12 @@ def have_replied(cid: str, bot_name: str) -> bool:
         True if successful, False otherwise.
     """
     try:
-        comment_obj = reddit.comment(id=cid)
+        replies = reddit.comment(id=cid).replies
 
-        for reply in comment_obj.replies:
+        if not replies:
+            return False
+
+        for reply in replies:
             if reply.author == bot_name:
                 return True
 
