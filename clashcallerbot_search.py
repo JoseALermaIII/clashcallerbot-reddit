@@ -107,6 +107,8 @@ def main():
 
     # TODO: If not already commented, comment and send PM
 
+    # TODO: Add comment.id to database
+
 
 # If run directly, instead of imported as a module, run main():
 if __name__ == '__main__':
