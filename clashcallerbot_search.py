@@ -76,6 +76,7 @@ def main():
                         # TODO: Send message and ignore comment
                         continue
                     timedelta = datetime.timedelta(hours=exp_digit)
+                # TODO: Ignore if expire time passed; may need to move apply expire time up here
                 # Strip expiration time
                 comment.body = comment.body[match.end():].strip()
             logger.debug(f'timedelta = {timedelta.seconds} seconds')
