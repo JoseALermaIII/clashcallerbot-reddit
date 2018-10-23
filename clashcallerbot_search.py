@@ -133,6 +133,31 @@ def send_message(uid: str, subj: str, msg: str) -> bool:
     return True
 
 
+def have_replied(cid: str, bot_name: str) -> bool:
+    """Checks if bot user has replied to a comment.
+
+    Function checks reply authors for bot user.
+
+    Args:
+        cid:        Comment ID to get replies of.
+        bot_name:   Name of bot to check for.
+
+    Returns:
+        True if successful, False otherwise.
+    """
+    try:
+        comment_obj = reddit.comment(id=cid)
+
+        for reply in comment_obj.replies:
+            if reply.author == bot_name:
+                return True
+
+    except prawcore.exceptions as err:
+        logger.error(f'have_replied: {err}')
+        return False
+    return False
+
+
 # If run directly, instead of imported as a module, run main():
 if __name__ == '__main__':
     main()
