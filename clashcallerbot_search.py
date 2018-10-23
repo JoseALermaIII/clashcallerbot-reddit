@@ -8,6 +8,7 @@ expiration time (if any) are parsed. The default, or provided, expiration time i
 applied, then all the comment data is saved to a MySQL-compatible database."""
 
 import praw
+import prawcore
 
 import logging.config
 import re
@@ -108,6 +109,28 @@ def main():
     # TODO: If not already commented, comment and send PM
 
     # TODO: Add comment.id to database
+
+
+def send_message(uid: str, subj: str, msg: str) -> bool:
+    """Send message to reddit user.
+
+    Function sends given message with given subject line to given user.
+
+    Args:
+        uid:    userID of user.
+        subj:   Subject line of message.
+        msg:    Message to send to user.
+
+    Returns:
+        True if successful, False otherwise.
+    """
+    try:
+        reddit.redditor(uid).message(subj, msg)
+
+    except prawcore.exceptions as err:
+        logger.error(f'send_message: {err}')
+        return False
+    return True
 
 
 # If run directly, instead of imported as a module, run main():
