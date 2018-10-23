@@ -319,7 +319,7 @@ def find_comment_id(cid: str) -> bool:
     return True
 
 
-def close_database() -> None:
+def close_connections() -> None:
     """Close database connections.
 
     Function closes global database cursor and connection.
