@@ -133,6 +133,28 @@ def send_message(uid: str, subj: str, msg: str) -> bool:
     return True
 
 
+def send_reply(cid: str, msg: str) -> bool:
+    """Replies to a comment.
+
+    Function replies to a given comment ID with a given message.
+
+    Args:
+        cid:    Comment ID to reply to.
+        msg:    Message to reply with.
+
+    Returns:
+        True if successful, False otherwise.
+    """
+    try:
+        comment = reddit.comment(id=cid)
+        comment.reply(msg)
+
+    except prawcore.exceptions as err:
+        logger.error(f'send_reply: {err}')
+        return False
+    return True
+
+
 def have_replied(cid: str, bot_name: str) -> bool:
     """Checks if bot user has replied to a comment.
 
