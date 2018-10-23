@@ -75,6 +75,7 @@ def main():
                         logging.error('Expiration time is >= 1 day.')
                         # TODO: Send message and ignore comment
                         continue
+                    # TODO: Ignore negative numbers
                     timedelta = datetime.timedelta(hours=exp_digit)
                 # TODO: Ignore if expire time passed; may need to move apply expire time up here
                 # Strip expiration time
