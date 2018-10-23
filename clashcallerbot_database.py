@@ -159,7 +159,7 @@ def create_table(db_name: str, tbl_name: str, cols: str) -> bool:
     """
     try:
         cmd = f'CREATE TABLE {tbl_name} ({cols});'
-        cursor.execute(f'USE {db_name}')
+        cursor.execute(f'USE {db_name};')
         cursor.execute(cmd)
 
     except mysql.Error as err:
