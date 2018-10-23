@@ -3,9 +3,13 @@
 """Searches recent reddit comments for ClashCaller! string and saves to database.
 
 This module uses the Python Reddit API Wrapper (PRAW) to search recent reddit comments
-for the ClashCaller! string. If found, the username, comment time, message, and
+for the ClashCaller! string.
+
+If found, the userID, permalink, comment time, message, and
 expiration time (if any) are parsed. The default, or provided, expiration time is
-applied, then all the comment data is saved to a MySQL-compatible database."""
+applied, then all the comment data is saved to a MySQL-compatible database.
+
+The comment is replied to, then the userID is PM'ed confirmation."""
 
 import praw
 import prawcore
