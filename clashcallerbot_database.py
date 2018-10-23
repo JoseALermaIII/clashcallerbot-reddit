@@ -110,6 +110,25 @@ def create_database(db_name: str) -> bool:
     return True
 
 
+def select_database(db_name: str) -> bool:
+    """Select database for command execution.
+
+    Function selects given database within MySQL for command execution.
+
+    Args:
+        db_name:    Database to select.
+
+    Returns:
+        True if successful, False otherwise.
+    """
+    try:
+        cursor.execute(f'USE {db_name};')
+    except mysql.Error as err:
+        logger.error(f'select_database: {err}')
+        return False
+    return True
+
+
 def get_tables(db_name: str) -> list:
     """Return table list of given database.
 
@@ -123,7 +142,7 @@ def get_tables(db_name: str) -> list:
     """
     table_names = []
     try:
-        cursor.execute(f'USE {db_name};')
+        select_database(db_name)
         cursor.execute('SHOW TABLES;')
         tables = cursor.fetchall()
 
@@ -159,7 +178,7 @@ def create_table(db_name: str, tbl_name: str, cols: str) -> bool:
     """
     try:
         cmd = f'CREATE TABLE {tbl_name} ({cols});'
-        cursor.execute(f'USE {db_name};')
+        select_database(db_name)
         cursor.execute(cmd)
 
     except mysql.Error as err:
@@ -214,7 +233,7 @@ def drop_table(db_name: str, tbl_name: str) -> bool:
         True if successful, False otherwise.
     """
     try:
-        cursor.execute(f'USE {db_name};')
+        select_database(db_name)
         cursor.execute(f'DROP TABLE IF EXISTS {tbl_name};')
 
         if tbl_name in get_tables(db_name):
