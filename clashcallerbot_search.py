@@ -39,7 +39,8 @@ def main():
                                 ''', re.VERBOSE)
     for comment in subreddit.stream.comments():
         match = clashcaller_re.search(comment.body)
-        if match and comment.author.name != 'ClashCallerBot' and not db.find_comment_id(comment.id):
+        if match and comment.author.name != 'ClashCallerBot' \
+                and not db.find_comment_id(comment.id) and not have_replied(comment.id, 'ClashCallerBot'):
             logger.info(f'In from {comment.author.name}: {comment}')
             # TODO: If found, parse username, comment date, message, permalink, and expiration time (if any)
 
@@ -110,7 +111,7 @@ def main():
 
     # TODO: Compose message for comment and PM
 
-    # TODO: If not already commented, comment and send PM
+    # TODO: Reply and send PM
 
     # TODO: Add comment.id to database
 
