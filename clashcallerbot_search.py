@@ -147,7 +147,7 @@ def send_confirmation(uid: str, link: str, exp: datetime.datetime) -> bool:
                   Thank you for entrusting us with your warring needs,
                   - ClashCallerBot
 
-                  ^[More info](https://www.reddit.com/r/ClashCallerBot/comments/4e9vo7/clashcallerbot_info/)
+                  [^(More info)](https://www.reddit.com/r/ClashCallerBot/comments/4e9vo7/clashcallerbot_info/)
                   """
         reddit.redditor(uid).message(subject, message.replace('                  ', ''))
 
@@ -180,7 +180,7 @@ def send_error_message(uid: str, error: str) -> bool:
                   Thank you for entrusting us with your warring needs,
                   - ClashCallerBot
                   
-                  ^[More info](https://www.reddit.com/r/ClashCallerBot/comments/4e9vo7/clashcallerbot_info/)
+                  [^(More info)](https://www.reddit.com/r/ClashCallerBot/comments/4e9vo7/clashcallerbot_info/)
                   """
         reddit.redditor(uid).message(subject, message.replace('                  ', ''))
 
