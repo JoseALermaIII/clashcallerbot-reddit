@@ -166,7 +166,7 @@ def send_confirmation(uid: str, link: str, exp: datetime.datetime) -> bool:
               [^(More info)](https://www.reddit.com/r/ClashCallerBot/comments/4e9vo7/clashcallerbot_info/)
               """
     try:
-        reddit.redditor(uid).message(subject, message.replace('                  ', ''))
+        reddit.redditor(uid).message(subject, message.replace('              ', ''))
 
     except praw.exceptions.PRAWException as err:
         logger.error(f'send_confirmation: {err}')
@@ -201,7 +201,7 @@ def send_error_message(uid: str, link: str, error: str) -> bool:
               [^(More info)](https://www.reddit.com/r/ClashCallerBot/comments/4e9vo7/clashcallerbot_info/)
               """
     try:
-        reddit.redditor(uid).message(subject, message.replace('                  ', ''))
+        reddit.redditor(uid).message(subject, message.replace('              ', ''))
 
     except praw.exceptions.PRAWException as err:
         logger.error(f'send_error_message: {err}')
@@ -225,16 +225,16 @@ def send_confirmation_reply(cid: str, link: str, exp: datetime.datetime) -> str:
     permalink = 'https://np.reddit.com' + link  # Permalinks are missing prefix
     time = datetime.datetime.strftime(exp, '%b. %d, %Y at %I:%M:%S %p (%Z)')
     message = f"""ClashCallerBot here!  
-                      I will be messaging you on {time} (UTC) to remind you of [**this link.**]({permalink})
+              I will be messaging you on {time} (UTC) to remind you of [**this link.**]({permalink})
 
-                      Thank you for entrusting us with your warring needs!
+              Thank you for entrusting us with your warring needs!
 
-                      [^(More info)](https://www.reddit.com/r/ClashCallerBot/comments/4e9vo7/clashcallerbot_info/)
-                      """
+              [^(More info)](https://www.reddit.com/r/ClashCallerBot/comments/4e9vo7/clashcallerbot_info/)
+              """
     comment_id = None
     try:
         comment_obj = reddit.comment(id=cid)
-        comment_id = comment_obj.reply(message.replace('                  ', ''))
+        comment_id = comment_obj.reply(message.replace('              ', ''))
 
     except praw.exceptions.PRAWException as err:
         logger.error(f'send_confirmation_reply: {err}')
