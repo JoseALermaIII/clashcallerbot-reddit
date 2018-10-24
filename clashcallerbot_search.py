@@ -124,21 +124,32 @@ def main():
     # TODO: Add comment.id to database
 
 
-def send_message(uid: str, subj: str, msg: str) -> bool:
-    """Send message to reddit user.
+def send_confirmation(uid: str, link: str, exp: datetime.datetime) -> bool:
+    """Send confirmation to reddit user.
 
-    Function sends given message with given subject line to given user.
+    Function sends given user confirmation of given expiration time with given link.
 
     Args:
         uid:    userID of user.
-        subj:   Subject line of message.
-        msg:    Message to send to user.
+        link:   Permalink of comment.
+        exp:    Expiration datetime of call.
 
     Returns:
         True if successful, False otherwise.
     """
     try:
-        reddit.redditor(uid).message(subj, msg)
+        subject = 'ClashCallerBot Confirmation Sent'
+        permalink = 'https://np.reddit.com' + link  # Permalinks are missing prefix
+        time = datetime.datetime.strftime(exp, '%b. %d, %Y at %I:%M:%S %p (%Z)')
+        message = f"""ClashCallerBot here!  
+                  I will be messaging you on {time} (UTC) to remind you of [**this link.**]({permalink})
+
+                  Thank you for entrusting us with your warring needs,
+                  - ClashCallerBot
+
+                  ^[More info](https://www.reddit.com/r/ClashCallerBot/comments/4e9vo7/clashcallerbot_info/)
+                  """
+        reddit.redditor(uid).message(subject, message.replace('                  ', ''))
 
     except prawcore.exceptions as err:
         logger.error(f'send_message: {err}')
