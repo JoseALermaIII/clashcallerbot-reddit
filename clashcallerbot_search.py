@@ -140,6 +140,8 @@ def main():
             # Save comment.id to database
             db.save_comment_id(comment.id)
 
+            # TODO: Add more functionality via PM: delete calls, add users to call reminder
+
 
 def send_confirmation(uid: str, link: str, exp: datetime.datetime) -> bool:
     """Send confirmation to reddit user.
