@@ -66,14 +66,14 @@ def main():
                 if '-' in match.group('exp_digit').strip():
                     # Send message and ignore comment
                     error = 'Expiration time is negative.'
-                    send_error_message(comment.author.id, comment.permalink, error)
+                    send_error_message(comment.author.name, comment.permalink, error)
                     continue
 
                 exp_digit = int(match.group('exp_digit').strip())
                 if exp_digit == 0:  # ignore zeros
                     # Send message and ignore comment
                     error = 'Expiration time is zero.'
-                    send_error_message(comment.author.id, comment.permalink, error)
+                    send_error_message(comment.author.name, comment.permalink, error)
                     logging.error(error)
                     continue
                 exp_unit = match.group('exp_unit').strip().lower()
@@ -83,7 +83,7 @@ def main():
                     if exp_digit >= 24:  # ignore days
                         # Send message and ignore comment
                         error = 'Expiration time is >= 1 day.'
-                        send_error_message(comment.author.id, comment.permalink, error)
+                        send_error_message(comment.author.name, comment.permalink, error)
                         logging.error(error)
                         continue
                     timedelta = datetime.timedelta(hours=exp_digit)
@@ -99,7 +99,7 @@ def main():
             if expiration_datetime < datetime.datetime.now(datetime.timezone.utc):
                 # Send message and ignore comment
                 error = 'Expiration time has already passed.'
-                send_error_message(comment.author.id, comment.permalink, error)
+                send_error_message(comment.author.name, comment.permalink, error)
                 logging.error(error)
                 continue
 
@@ -110,7 +110,7 @@ def main():
             if len(comment.body) > 100:
                 # Send message and ignore comment
                 error = 'Message length > 100 characters.'
-                send_error_message(comment.author.id, comment.permalink, error)
+                send_error_message(comment.author.name, comment.permalink, error)
                 logger.error(error)
                 continue
             message_re = re.compile(r'''
@@ -124,17 +124,17 @@ def main():
                 # Send message and ignore comment
                 error = 'Message not properly formatted.'
                 logger.error(error)
-                send_error_message(comment.author.id, comment.permalink, error)
+                send_error_message(comment.author.name, comment.permalink, error)
                 continue
 
             message = comment.body
             logger.debug(f'message = {message}')
 
             # Save message data to MySQL-compatible database
-            db.save_message(comment.permalink, message, expiration_datetime, comment.author.id)
+            db.save_message(comment.permalink, message, expiration_datetime, comment.author.name)
 
             # Reply and send PM
-            send_confirmation(comment.author.id, comment.permalink, expiration_datetime)
+            send_confirmation(comment.author.name, comment.permalink, expiration_datetime)
             send_confirmation_reply(comment.id, comment.permalink, expiration_datetime)
 
             # Save comment.id to database
