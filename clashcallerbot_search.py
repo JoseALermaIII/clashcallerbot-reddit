@@ -187,7 +187,7 @@ def have_replied(cid: str, bot_name: str) -> bool:
             return False
 
         for reply in replies:
-            if reply.author == bot_name:
+            if reply.author.name == bot_name:
                 return True
 
     except prawcore.exceptions as err:
