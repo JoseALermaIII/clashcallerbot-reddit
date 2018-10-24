@@ -17,6 +17,7 @@ import praw.exceptions
 import logging.config
 import re
 import datetime
+import time
 
 import clashcallerbot_database as db
 
@@ -256,7 +257,17 @@ def have_replied(cid: str, bot_name: str) -> bool:
         True if successful, False otherwise.
     """
     try:
-        replies = reddit.comment(id=cid).replies
+        comment = reddit.comment(id=cid)
+        comment.refresh()  # Refreshes attributes of comment to load replies
+
+        # Keep fetching 20 new replies until it finishes
+        while True:
+            try:
+                replies = comment.replies.replace_more()
+                break
+            except praw.exceptions.PRAWException as err:
+                logger.error(f'comment.replies.replace_more: {err}')
+                time.sleep(1)
 
         if not replies:
             return False
