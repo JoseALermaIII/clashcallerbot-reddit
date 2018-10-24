@@ -12,7 +12,7 @@ applied, then all the comment data is saved to a MySQL-compatible database.
 The comment is replied to, then the userID is PM'ed confirmation."""
 
 import praw
-import prawcore
+import praw.exceptions
 
 import logging.config
 import re
@@ -168,7 +168,7 @@ def send_confirmation(uid: str, link: str, exp: datetime.datetime) -> bool:
     try:
         reddit.redditor(uid).message(subject, message.replace('                  ', ''))
 
-    except prawcore.exceptions as err:
+    except praw.exceptions.PRAWException as err:
         logger.error(f'send_confirmation: {err}')
         return False
     return True
@@ -203,7 +203,7 @@ def send_error_message(uid: str, link: str, error: str) -> bool:
     try:
         reddit.redditor(uid).message(subject, message.replace('                  ', ''))
 
-    except prawcore.exceptions as err:
+    except praw.exceptions.PRAWException as err:
         logger.error(f'send_error_message: {err}')
         return False
     return True
@@ -236,7 +236,7 @@ def send_confirmation_reply(cid: str, link: str, exp: datetime.datetime) -> str:
         comment_obj = reddit.comment(id=cid)
         comment_id = comment_obj.reply(message.replace('                  ', ''))
 
-    except prawcore.exceptions as err:
+    except praw.exceptions.PRAWException as err:
         logger.error(f'send_confirmation_reply: {err}')
     return comment_id
 
@@ -263,7 +263,7 @@ def have_replied(cid: str, bot_name: str) -> bool:
             if reply.author.name == bot_name:
                 return True
 
-    except prawcore.exceptions as err:
+    except praw.exceptions.PRAWException as err:
         logger.error(f'have_replied: {err}')
         return False
     return False
