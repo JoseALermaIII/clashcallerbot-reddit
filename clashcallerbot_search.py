@@ -160,7 +160,7 @@ def send_confirmation(uid: str, link: str, exp: datetime.datetime) -> bool:
     message = f"""ClashCallerBot here!  
               I will be messaging you on {time} to remind you of [**this link.**]({permalink})
 
-              Thank you for entrusting us with your warring needs,
+              Thank you for entrusting us with your warring needs,  
               - ClashCallerBot
 
               [^(More info)](https://www.reddit.com/r/ClashCallerBot/comments/4e9vo7/clashcallerbot_info/)
