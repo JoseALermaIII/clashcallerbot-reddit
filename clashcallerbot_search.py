@@ -159,10 +159,10 @@ def send_confirmation(uid: str, link: str, exp: datetime.datetime) -> bool:
     time = datetime.datetime.strftime(exp, '%b. %d, %Y at %I:%M:%S %p (%Z)')
     message = f"""ClashCallerBot here!  
               I will be messaging you on {time} to remind you of [**this link.**]({permalink})
-
+ 
               Thank you for entrusting us with your warring needs,  
               - ClashCallerBot
-
+ 
               [^(More info)](https://www.reddit.com/r/ClashCallerBot/comments/4e9vo7/clashcallerbot_info/)
               """
     try:
@@ -194,10 +194,10 @@ def send_error_message(uid: str, link: str, error: str) -> bool:
               {error}  
               Please delete your call to reduce spam and try again after making the
               above change.
-
+ 
               Thank you for entrusting us with your warring needs,  
               - ClashCallerBot
-
+ 
               [^(More info)](https://www.reddit.com/r/ClashCallerBot/comments/4e9vo7/clashcallerbot_info/)
               """
     try:
@@ -226,9 +226,9 @@ def send_confirmation_reply(cid: str, link: str, exp: datetime.datetime) -> str:
     time = datetime.datetime.strftime(exp, '%b. %d, %Y at %I:%M:%S %p (%Z)')
     message = f"""ClashCallerBot here!  
               I will be messaging you on {time} to remind you of [**this link.**]({permalink})
-
+ 
               Thank you for entrusting us with your warring needs!
-
+ 
               [^(More info)](https://www.reddit.com/r/ClashCallerBot/comments/4e9vo7/clashcallerbot_info/)
               """
     comment_id = None
