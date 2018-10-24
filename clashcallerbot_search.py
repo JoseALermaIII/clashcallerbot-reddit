@@ -131,7 +131,8 @@ def main():
             send_confirmation(comment.author.id, comment.permalink, expiration_datetime)
             send_confirmation_reply(comment.id, comment.permalink, expiration_datetime)
 
-    # TODO: Add comment.id to database
+            # Save comment.id to database
+            db.save_comment_id(comment.id)
 
 
 def send_confirmation(uid: str, link: str, exp: datetime.datetime) -> bool:
