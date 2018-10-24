@@ -73,7 +73,7 @@ def main():
                 if exp_digit == 0:  # ignore zeros
                     # Send message and ignore comment
                     error = 'Expiration time is zero.'
-                    send_error_message(comment.author.name, comment.permalink, error)
+                    # send_error_message(comment.author.name, comment.permalink, error)
                     logging.error(error)
                     continue
                 exp_unit = match.group('exp_unit').strip().lower()
@@ -83,7 +83,7 @@ def main():
                     if exp_digit >= 24:  # ignore days
                         # Send message and ignore comment
                         error = 'Expiration time is >= 1 day.'
-                        send_error_message(comment.author.name, comment.permalink, error)
+                        # send_error_message(comment.author.name, comment.permalink, error)
                         logging.error(error)
                         continue
                     timedelta = datetime.timedelta(hours=exp_digit)
@@ -99,7 +99,7 @@ def main():
             if expiration_datetime < datetime.datetime.now(datetime.timezone.utc):
                 # Send message and ignore comment
                 error = 'Expiration time has already passed.'
-                send_error_message(comment.author.name, comment.permalink, error)
+                # send_error_message(comment.author.name, comment.permalink, error)
                 logging.error(error)
                 continue
 
@@ -110,7 +110,7 @@ def main():
             if len(comment.body) > 100:
                 # Send message and ignore comment
                 error = 'Message length > 100 characters.'
-                send_error_message(comment.author.name, comment.permalink, error)
+                # send_error_message(comment.author.name, comment.permalink, error)
                 logger.error(error)
                 continue
             message_re = re.compile(r'''
@@ -124,7 +124,7 @@ def main():
                 # Send message and ignore comment
                 error = 'Message not properly formatted.'
                 logger.error(error)
-                send_error_message(comment.author.name, comment.permalink, error)
+                # send_error_message(comment.author.name, comment.permalink, error)
                 continue
 
             message = comment.body
