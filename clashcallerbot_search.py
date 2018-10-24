@@ -77,18 +77,22 @@ def main():
                         continue
                     # TODO: Ignore negative numbers
                     timedelta = datetime.timedelta(hours=exp_digit)
-
-                # Apply expiration time to comment date
-                comment_datetime = datetime.datetime.fromtimestamp(comment.created_utc, datetime.timezone.utc)
-                logger.info(f'comment_datetime = {comment_datetime}')
-                expiration_datetime = comment_datetime + timedelta
-                logger.info(f'expiration_datetime = {expiration_datetime}')
-
-                # TODO: Ignore if expire time passed; may need to move apply expire time up here
-
-                # Strip expiration time
-                comment.body = comment.body[match.end():].strip()
             logger.debug(f'timedelta = {timedelta.seconds} seconds')
+
+            # Apply expiration time to comment date
+            comment_datetime = datetime.datetime.fromtimestamp(comment.created_utc, datetime.timezone.utc)
+            logger.info(f'comment_datetime = {comment_datetime}')
+            expiration_datetime = comment_datetime + timedelta
+            logger.info(f'expiration_datetime = {expiration_datetime}')
+
+            # Ignore if expire time passed
+            if expiration_datetime < datetime.datetime.now(datetime.timezone.utc):
+                logging.error('Expiration time has already passed.')
+                # TODO: Send message and ignore comment
+                continue
+
+            # Strip expiration time
+            comment.body = comment.body[match.end():].strip()
 
             # Evaluate message
             if len(comment.body) > 100:
