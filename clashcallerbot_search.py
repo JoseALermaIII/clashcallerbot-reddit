@@ -64,16 +64,20 @@ def main():
             else:
                 exp_digit = int(match.group('exp_digit').strip())
                 if exp_digit == 0:  # ignore zeros
-                    logging.error('Expiration time is zero.')
-                    # TODO: Send message and ignore comment
+                    # Send message and ignore comment
+                    error = 'Expiration time is zero.'
+                    send_error_message(comment.author.id, error)
+                    logging.error(error)
                     continue
                 exp_unit = match.group('exp_unit').strip().lower()
                 if exp_unit in minute_tokens:
                     timedelta = datetime.timedelta(minutes=exp_digit)
                 else:
                     if exp_digit >= 24:  # ignore days
-                        logging.error('Expiration time is >= 1 day.')
-                        # TODO: Send message and ignore comment
+                        # Send message and ignore comment
+                        error = 'Expiration time is >= 1 day.'
+                        send_error_message(comment.author.id, error)
+                        logging.error(error)
                         continue
                     # TODO: Ignore negative numbers
                     timedelta = datetime.timedelta(hours=exp_digit)
@@ -87,8 +91,10 @@ def main():
 
             # Ignore if expire time passed
             if expiration_datetime < datetime.datetime.now(datetime.timezone.utc):
-                logging.error('Expiration time has already passed.')
-                # TODO: Send message and ignore comment
+                # Send message and ignore comment
+                error = 'Expiration time has already passed.'
+                send_error_message(comment.author.id, error)
+                logging.error(error)
                 continue
 
             # Strip expiration time
@@ -96,8 +102,10 @@ def main():
 
             # Evaluate message
             if len(comment.body) > 100:
-                logger.error('Message length > 100 characters.')
-                # TODO: send message and ignore comment
+                # Send message and ignore comment
+                error = 'Message length > 100 characters.'
+                send_error_message(comment.author.id, error)
+                logger.error(error)
                 continue
             message_re = re.compile(r'''
                                     (\s)*     # optional space
@@ -107,8 +115,10 @@ def main():
                                     ''', re.VERBOSE | re.IGNORECASE)  # case-insensitive
             match = message_re.search(comment.body)
             if not match:
-                logger.error('Message not properly formatted.')
-                # TODO: send message and ignore comment
+                # Send message and ignore comment
+                error = 'Message not properly formatted.'
+                logger.error(error)
+                send_error_message(comment.author.id, error)
                 continue
 
             message = comment.body
