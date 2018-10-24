@@ -195,7 +195,7 @@ def send_error_message(uid: str, link: str, error: str) -> bool:
               Please delete your call to reduce spam and try again after making the
               above change.
 
-              Thank you for entrusting us with your warring needs,
+              Thank you for entrusting us with your warring needs,  
               - ClashCallerBot
 
               [^(More info)](https://www.reddit.com/r/ClashCallerBot/comments/4e9vo7/clashcallerbot_info/)
