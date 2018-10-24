@@ -143,13 +143,13 @@ def main():
             # TODO: Add more functionality via PM: delete calls, add users to call reminder
 
 
-def send_confirmation(uid: str, link: str, exp: datetime.datetime) -> bool:
+def send_confirmation(u_name: str, link: str, exp: datetime.datetime) -> bool:
     """Send confirmation to reddit user.
 
     Function sends given user confirmation of given expiration time with given link.
 
     Args:
-        uid:    userID of user.
+        u_name: username of user.
         link:   Permalink of comment.
         exp:    Expiration datetime of call.
 
@@ -168,7 +168,7 @@ def send_confirmation(uid: str, link: str, exp: datetime.datetime) -> bool:
               [^(More info)](https://www.reddit.com/r/ClashCallerBot/comments/4e9vo7/clashcallerbot_info/)
               """
     try:
-        reddit.redditor(uid).message(subject, message.replace('              ', ''))
+        reddit.redditor(u_name).message(subject, message.replace('              ', ''))
 
     except praw.exceptions.PRAWException as err:
         logger.error(f'send_confirmation: {err}')
@@ -176,13 +176,13 @@ def send_confirmation(uid: str, link: str, exp: datetime.datetime) -> bool:
     return True
 
 
-def send_error_message(uid: str, link: str, error: str) -> bool:
+def send_error_message(u_name: str, link: str, error: str) -> bool:
     """Send error message to reddit user.
 
     Function sends given error to given user.
 
     Args:
-        uid:      userID of user.
+        u_name:   username of user.
         link:     Permalink of comment.
         error:    Error to send to user.
 
@@ -203,7 +203,7 @@ def send_error_message(uid: str, link: str, error: str) -> bool:
               [^(More info)](https://www.reddit.com/r/ClashCallerBot/comments/4e9vo7/clashcallerbot_info/)
               """
     try:
-        reddit.redditor(uid).message(subject, message.replace('              ', ''))
+        reddit.redditor(u_name).message(subject, message.replace('              ', ''))
 
     except praw.exceptions.PRAWException as err:
         logger.error(f'send_error_message: {err}')
