@@ -62,6 +62,13 @@ def main():
             if not match:
                 timedelta = datetime.timedelta(hours=1)  # Default to 1 hour
             else:
+                # Ignore negative numbers
+                if '-' in match.group('exp_digit').strip():
+                    # Send message and ignore comment
+                    error = 'Expiration time is negative.'
+                    send_error_message(comment.author.id, comment.permalink, error)
+                    continue
+
                 exp_digit = int(match.group('exp_digit').strip())
                 if exp_digit == 0:  # ignore zeros
                     # Send message and ignore comment
@@ -79,7 +86,6 @@ def main():
                         send_error_message(comment.author.id, error)
                         logging.error(error)
                         continue
-                    # TODO: Ignore negative numbers
                     timedelta = datetime.timedelta(hours=exp_digit)
             logger.debug(f'timedelta = {timedelta.seconds} seconds')
 
