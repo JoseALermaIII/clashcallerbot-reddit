@@ -85,8 +85,8 @@ def main():
 
             # Apply expiration time to comment date
             comment_datetime = datetime.datetime.fromtimestamp(comment.created_utc, datetime.timezone.utc)
-            logger.info(f'comment_datetime = {comment_datetime}')
             expiration_datetime = comment_datetime + timedelta
+            logger.info(f'comment_datetime = {comment_datetime}')
             logger.info(f'expiration_datetime = {expiration_datetime}')
 
             # Ignore if expire time passed
