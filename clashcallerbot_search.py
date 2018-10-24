@@ -152,7 +152,7 @@ def send_confirmation(uid: str, link: str, exp: datetime.datetime) -> bool:
         reddit.redditor(uid).message(subject, message.replace('                  ', ''))
 
     except prawcore.exceptions as err:
-        logger.error(f'send_message: {err}')
+        logger.error(f'send_confirmation: {err}')
         return False
     return True
 
@@ -218,7 +218,7 @@ def send_confirmation_reply(cid: str, link: str, exp: datetime.datetime) -> str:
         comment_id = comment_obj.reply(message.replace('                  ', ''))
 
     except prawcore.exceptions as err:
-        logger.error(f'send_reply: {err}')
+        logger.error(f'send_confirmation_reply: {err}')
     return comment_id
 
 
