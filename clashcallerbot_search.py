@@ -127,9 +127,9 @@ def main():
             # Save message data to MySQL-compatible database
             db.save_message(comment.permalink, message, expiration_datetime, comment.author.id)
 
-    # TODO: Compose message for comment and PM
-
-    # TODO: Reply and send PM
+            # Reply and send PM
+            send_confirmation(comment.author.id, comment.permalink, expiration_datetime)
+            send_confirmation_reply(comment.id, comment.permalink, expiration_datetime)
 
     # TODO: Add comment.id to database
 
