@@ -146,6 +146,39 @@ def send_message(uid: str, subj: str, msg: str) -> bool:
     return True
 
 
+def send_error_message(uid: str, error: str) -> bool:
+    """Send error message to reddit user.
+
+    Function sends given error to given user.
+
+    Args:
+        uid:      userID of user.
+        error:    Error to send to user.
+
+    Returns:
+        True if successful, False otherwise.
+    """
+    try:
+        subject = 'Unable to save call due to error.'
+        message = f"""ClashCallerBot here!  
+                  I regret to inform you that I could not save your call because of:
+                  {error}.  
+                  Please delete your call to reduce spam and try again after making the
+                  above change.
+                  
+                  Thank you for entrusting us with your warring needs,
+                  - ClashCallerBot
+                  
+                  ^[More info](https://www.reddit.com/r/ClashCallerBot/comments/4e9vo7/clashcallerbot_info/)
+                  """
+        reddit.redditor(uid).message(subject, message.replace('                  ', ''))
+
+    except prawcore.exceptions as err:
+        logger.error(f'send_error_message: {err}')
+        return False
+    return True
+
+
 def send_reply(cid: str, msg: str) -> bool:
     """Replies to a comment.
 
