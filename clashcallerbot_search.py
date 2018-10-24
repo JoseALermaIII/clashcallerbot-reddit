@@ -190,26 +190,36 @@ def send_error_message(uid: str, error: str) -> bool:
     return True
 
 
-def send_reply(cid: str, msg: str) -> bool:
+def send_confirmation_reply(cid: str, link: str, exp: datetime.datetime) -> str:
     """Replies to a comment.
 
     Function replies to a given comment ID with a given message.
 
     Args:
         cid:    Comment ID to reply to.
-        msg:    Message to reply with.
+        link:   Permalink of comment.
+        exp:    Expiration datetime of call.
 
     Returns:
-        True if successful, False otherwise.
+        comment_id: id of new comment if successful, None otherwise
     """
+    permalink = 'https://np.reddit.com' + link  # Permalinks are missing prefix
+    time = datetime.datetime.strftime(exp, '%b. %d, %Y at %I:%M:%S %p (%Z)')
+    message = f"""ClashCallerBot here!  
+                      I will be messaging you on {time} (UTC) to remind you of [**this link.**]({permalink})
+
+                      Thank you for entrusting us with your warring needs!
+
+                      [^(More info)](https://www.reddit.com/r/ClashCallerBot/comments/4e9vo7/clashcallerbot_info/)
+                      """
+    comment_id = None
     try:
-        comment = reddit.comment(id=cid)
-        comment.reply(msg)
+        comment_obj = reddit.comment(id=cid)
+        comment_id = comment_obj.reply(message.replace('                  ', ''))
 
     except prawcore.exceptions as err:
         logger.error(f'send_reply: {err}')
-        return False
-    return True
+    return comment_id
 
 
 def have_replied(cid: str, bot_name: str) -> bool:
