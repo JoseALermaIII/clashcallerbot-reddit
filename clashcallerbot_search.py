@@ -190,7 +190,7 @@ def send_error_message(uid: str, link: str, error: str) -> bool:
     subject = 'Unable to save call due to error.'
     permalink = 'https://np.reddit.com' + link  # Permalinks are missing prefix
     message = f"""ClashCallerBot here!  
-              I regret to inform you that I could not save [**your call**]]({permalink}) because of:
+              I regret to inform you that I could not save [**your call**]({permalink}) because of:
               {error}.  
               Please delete your call to reduce spam and try again after making the
               above change.
