@@ -77,7 +77,15 @@ def main():
                         continue
                     # TODO: Ignore negative numbers
                     timedelta = datetime.timedelta(hours=exp_digit)
+
+                # Apply expiration time to comment date
+                comment_datetime = datetime.datetime.fromtimestamp(comment.created_utc, datetime.timezone.utc)
+                logger.info(f'comment_datetime = {comment_datetime}')
+                expiration_datetime = comment_datetime + timedelta
+                logger.info(f'expiration_datetime = {expiration_datetime}')
+
                 # TODO: Ignore if expire time passed; may need to move apply expire time up here
+
                 # Strip expiration time
                 comment.body = comment.body[match.end():].strip()
             logger.debug(f'timedelta = {timedelta.seconds} seconds')
@@ -101,12 +109,6 @@ def main():
 
             message = comment.body
             logger.debug(f'message = {message}')
-
-            # Apply expiration time to comment date
-            comment_datetime = datetime.datetime.fromtimestamp(comment.created_utc, datetime.timezone.utc)
-            logger.info(f'comment_datetime = {comment_datetime}')
-            expiration_datetime = comment_datetime + timedelta
-            logger.info(f'expiration_datetime = {expiration_datetime}')
 
             # Save message data to MySQL-compatible database
             db.save_message(comment.permalink, message, expiration_datetime, comment.author.id)
