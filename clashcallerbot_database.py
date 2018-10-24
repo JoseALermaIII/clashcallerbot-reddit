@@ -283,7 +283,7 @@ def save_comment_id(cid: str) -> bool:
         True for success, false otherwise.
     """
     try:
-        add_comment_id = f'INSERT INTO comment_list (comment_ids) VALUES ({cid});'
+        add_comment_id = f'INSERT INTO comment_list (comment_ids) VALUES (\'{cid}\');'
 
         cursor.execute(add_comment_id)
         mysql_connection.commit()
