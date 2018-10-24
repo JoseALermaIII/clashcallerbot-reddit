@@ -137,18 +137,18 @@ def send_confirmation(uid: str, link: str, exp: datetime.datetime) -> bool:
     Returns:
         True if successful, False otherwise.
     """
+    subject = 'ClashCallerBot Confirmation Sent'
+    permalink = 'https://np.reddit.com' + link  # Permalinks are missing prefix
+    time = datetime.datetime.strftime(exp, '%b. %d, %Y at %I:%M:%S %p (%Z)')
+    message = f"""ClashCallerBot here!  
+              I will be messaging you on {time} (UTC) to remind you of [**this link.**]({permalink})
+
+              Thank you for entrusting us with your warring needs,
+              - ClashCallerBot
+
+              [^(More info)](https://www.reddit.com/r/ClashCallerBot/comments/4e9vo7/clashcallerbot_info/)
+              """
     try:
-        subject = 'ClashCallerBot Confirmation Sent'
-        permalink = 'https://np.reddit.com' + link  # Permalinks are missing prefix
-        time = datetime.datetime.strftime(exp, '%b. %d, %Y at %I:%M:%S %p (%Z)')
-        message = f"""ClashCallerBot here!  
-                  I will be messaging you on {time} (UTC) to remind you of [**this link.**]({permalink})
-
-                  Thank you for entrusting us with your warring needs,
-                  - ClashCallerBot
-
-                  [^(More info)](https://www.reddit.com/r/ClashCallerBot/comments/4e9vo7/clashcallerbot_info/)
-                  """
         reddit.redditor(uid).message(subject, message.replace('                  ', ''))
 
     except prawcore.exceptions as err:
@@ -169,19 +169,19 @@ def send_error_message(uid: str, error: str) -> bool:
     Returns:
         True if successful, False otherwise.
     """
+    subject = 'Unable to save call due to error.'
+    message = f"""ClashCallerBot here!  
+              I regret to inform you that I could not save your call because of:
+              {error}.  
+              Please delete your call to reduce spam and try again after making the
+              above change.
+
+              Thank you for entrusting us with your warring needs,
+              - ClashCallerBot
+
+              [^(More info)](https://www.reddit.com/r/ClashCallerBot/comments/4e9vo7/clashcallerbot_info/)
+              """
     try:
-        subject = 'Unable to save call due to error.'
-        message = f"""ClashCallerBot here!  
-                  I regret to inform you that I could not save your call because of:
-                  {error}.  
-                  Please delete your call to reduce spam and try again after making the
-                  above change.
-                  
-                  Thank you for entrusting us with your warring needs,
-                  - ClashCallerBot
-                  
-                  [^(More info)](https://www.reddit.com/r/ClashCallerBot/comments/4e9vo7/clashcallerbot_info/)
-                  """
         reddit.redditor(uid).message(subject, message.replace('                  ', ''))
 
     except prawcore.exceptions as err:
