@@ -73,7 +73,7 @@ def main():
                 if exp_digit == 0:  # ignore zeros
                     # Send message and ignore comment
                     error = 'Expiration time is zero.'
-                    send_error_message(comment.author.id, error)
+                    send_error_message(comment.author.id, comment.permalink, error)
                     logging.error(error)
                     continue
                 exp_unit = match.group('exp_unit').strip().lower()
@@ -83,7 +83,7 @@ def main():
                     if exp_digit >= 24:  # ignore days
                         # Send message and ignore comment
                         error = 'Expiration time is >= 1 day.'
-                        send_error_message(comment.author.id, error)
+                        send_error_message(comment.author.id, comment.permalink, error)
                         logging.error(error)
                         continue
                     timedelta = datetime.timedelta(hours=exp_digit)
@@ -99,7 +99,7 @@ def main():
             if expiration_datetime < datetime.datetime.now(datetime.timezone.utc):
                 # Send message and ignore comment
                 error = 'Expiration time has already passed.'
-                send_error_message(comment.author.id, error)
+                send_error_message(comment.author.id, comment.permalink, error)
                 logging.error(error)
                 continue
 
@@ -110,7 +110,7 @@ def main():
             if len(comment.body) > 100:
                 # Send message and ignore comment
                 error = 'Message length > 100 characters.'
-                send_error_message(comment.author.id, error)
+                send_error_message(comment.author.id, comment.permalink, error)
                 logger.error(error)
                 continue
             message_re = re.compile(r'''
@@ -124,7 +124,7 @@ def main():
                 # Send message and ignore comment
                 error = 'Message not properly formatted.'
                 logger.error(error)
-                send_error_message(comment.author.id, error)
+                send_error_message(comment.author.id, comment.permalink, error)
                 continue
 
             message = comment.body
@@ -174,21 +174,23 @@ def send_confirmation(uid: str, link: str, exp: datetime.datetime) -> bool:
     return True
 
 
-def send_error_message(uid: str, error: str) -> bool:
+def send_error_message(uid: str, link: str, error: str) -> bool:
     """Send error message to reddit user.
 
     Function sends given error to given user.
 
     Args:
         uid:      userID of user.
+        link:     Permalink of comment.
         error:    Error to send to user.
 
     Returns:
         True if successful, False otherwise.
     """
     subject = 'Unable to save call due to error.'
+    permalink = 'https://np.reddit.com' + link  # Permalinks are missing prefix
     message = f"""ClashCallerBot here!  
-              I regret to inform you that I could not save your call because of:
+              I regret to inform you that I could not save [**your call**]]({permalink}) because of:
               {error}.  
               Please delete your call to reduce spam and try again after making the
               above change.
