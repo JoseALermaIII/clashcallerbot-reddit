@@ -76,6 +76,21 @@ def send_reminder(link: str, msg: str, usr: str)-> bool:
     return True
 
 
+def get_parent(link: str) -> str:
+    """Fetch parent comment or submission.
+
+    Function gets parent comment of given permalink or submission if top level comment.
+
+    Args:
+         link:  Permalink to get parent of.
+
+    Returns:
+        parent: Parent comment link or default string.
+    """
+    # TODO: Populate with awesomeness
+    pass
+
+
 # If run directly, instead of imported as a module, run main():
 if __name__ == '__main__':
     main()
