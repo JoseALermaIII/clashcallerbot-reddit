@@ -34,9 +34,46 @@ def main():
         if not messages:
             continue
 
-        # TODO: Send reminder PM
+        # Send reminder PM
+        for message in messages:
+            for tid, link, msg, _exp, usr in message:
+                send_reminder(link, msg, usr)
 
-        # TODO: Delete message from database
+                # TODO: Delete message from database
+
+
+def send_reminder(link: str, msg: str, usr: str)-> bool:
+    """Sends reminder PM to username.
+
+    Function sends given permalink and message to given username.
+
+    Args:
+         link:  Permalink to comment.
+         msg:   Message in comment that was saved.
+         usr:   User to send reminder to.
+
+    Returns:
+        True if successful, False otherwise.
+    """
+    subject = 'ClashCallerBot Private Message Here!'
+    permalink = 'https://np.reddit.com' + link  # Permalinks are missing prefix
+    parent = get_submission(link)
+    message = f"""**The message:** {msg}  
+              **The original comment:** {permalink}  
+              **The parent comment or submission:** {parent}  
+
+              Thank you for entrusting us with your warring needs,  
+              - ClashCallerBot
+
+              [^(More info)](https://www.reddit.com/r/ClashCallerBot/comments/4e9vo7/clashcallerbot_info/)
+              """
+    try:
+        reddit.redditor(usr).message(subject, message.replace('              ', ''))
+
+    except praw.exceptions.PRAWException as err:
+        logger.error(f'send_reminder: {err}')
+        return False
+    return True
 
 
 # If run directly, instead of imported as a module, run main():
