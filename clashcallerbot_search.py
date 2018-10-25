@@ -33,22 +33,22 @@ subreddit = reddit.subreddit('ClashCallerBot')  # Limit scope for testing purpos
 # Regular expressions
 clashcaller_re = re.compile(r'''
                             [!|\s]?             # prefix ! or space (optional)
-                            [C|c]lash[C|c]aller # upper or lowercase ClashCaller
+                            [C|c]lash[C|c]aller # upper or lowercase ClashCaller (required)
                             [!|\s]              # suffix ! or space (required)
                             ''', re.VERBOSE)
 expiration_re = re.compile(r'''
-                           (?P<exp_digit>(\d){1,2})    # single or double digit
-                           (\s)?                       # optional space
+                           (?P<exp_digit>(\d){1,2})    # single or double digit (required)
+                           (\s)?                       # space (optional)
                            (?P<exp_unit>minute(s)?\s|  # minute(s) (space after required)
                            min\s|                      # minute abbr. (space after required)
                            hour(s)?\s|                 # hour(s) (space after required)
                            hr\s                        # hour abbr. (space after required)
                            )+''', re.VERBOSE | re.IGNORECASE)  # case-insensitive
 message_re = re.compile(r'''
-                        (\s)*     # optional space
-                        base      # required string: base
-                        [\W|\s]*  # optional non-word character or space
-                        (\d){1,2} # required single or double digit
+                        (\s)*     # space (optional)
+                        base      # string: base (required)
+                        [\W|\s]*  # non-word character or space (optional)
+                        (\d){1,2} # single or double digit (required)
                         ''', re.VERBOSE | re.IGNORECASE)  # case-insensitive
 
 
