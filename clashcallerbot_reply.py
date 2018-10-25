@@ -27,14 +27,16 @@ subreddit = reddit.subreddit('ClashCallerBot')  # Limit scope for testing purpos
 
 def main():
     while True:
-        # TODO: Get list of messages ordered by expiration date (in MySQL)
+        # Get list of messages older than current datetime
+        now = datetime.datetime.now(datetime.timezone.utc)
+        messages = db.get_messages(now)
 
-        # TODO: Compare each message expiration datetime to current datetime (in MySQL?)
+        if not messages:
+            continue
 
-        # TODO: If current datetime is after expiration datetime, send PM
+        # TODO: Send reminder PM
 
         # TODO: Delete message from database
-        pass
 
 
 # If run directly, instead of imported as a module, run main():
