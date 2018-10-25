@@ -319,6 +319,29 @@ def find_comment_id(cid: str) -> bool:
     return True
 
 
+def get_messages(time_now: datetime.datetime) -> list:
+    """Retrieves list of messages that have expired.
+
+    Function returns list of messages whose expiration times are before current datetime.
+
+    Args:
+        time_now:   Current datetime.
+
+    Returns:
+        messages:   List containing results of query.
+    """
+    messages = []
+    try:
+        time_now = time_now.strftime('%Y-%m-%d %H:%M:%S')  # Convert to MySQL datetime
+        find_messages = f'SELECT * FROM message_data WHERE new_date < \'{time_now}\';'
+        cursor.execute(find_messages)
+        messages = cursor.fetchall()
+
+    except mysql.Error as err:
+        logger.error(f'get_messages: {err}')
+    return messages
+
+
 def close_connections() -> None:
     """Close database connections.
 
