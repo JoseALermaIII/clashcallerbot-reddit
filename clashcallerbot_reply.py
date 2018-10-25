@@ -57,7 +57,7 @@ def send_reminder(link: str, msg: str, usr: str)-> bool:
     """
     subject = 'ClashCallerBot Private Message Here!'
     permalink = 'https://np.reddit.com' + link  # Permalinks are missing prefix
-    parent = get_submission(link)
+    parent = get_parent(link)
     message = f"""**The message:** {msg}  
               **The original comment:** {permalink}  
               **The parent comment or submission:** {parent}  
