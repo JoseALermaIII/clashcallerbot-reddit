@@ -30,14 +30,31 @@ logger = logging.getLogger('search')
 reddit = praw.Reddit('clashcaller')  # Section name in praw.ini
 subreddit = reddit.subreddit('ClashCallerBot')  # Limit scope for testing purposes
 
+# Regular expressions
+clashcaller_re = re.compile(r'''
+                            [!|\s]?             # prefix ! or space (optional)
+                            [C|c]lash[C|c]aller # upper or lowercase ClashCaller
+                            [!|\s]              # suffix ! or space (required)
+                            ''', re.VERBOSE)
+expiration_re = re.compile(r'''
+                           (?P<exp_digit>(\d){1,2})    # single or double digit
+                           (\s)?                       # optional space
+                           (?P<exp_unit>minute(s)?\s|  # minute(s) (space after required)
+                           min\s|                      # minute abbr. (space after required)
+                           hour(s)?\s|                 # hour(s) (space after required)
+                           hr\s                        # hour abbr. (space after required)
+                           )+''', re.VERBOSE | re.IGNORECASE)  # case-insensitive
+message_re = re.compile(r'''
+                        (\s)*     # optional space
+                        base      # required string: base
+                        [\W|\s]*  # optional non-word character or space
+                        (\d){1,2} # required single or double digit
+                        ''', re.VERBOSE | re.IGNORECASE)  # case-insensitive
+
 
 def main():
     # Search recent comments for ClashCaller! string
-    clashcaller_re = re.compile(r'''
-                                [!|\s]?             # prefix ! or space (optional)
-                                [C|c]lash[C|c]aller # upper or lowercase ClashCaller
-                                [!|\s]              # suffix ! or space (required)
-                                ''', re.VERBOSE)
+
     for comment in subreddit.stream.comments():
         match = clashcaller_re.search(comment.body)
         if match and comment.author.name != 'ClashCallerBot' \
@@ -50,14 +67,6 @@ def main():
             logger.debug(f'Stripped comment body: {comment.body}')
 
             # Check for expiration time
-            expiration_re = re.compile(r'''
-                                       (?P<exp_digit>(\d){1,2})    # single or double digit
-                                       (\s)?                       # optional space
-                                       (?P<exp_unit>minute(s)?\s|  # minute(s) (space after required)
-                                       min\s|                      # minute abbr. (space after required)
-                                       hour(s)?\s|                 # hour(s) (space after required)
-                                       hr\s                        # hour abbr. (space after required)
-                                       )+''', re.VERBOSE | re.IGNORECASE)  # case-insensitive
             minute_tokens = ('min', 'minute', 'minutes')
             match = expiration_re.search(comment.body)
             if not match:
@@ -114,12 +123,7 @@ def main():
                 # send_error_message(comment.author.name, comment.permalink, error)
                 logger.error(error)
                 continue
-            message_re = re.compile(r'''
-                                    (\s)*     # optional space
-                                    base      # required string: base
-                                    [\W|\s]*  # optional non-word character or space
-                                    (\d){1,2} # required single or double digit
-                                    ''', re.VERBOSE | re.IGNORECASE)  # case-insensitive
+
             match = message_re.search(comment.body)
             if not match:
                 # Send message and ignore comment
