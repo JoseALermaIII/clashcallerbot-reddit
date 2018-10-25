@@ -27,7 +27,7 @@ logging.raiseExceptions = True  # Production mode if False (no console sys.stder
 logger = logging.getLogger('search')
 
 # Generate reddit instance
-reddit = praw.Reddit('clashcaller')  # Section name in praw.ini
+reddit = praw.Reddit('clashcallersearch')  # Section name in praw.ini
 subreddit = reddit.subreddit('ClashCallerBot')  # Limit scope for testing purposes
 
 # Regular expressions
