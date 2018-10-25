@@ -335,7 +335,7 @@ def get_messages(time_now: datetime.datetime) -> list:
     messages = []
     try:
         time_now = time_now.strftime('%Y-%m-%d %H:%M:%S')  # Convert to MySQL datetime
-        find_messages = f'SELECT * FROM message_data WHERE new_date < \'{time_now}\';'
+        find_messages = f'SELECT * FROM message_data WHERE new_date < \'{time_now}\' GROUP BY id;'
         cursor.execute(find_messages)
         messages = cursor.fetchall()
 
