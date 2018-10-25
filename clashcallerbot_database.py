@@ -190,8 +190,7 @@ def create_table(db_name: str, tbl_name: str, cols: str) -> bool:
 def grant_permissions(db_name: str, usr_name: str, usr_passwd: str) -> bool:
     """Grants user permissions to database.
 
-    Function grants given user permissions to given database. However,
-    only database root user can grant database permissions.
+    Function grants given user permissions to given database.
 
     Args:
         db_name:    Database to grant permissions to.
@@ -208,6 +207,9 @@ def grant_permissions(db_name: str, usr_name: str, usr_passwd: str) -> bool:
 
     Returns:
         True if successful, False otherwise.
+
+    Notes:
+        Only database root user can grant database permissions.
     """
     try:
         cmd = f'GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX, ALTER, ' \
