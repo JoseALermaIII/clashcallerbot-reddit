@@ -71,7 +71,7 @@ def send_reminder(link: str, msg: str, usr: str)-> bool:
         reddit.redditor(usr).message(subject, message.replace('              ', ''))
 
     except praw.exceptions.PRAWException as err:
-        logger.error(f'send_reminder: {err}')
+        logger.exception(f'send_reminder: {err}')
         return False
     return True
 
