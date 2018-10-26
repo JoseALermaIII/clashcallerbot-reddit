@@ -46,7 +46,7 @@ expiration_re = re.compile(r'''
                            )+''', re.VERBOSE | re.IGNORECASE)  # case-insensitive
 message_re = re.compile(r'''
                         (\s)*     # space (optional)
-                        base      # string: base (required)
+                        base(s)?  # string: base(s) (required)
                         [\W|\s]*  # non-word character or space (optional)
                         (\d){1,2} # single or double digit (required)
                         ''', re.VERBOSE | re.IGNORECASE)  # case-insensitive
