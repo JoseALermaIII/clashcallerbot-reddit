@@ -273,6 +273,28 @@ def save_message(link: str, msg: str, exp: datetime, uid: str) -> bool:
     return True
 
 
+def delete_message(tid: str) -> bool:
+    """Deletes message from message_data table.
+
+    Function deletes given table id (row) from message_data table.
+
+    Args:
+        tid:    Table id from id column of message_data table.
+
+    Returns:
+        True for success, False otherwise.
+    """
+    try:
+        delete_row = f'DELETE FROM message_data WHERE id = \'{tid}\''
+        cursor.execute(delete_row)
+        mysql_connection.commit()
+
+    except mysql.Error as err:
+        logger.exception(f'delete_message: {err}')
+        return False
+    return True
+
+
 def save_comment_id(cid: str) -> bool:
     """Saves comment id into comment_list table.
 
