@@ -35,15 +35,19 @@ def main():
         messages = db.get_messages(now)
 
         if not messages:
+            logger.error('No old messages.')
             continue
 
         # Send reminder PM
         for message in messages:
             tid, link, msg, _exp, usr = message
-            send_reminder(link, msg, usr)
+            logger.debug(f'Found message: {message}')
+            if send_reminder(link, msg, usr):
+                logger.info(f'Reminder sent to {usr}.')
 
             # Delete message from database
-            db.delete_message(tid)
+            if db.delete_message(tid):
+                logger.info(f'Message deleted.')
 
 
 def send_reminder(link: str, msg: str, usr: str)-> bool:
