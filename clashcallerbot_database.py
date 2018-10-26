@@ -2,13 +2,16 @@
 # -*- coding: utf-8 -*-
 """Setup the MySQL-compatible database.
 
-This module provides various functions for managing the MySQL-compatible database:
+If run directly, this module will setup the clashcallerbot database with
+tables and display the format and contents of the tables. Additionally,
+this module provides various functions for managing the MySQL-compatible
+database:
 
 * Create database and tables.
 * View table data and properties.
 * Grant user permissions (if logged into database as root).
 * Add rows to tables.
-* Delete tables.
+* Delete tables and rows.
 """
 
 import mysql.connector as mysql
