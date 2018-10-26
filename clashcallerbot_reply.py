@@ -39,7 +39,8 @@ def main():
             for tid, link, msg, _exp, usr in message:
                 send_reminder(link, msg, usr)
 
-                # TODO: Delete message from database
+                # Delete message from database
+                db.delete_message(tid)
 
 
 def send_reminder(link: str, msg: str, usr: str)-> bool:
