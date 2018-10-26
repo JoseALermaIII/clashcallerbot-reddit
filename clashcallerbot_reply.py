@@ -36,11 +36,11 @@ def main():
 
         # Send reminder PM
         for message in messages:
-            for tid, link, msg, _exp, usr in message:
-                send_reminder(link, msg, usr)
+            tid, link, msg, _exp, usr = message
+            send_reminder(link, msg, usr)
 
-                # Delete message from database
-                db.delete_message(tid)
+            # Delete message from database
+            db.delete_message(tid)
 
 
 def send_reminder(link: str, msg: str, usr: str)-> bool:
