@@ -92,7 +92,7 @@ def get_parent(link: str) -> str:
     parent = 'Parent comment not found.'  # Default string
     try:
         comment = reddit.comment(url=permalink)  # Fetch comment by URL
-        parent = 'https;//np.reddit.com' + comment.submission.permalink
+        parent = 'https://np.reddit.com' + comment.submission.permalink
     except praw.exceptions as err:
         logger.exception(f'get_parent: {err}')
         return parent
