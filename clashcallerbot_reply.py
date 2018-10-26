@@ -12,6 +12,7 @@ import praw.exceptions
 
 import logging.config
 import datetime
+import time
 
 import clashcallerbot_database as db
 
@@ -27,6 +28,8 @@ subreddit = reddit.subreddit('ClashCallerBot')  # Limit scope for testing purpos
 
 def main():
     while True:
+        time.sleep(30)
+
         # Get list of messages older than current datetime
         now = datetime.datetime.now(datetime.timezone.utc)
         messages = db.get_messages(now)
