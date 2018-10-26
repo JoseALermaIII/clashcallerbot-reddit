@@ -60,7 +60,6 @@ def main():
         if match and comment.author.name != 'ClashCallerBot' \
                 and not db.find_comment_id(comment.id) and not have_replied(comment.id, 'ClashCallerBot'):
             logger.info(f'In from {comment.author.name}: {comment}')
-            # TODO: If found, parse username, comment date, message, permalink, and expiration time (if any)
 
             # Strip everything before and including ClashCaller! string
             comment.body = comment.body[match.end():].strip()
@@ -141,10 +140,10 @@ def main():
             send_confirmation_reply(comment.id, comment.permalink, expiration_datetime)
 
             # Save comment.id to database;
-            # TODO: Trim by checking saved permalinks? Comments too rapid for repeat/expired calls?
+            # TODO: Trim by checking saved permalinks? Wars take 48 hours, trim weekly.
             db.save_comment_id(comment.id)
 
-            # TODO: Add more functionality via PM: delete calls, add users to call reminder
+            # TODO: Add more functionality via PM: delete calls, list calls, add users to call reminder
 
 
 def send_confirmation(u_name: str, link: str, exp: datetime.datetime) -> bool:
