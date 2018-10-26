@@ -77,6 +77,7 @@ def main():
                     # Send message and ignore comment
                     error = 'Expiration time is zero.'
                     # send_error_message(comment.author.name, comment.permalink, error)
+                    db.save_comment_id(comment.id)
                     logging.error(error)
                     continue
                 exp_unit = match.group('exp_unit').strip().lower()
@@ -87,6 +88,7 @@ def main():
                         # Send message and ignore comment
                         error = 'Expiration time is >= 1 day.'
                         # send_error_message(comment.author.name, comment.permalink, error)
+                        db.save_comment_id(comment.id)
                         logging.error(error)
                         continue
                     timedelta = datetime.timedelta(hours=exp_digit)
@@ -103,6 +105,7 @@ def main():
                 # Send message and ignore comment
                 error = 'Expiration time has already passed.'
                 # send_error_message(comment.author.name, comment.permalink, error)
+                db.save_comment_id(comment.id)
                 logging.error(error)
                 continue
 
@@ -114,6 +117,7 @@ def main():
                 # Send message and ignore comment
                 error = 'Message length > 100 characters.'
                 # send_error_message(comment.author.name, comment.permalink, error)
+                db.save_comment_id(comment.id)
                 logger.error(error)
                 continue
 
@@ -121,8 +125,9 @@ def main():
             if not match:
                 # Send message and ignore comment
                 error = 'Message not properly formatted.'
-                logger.error(error)
                 # send_error_message(comment.author.name, comment.permalink, error)
+                db.save_comment_id(comment.id)
+                logger.error(error)
                 continue
 
             message = comment.body
