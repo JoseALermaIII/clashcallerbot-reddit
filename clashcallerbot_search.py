@@ -169,7 +169,7 @@ def send_confirmation(u_name: str, link: str, exp: datetime.datetime) -> bool:
         reddit.redditor(u_name).message(subject, message.replace('              ', ''))
 
     except praw.exceptions.PRAWException as err:
-        logger.error(f'send_confirmation: {err}')
+        logger.exception(f'send_confirmation: {err}')
         return False
     return True
 
@@ -204,7 +204,7 @@ def send_error_message(u_name: str, link: str, error: str) -> bool:
         reddit.redditor(u_name).message(subject, message.replace('              ', ''))
 
     except praw.exceptions.PRAWException as err:
-        logger.error(f'send_error_message: {err}')
+        logger.exception(f'send_error_message: {err}')
         return False
     return True
 
@@ -237,7 +237,7 @@ def send_confirmation_reply(cid: str, link: str, exp: datetime.datetime) -> str:
         comment_id = comment_obj.reply(message.replace('              ', ''))
 
     except praw.exceptions.PRAWException as err:
-        logger.error(f'send_confirmation_reply: {err}')
+        logger.exception(f'send_confirmation_reply: {err}')
     return comment_id
 
 
@@ -263,7 +263,7 @@ def have_replied(cid: str, bot_name: str) -> bool:
                 replies = comment.replies.replace_more()
                 break
             except praw.exceptions.PRAWException as err:
-                logger.error(f'comment.replies.replace_more: {err}')
+                logger.exception(f'comment.replies.replace_more: {err}')
                 time.sleep(1)
 
         if not replies:
@@ -274,7 +274,7 @@ def have_replied(cid: str, bot_name: str) -> bool:
                 return True
 
     except praw.exceptions.PRAWException as err:
-        logger.error(f'have_replied: {err}')
+        logger.exception(f'have_replied: {err}')
         return False
     return False
 
