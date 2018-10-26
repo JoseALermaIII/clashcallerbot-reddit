@@ -135,7 +135,8 @@ def main():
             send_confirmation(comment.author.name, comment.permalink, expiration_datetime)
             send_confirmation_reply(comment.id, comment.permalink, expiration_datetime)
 
-            # Save comment.id to database
+            # Save comment.id to database;
+            # TODO: Trim by checking saved permalinks? Comments too rapid for repeat/expired calls?
             db.save_comment_id(comment.id)
 
             # TODO: Add more functionality via PM: delete calls, add users to call reminder
