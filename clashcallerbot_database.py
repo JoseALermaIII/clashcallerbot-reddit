@@ -105,7 +105,7 @@ def create_database(db_name: str) -> bool:
     try:
         cursor.execute(f'CREATE DATABASE {db_name};')
     except mysql.Error as err:
-        logger.error(f'create_database: {err}')
+        logger.exception(f'create_database: {err}')
         return False
     return True
 
@@ -124,7 +124,7 @@ def select_database(db_name: str) -> bool:
     try:
         cursor.execute(f'USE {db_name};')
     except mysql.Error as err:
-        logger.error(f'select_database: {err}')
+        logger.exception(f'select_database: {err}')
         return False
     return True
 
@@ -149,7 +149,7 @@ def get_tables(db_name: str) -> list:
         for table in tables:
             table_names.append(str(table[0]))
     except mysql.Error as err:
-        logger.error(f'get_tables: {err}')
+        logger.exception(f'get_tables: {err}')
     return table_names
 
 
@@ -182,7 +182,7 @@ def create_table(db_name: str, tbl_name: str, cols: str) -> bool:
         cursor.execute(cmd)
 
     except mysql.Error as err:
-        logger.error(f'create_table: {err}')
+        logger.exception(f'create_table: {err}')
         return False
     return True
 
@@ -217,7 +217,7 @@ def grant_permissions(db_name: str, usr_name: str, usr_passwd: str) -> bool:
               f'IDENTIFIED BY \'{usr_passwd}\';'
         cursor.execute(cmd)
     except mysql.Error as err:
-        logger.error(f'grant_permissions: {err}')
+        logger.exception(f'grant_permissions: {err}')
         return False
     return True
 
@@ -241,7 +241,7 @@ def drop_table(db_name: str, tbl_name: str) -> bool:
         if tbl_name in get_tables(db_name):
             return False
     except mysql.Error as err:
-        logger.error(f'drop_table: {err}')
+        logger.exception(f'drop_table: {err}')
         return False
     return True
 
@@ -268,7 +268,7 @@ def save_message(link: str, msg: str, exp: datetime, uid: str) -> bool:
         mysql_connection.commit()
 
     except mysql.Error as err:
-        logger.error(f'save_message: {err}')
+        logger.exception(f'save_message: {err}')
         return False
     return True
 
@@ -291,7 +291,7 @@ def save_comment_id(cid: str) -> bool:
         mysql_connection.commit()
 
     except mysql.Error as err:
-        logger.error(f'save_comment_id: {err}')
+        logger.exception(f'save_comment_id: {err}')
         return False
     return True
 
@@ -316,7 +316,7 @@ def find_comment_id(cid: str) -> bool:
             return False
 
     except mysql.Error as err:
-        logger.error(f'find_comment_id: {err}')
+        logger.exception(f'find_comment_id: {err}')
         return False
     return True
 
@@ -340,7 +340,7 @@ def get_messages(time_now: datetime.datetime) -> list:
         messages = cursor.fetchall()
 
     except mysql.Error as err:
-        logger.error(f'get_messages: {err}')
+        logger.exception(f'get_messages: {err}')
     return messages
 
 
