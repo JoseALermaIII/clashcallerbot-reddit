@@ -87,8 +87,15 @@ def get_parent(link: str) -> str:
     Returns:
         parent: Parent comment link or default string.
     """
-    # TODO: Populate with awesomeness
-    pass
+    permalink = 'https://www.reddit.com' + link  # Permalink is missing prefix
+    parent = 'Parent comment not found.'  # Default string
+    try:
+        comment = reddit.comment(url=permalink)  # Fetch comment by URL
+        parent = 'https;//np.reddit.com' + comment.submission.permalink
+    except praw.exceptions as err:
+        logger.exception(f'get_parent: {err}')
+        return parent
+    return parent
 
 
 # If run directly, instead of imported as a module, run main():
