@@ -44,10 +44,13 @@ else:
     DB_NAME = config.get('bot', 'database')
 
 # Setup MySQL-compatible database
-mysql_connection = mysql.connect(user=DB_USER, password=DB_PASS, database=DB_NAME)
-search_cursor = mysql_connection.cursor()
-reply_cursor = mysql_connection.cursor()
-local_cursor = mysql_connection.cursor()
+try:
+    mysql_connection = mysql.connect(user=DB_USER, password=DB_PASS, database=DB_NAME)
+    search_cursor = mysql_connection.cursor()
+    reply_cursor = mysql_connection.cursor()
+    local_cursor = mysql_connection.cursor()
+except mysql.Error as err:
+    logger.exception(f'mySQL connector and cursor: {err}')
 
 
 def main():
