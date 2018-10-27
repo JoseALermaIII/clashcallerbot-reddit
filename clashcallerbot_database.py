@@ -3,7 +3,7 @@
 """Setup the MySQL-compatible database.
 
 If run directly, this module will setup the clashcallerbot database with
-tables and display the format and contents of the tables. Additionally,
+tables and display their format and contents. Additionally,
 this module provides various functions for managing the MySQL-compatible
 database:
 
@@ -12,6 +12,7 @@ database:
 * Grant user permissions (if logged into database as root).
 * Add rows to tables.
 * Delete tables and rows.
+* Convert python datetime to MySQL datetime.
 """
 
 import mysql.connector as mysql
