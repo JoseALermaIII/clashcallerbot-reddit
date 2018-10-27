@@ -249,6 +249,20 @@ def drop_table(db_name: str, tbl_name: str) -> bool:
     return True
 
 
+def convert_datetime(dt: datetime) -> datetime:
+    """Converts python datetime to MySQL datetime.
+
+    Function converts given python datetime object to MySQL datetime format.
+
+    Args:
+        dt: Datetime object in default format.
+
+    Returns:
+        Datetime object in MySQL format.
+    """
+    return dt.strftime('%Y-%m-%d %H:%M:%S')  # Convert to MySQL datetime
+
+
 def save_message(link: str, msg: str, exp: datetime, uid: str) -> bool:
     """Saves given comment data into message_data table.
 
@@ -264,7 +278,7 @@ def save_message(link: str, msg: str, exp: datetime, uid: str) -> bool:
         True for success, false otherwise.
     """
     try:
-        exp = exp.strftime('%Y-%m-%d %H:%M:%S')  # Convert to MySQL datetime
+        exp = convert_datetime(exp)
         add_row = f'INSERT INTO message_data (permalink, message, new_date, userID) ' \
                   f'VALUES (\'{link}\', \'{msg}\', \'{exp}\', \'{uid}\');'
         search_cursor.execute(add_row)
@@ -359,7 +373,7 @@ def get_messages(time_now: datetime.datetime) -> list:
     """
     messages = []
     try:
-        time_now = time_now.strftime('%Y-%m-%d %H:%M:%S')  # Convert to MySQL datetime
+        time_now = convert_datetime(time_now)
         find_messages = f'SELECT * FROM message_data WHERE new_date < \'{time_now}\' GROUP BY id;'
         reply_cursor.execute(find_messages)
         messages = reply_cursor.fetchall()
