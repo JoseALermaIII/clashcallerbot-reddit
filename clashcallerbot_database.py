@@ -374,8 +374,8 @@ def get_messages(time_now: datetime.datetime) -> list:
         messages:   List containing results of query.
     """
     messages = []
+    time_now = convert_datetime(time_now)
     try:
-        time_now = convert_datetime(time_now)
         find_messages = f'SELECT * FROM message_data WHERE new_date < \'{time_now}\' GROUP BY id;'
         reply_cursor.execute(find_messages)
         messages = reply_cursor.fetchall()
