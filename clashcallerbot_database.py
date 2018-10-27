@@ -43,13 +43,13 @@ else:
     DB_NAME = config.get('bot', 'database')
 
 # Setup MySQL-compatible database
-# TODO: Split cursors between search and reply
 mysql_connection = mysql.connect(user=DB_USER, password=DB_PASS, database=DB_NAME)
-cursor = mysql_connection.cursor()
+search_cursor = mysql_connection.cursor()
+reply_cursor = mysql_connection.cursor()
+local_cursor = mysql_connection.cursor()
 
 
 def main():
-    local_cursor = mysql_connection.cursor()
     # Create the clashcaller database
     create_database(DB_NAME)
 
@@ -92,7 +92,6 @@ def main():
 
     # Close database connections
     local_cursor.close()
-    mysql_connection.close()
 
 
 def create_database(db_name: str) -> bool:
@@ -107,7 +106,7 @@ def create_database(db_name: str) -> bool:
         True if successful, False otherwise.
     """
     try:
-        cursor.execute(f'CREATE DATABASE {db_name};')
+        local_cursor.execute(f'CREATE DATABASE {db_name};')
     except mysql.Error as err:
         logger.exception(f'create_database: {err}')
         return False
@@ -126,7 +125,7 @@ def select_database(db_name: str) -> bool:
         True if successful, False otherwise.
     """
     try:
-        cursor.execute(f'USE {db_name};')
+        local_cursor.execute(f'USE {db_name};')
     except mysql.Error as err:
         logger.exception(f'select_database: {err}')
         return False
@@ -147,8 +146,8 @@ def get_tables(db_name: str) -> list:
     table_names = []
     try:
         select_database(db_name)
-        cursor.execute('SHOW TABLES;')
-        tables = cursor.fetchall()
+        local_cursor.execute('SHOW TABLES;')
+        tables = local_cursor.fetchall()
 
         for table in tables:
             table_names.append(str(table[0]))
@@ -183,7 +182,7 @@ def create_table(db_name: str, tbl_name: str, cols: str) -> bool:
     try:
         cmd = f'CREATE TABLE {tbl_name} ({cols});'
         select_database(db_name)
-        cursor.execute(cmd)
+        local_cursor.execute(cmd)
 
     except mysql.Error as err:
         logger.exception(f'create_table: {err}')
@@ -219,7 +218,7 @@ def grant_permissions(db_name: str, usr_name: str, usr_passwd: str) -> bool:
         cmd = f'GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX, ALTER, ' \
               f'CREATE TEMPORARY TABLES, LOCK TABLES ON {db_name}.* TO \'{usr_name}\'@localhost ' \
               f'IDENTIFIED BY \'{usr_passwd}\';'
-        cursor.execute(cmd)
+        local_cursor.execute(cmd)
     except mysql.Error as err:
         logger.exception(f'grant_permissions: {err}')
         return False
@@ -240,7 +239,7 @@ def drop_table(db_name: str, tbl_name: str) -> bool:
     """
     try:
         select_database(db_name)
-        cursor.execute(f'DROP TABLE IF EXISTS {tbl_name};')
+        local_cursor.execute(f'DROP TABLE IF EXISTS {tbl_name};')
 
         if tbl_name in get_tables(db_name):
             return False
@@ -268,7 +267,7 @@ def save_message(link: str, msg: str, exp: datetime, uid: str) -> bool:
         exp = exp.strftime('%Y-%m-%d %H:%M:%S')  # Convert to MySQL datetime
         add_row = f'INSERT INTO message_data (permalink, message, new_date, userID) ' \
                   f'VALUES (\'{link}\', \'{msg}\', \'{exp}\', \'{uid}\');'
-        cursor.execute(add_row)
+        search_cursor.execute(add_row)
         mysql_connection.commit()
 
     except mysql.Error as err:
@@ -290,7 +289,7 @@ def delete_message(tid: str) -> bool:
     """
     try:
         delete_row = f'DELETE FROM message_data WHERE id = \'{tid}\''
-        cursor.execute(delete_row)
+        reply_cursor.execute(delete_row)
         mysql_connection.commit()
 
     except mysql.Error as err:
@@ -313,7 +312,7 @@ def save_comment_id(cid: str) -> bool:
     try:
         add_comment_id = f'INSERT INTO comment_list (comment_ids) VALUES (\'{cid}\');'
 
-        cursor.execute(add_comment_id)
+        search_cursor.execute(add_comment_id)
         mysql_connection.commit()
 
     except mysql.Error as err:
@@ -335,9 +334,9 @@ def find_comment_id(cid: str) -> bool:
     """
     try:
         query = f'SELECT * FROM comment_list WHERE comment_ids=\'{cid}\' GROUP BY id;'
-        cursor.execute(query)
+        search_cursor.execute(query)
 
-        rows = cursor.fetchall()
+        rows = search_cursor.fetchall()
         if not rows:
             return False
 
@@ -362,8 +361,8 @@ def get_messages(time_now: datetime.datetime) -> list:
     try:
         time_now = time_now.strftime('%Y-%m-%d %H:%M:%S')  # Convert to MySQL datetime
         find_messages = f'SELECT * FROM message_data WHERE new_date < \'{time_now}\' GROUP BY id;'
-        cursor.execute(find_messages)
-        messages = cursor.fetchall()
+        reply_cursor.execute(find_messages)
+        messages = reply_cursor.fetchall()
 
     except mysql.Error as err:
         logger.exception(f'get_messages: {err}')
@@ -378,7 +377,8 @@ def close_connections() -> None:
     Returns:
          None
     """
-    cursor.close()
+    search_cursor.close()
+    reply_cursor.close()
     mysql_connection.close()
 
 
