@@ -279,8 +279,8 @@ def save_message(link: str, msg: str, exp: datetime, uid: str) -> bool:
     Returns:
         True for success, false otherwise.
     """
+    exp = convert_datetime(exp)
     try:
-        exp = convert_datetime(exp)
         add_row = f'INSERT INTO message_data (permalink, message, new_date, userID) ' \
                   f'VALUES (\'{link}\', \'{msg}\', \'{exp}\', \'{uid}\');'
         search_cursor.execute(add_row)
