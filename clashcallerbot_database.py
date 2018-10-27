@@ -75,6 +75,7 @@ def main():
     print(tuple(local_cursor.fetchall()))
 
     # Create comment_list table
+    # TODO: Add last run datetime to table for trimming
     col = 'id MEDIUMINT NOT NULL AUTO_INCREMENT, comment_ids VARCHAR(35), ' \
           'PRIMARY KEY(id)'
     create_table(DB_NAME, 'comment_list', col)
