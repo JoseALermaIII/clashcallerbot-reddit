@@ -170,6 +170,25 @@ class ClashCallerDatabase(object):
             logger.exception(f'describe_table: {err}')
         return description
 
+    def get_rows(self, tbl_name: str) -> tuple:
+        """Fetch table rows.
+
+        Method gets rows of given table by order of id in a tuple.
+
+        Args:
+            tbl_name:   Name of table to get rows from.
+        Returns:
+            rows:   Tuple containing each row's data, empty tuple otherwise.
+        """
+        rows = ()
+        try:
+            self.cursor.execute(f'SELECT * FROM {tbl_name} GROUP BY id;')
+            rows = tuple(self.cursor.fetchall())
+
+        except mysql.Error as err:
+            logger.exception(f'get_rows: {err}')
+        return rows
+
     def grant_permissions(self) -> bool:
         """Grants bot user permissions to database.
 
@@ -378,9 +397,7 @@ def main():
     print(database.describe_table('message_data'))
 
     # Fetch rows from message_data as tuple of tuples
-    # TODO: Make method
-    database.cursor.execute(f'SELECT * FROM message_data GROUP BY id;')
-    print(tuple(database.cursor.fetchall()))
+    print(database.get_rows('message_data'))
 
     # Create comment_list table
     # TODO: Add last run datetime to table for trimming
@@ -393,8 +410,7 @@ def main():
     print(database.cursor.fetchall())
 
     # Fetch rows from comment_list as tuple of tuples
-    database.cursor.execute(f'SELECT * FROM comment_list GROUP BY id;')
-    print(tuple(database.cursor.fetchall()))
+    print(database.get_rows('comment_list'))
 
     # Grant database bot permissions
     database.grant_permissions()
