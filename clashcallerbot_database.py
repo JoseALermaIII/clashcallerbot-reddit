@@ -390,6 +390,7 @@ def main():
     print(database.get_tables())
 
     # Create message table
+    # TODO: Store comment.id instead of permalink?
     col = 'id INT UNSIGNED NOT NULL AUTO_INCREMENT, ' \
           'permalink VARCHAR(100), message VARCHAR(100), new_date DATETIME, ' \
           'userID VARCHAR(20), PRIMARY KEY(id)'
