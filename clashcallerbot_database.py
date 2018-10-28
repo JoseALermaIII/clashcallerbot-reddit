@@ -39,10 +39,6 @@ class ClashCallerDatabase(object):
         root_user (bool): Specifies whether the database will be setup as root user.
         mysql_connection (mysql.connect()): A mysql.connector.connect() object.
         cursor (mysql.connect().cursor()): A mysql.connector.connect().cursor() object.
-
-    Todo:
-        * Finish class implementation
-
     """
     def __init__(self, config_file=None, root_user=None):
         if root_user is None:
@@ -68,6 +64,12 @@ class ClashCallerDatabase(object):
             self.cursor = self.mysql_connection.cursor()
         except mysql.Error as err:
             logger.exception(f'mySQL connector and cursor: {err}')
+
+    def __repr__(self):
+        return f'ClashCallerDatabase(configparser.ConfigParser(\'database.ini\'), {self._root_user})'
+
+    def __str__(self):
+        return f'Logged into database: {self._db_name} as: {self._db_user}'
 
     def create_database(self) -> bool:
         """Create database
