@@ -170,9 +170,9 @@ def send_confirmation(u_name: str, link: str, exp: datetime.datetime) -> bool:
     """
     subject = 'ClashCallerBot Confirmation Sent'
     permalink = 'https://np.reddit.com' + link  # Permalinks are missing prefix
-    time = datetime.datetime.strftime(exp, '%b. %d, %Y at %I:%M:%S %p (%Z)')
+    exp = datetime.datetime.strftime(exp, '%b. %d, %Y at %I:%M:%S %p (%Z)')
     message = f"""ClashCallerBot here!  
-              I will be messaging you on {time} to remind you of [**this link.**]({permalink})
+              I will be messaging you on {exp} to remind you of [**this link.**]({permalink})
  
               Thank you for entrusting us with your warring needs,  
               - ClashCallerBot
@@ -237,9 +237,9 @@ def send_confirmation_reply(cid: str, link: str, exp: datetime.datetime) -> str:
         comment_id: id of new comment if successful, None otherwise
     """
     permalink = 'https://np.reddit.com' + link  # Permalinks are missing prefix
-    time = datetime.datetime.strftime(exp, '%b. %d, %Y at %I:%M:%S %p (%Z)')
+    exp = datetime.datetime.strftime(exp, '%b. %d, %Y at %I:%M:%S %p (%Z)')
     message = f"""ClashCallerBot here!  
-              I will be messaging you on {time} to remind you of [**this link.**]({permalink})
+              I will be messaging you on {exp} to remind you of [**this link.**]({permalink})
  
               Thank you for entrusting us with your warring needs!
  
