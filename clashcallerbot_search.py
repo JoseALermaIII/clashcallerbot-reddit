@@ -51,6 +51,8 @@ message_re = re.compile(r'''
                         (\d){1,2} # single or double digit (required)
                         ''', re.VERBOSE | re.IGNORECASE)  # case-insensitive
 
+start_time = datetime.datetime.now(datetime.timezone.utc)
+
 
 def main():
     # Search recent comments for ClashCaller! string
@@ -58,7 +60,8 @@ def main():
     for comment in subreddit.stream.comments():
         match = clashcaller_re.search(comment.body)
         if match and comment.author.name != 'ClashCallerBot' \
-                and not db.find_comment_id(comment.id) and not have_replied(comment.id, 'ClashCallerBot'):
+                and not db.find_comment_id(comment.id) and not have_replied(comment.id, 'ClashCallerBot')\
+                and is_recent(comment):
             logger.info(f'In from {comment.author.name}: {comment}')
 
             # Strip everything before and including ClashCaller! string
@@ -281,6 +284,23 @@ def have_replied(cid: str, bot_name: str) -> bool:
     except praw.exceptions.PRAWException as err:
         logger.exception(f'have_replied: {err}')
         return False
+    return False
+
+
+def is_recent(cmnt: praw.reddit.models.Comment) -> bool:
+    """Checks if comment is a recent comment.
+
+    Function compares comment time with program start time.
+
+    Args:
+        cmnt:  praw comment object.
+
+    Returns:
+        True if comment time is after start time, False otherwise.
+    """
+    cmnt_time = datetime.datetime.fromtimestamp(cmnt.created_utc, datetime.timezone.utc)
+    if cmnt_time > start_time:
+        return True
     return False
 
 
