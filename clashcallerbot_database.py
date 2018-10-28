@@ -49,7 +49,8 @@ class ClashCallerDatabase(object):
             raise ValueError('root_user must be given.')
         if config_file is None:
             raise ValueError('A ConfigParser object must be given.')
-        if root_user:
+        self._root_user = root_user
+        if self._root_user:
             self._db_user = config_file.get('root', 'user')
             self._db_pass = config_file.get('root', 'password')
 
@@ -160,6 +161,10 @@ class ClashCallerDatabase(object):
         Notes:
             Only database root user can grant database permissions.
         """
+        if not self._root_user:
+            logger.error('Only root user can grant database permissions.')
+            return False
+
         try:
             cmd = f'GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX, ALTER, ' \
                   f'CREATE TEMPORARY TABLES, LOCK TABLES ON {self._db_name}.* TO \'{self._bot_name}\'@localhost ' \
@@ -335,7 +340,7 @@ class ClashCallerDatabase(object):
 
 def main():
     # Create the clashcaller database
-    database = ClashCallerDatabase(config=config_file, root_user=False)
+    database = ClashCallerDatabase(config_file=config, root_user=False)
 
     # Select the clashcaller database
     database.select_database()
@@ -374,7 +379,6 @@ def main():
     print(tuple(database.cursor.fetchall()))
 
     # Grant database bot permissions
-    # TODO: add root_user handling
     database.grant_permissions()
 
     # Close database connections
