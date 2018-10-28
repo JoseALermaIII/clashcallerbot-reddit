@@ -159,7 +159,7 @@ class ClashCallerDatabase(object):
             tbl_name:  Name of table to describe
 
         Returns:
-            description: List with table description.
+            description: List with table description, empty list otherwise.
         """
         description = []
         try:
@@ -406,8 +406,7 @@ def main():
     database.create_table('comment_list', col)
 
     # Describe comment list table
-    database.cursor.execute('DESCRIBE comment_list;')
-    print(database.cursor.fetchall())
+    print(database.describe_table('comment_list'))
 
     # Fetch rows from comment_list as tuple of tuples
     print(database.get_rows('comment_list'))
