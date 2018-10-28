@@ -35,7 +35,7 @@ class ClashCallerDatabase(object):
     """Implements a class for a ClashCaller Database.
 
     Attributes:
-        config (configparser.ConfigParser()): A configparser object with database.ini file pre-read.
+        config_file (configparser.ConfigParser()): A configparser object with database.ini file pre-read.
         root_user (bool): Specifies whether the database will be setup as root user.
         mysql_connection (mysql.connect()): A mysql.connector.connect() object.
         cursor (mysql.connect().cursor()): A mysql.connector.connect().cursor() object.
@@ -149,6 +149,26 @@ class ClashCallerDatabase(object):
             logger.exception(f'create_table: {err}')
             return False
         return True
+
+    def describe_table(self, tbl_name: str) -> list:
+        """Gets description of table.
+
+        Method returns a list describing the structure of the given table.
+
+        Args:
+            tbl_name:  Name of table to describe
+
+        Returns:
+            description: List with table description.
+        """
+        description = []
+        try:
+            self.cursor.execute(f'DESCRIBE {tbl_name};')
+            description = self.cursor.fetchall()
+
+        except mysql.Error as err:
+            logger.exception(f'describe_table: {err}')
+        return description
 
     def grant_permissions(self) -> bool:
         """Grants bot user permissions to database.
@@ -355,9 +375,7 @@ def main():
     database.create_table('message_data', col)
 
     # Describe message table
-    # TODO: Make method
-    database.cursor.execute('DESCRIBE message_data;')
-    print(database.cursor.fetchall())
+    print(database.describe_table('message_data'))
 
     # Fetch rows from message_data as tuple of tuples
     # TODO: Make method
