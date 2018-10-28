@@ -143,7 +143,7 @@ class ClashCallerDatabase(object):
             True if successful, False otherwise.
         """
         try:
-            cmd = f'CREATE TABLE {tbl_name} ({cols});'
+            cmd = f'CREATE TABLE {tbl_name} ({cols})  ENGINE=InnoDB;'
             self.select_database()
             self.cursor.execute(cmd)
 
