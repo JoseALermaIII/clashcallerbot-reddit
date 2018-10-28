@@ -27,8 +27,8 @@ logging.raiseExceptions = True  # Production mode if False (no console sys.stder
 logger = logging.getLogger('database')
 
 # Read database.ini file
-config_file = configparser.ConfigParser()
-config_file.read("database.ini")
+config = configparser.ConfigParser()
+config.read("database.ini")
 
 
 class ClashCallerDatabase(object):
@@ -44,22 +44,22 @@ class ClashCallerDatabase(object):
         * Finish class implementation
 
     """
-    def __init__(self, config=None, root_user=None):
+    def __init__(self, config_file=None, root_user=None):
         if root_user is None:
             raise ValueError('root_user must be given.')
-        if config is None:
-            raise ValueError('A config file must be given.')
+        if config_file is None:
+            raise ValueError('A ConfigParser object must be given.')
         if root_user:
-            self._db_user = config.get('root', 'user')
-            self._db_pass = config.get('root', 'password')
+            self._db_user = config_file.get('root', 'user')
+            self._db_pass = config_file.get('root', 'password')
 
-            self._bot_name = config.get('bot', 'user')
-            self._bot_passwd = config.get('bot', 'password')
+            self._bot_name = config_file.get('bot', 'user')
+            self._bot_passwd = config_file.get('bot', 'password')
         else:
-            self._db_user = config.get('bot', 'user')
-            self._db_pass = config.get('bot', 'password')
+            self._db_user = config_file.get('bot', 'user')
+            self._db_pass = config_file.get('bot', 'password')
 
-        self._db_name = config.get('bot', 'database')
+        self._db_name = config_file.get('bot', 'database')
 
         # Setup MySQL-compatible database
         try:
