@@ -290,7 +290,7 @@ class ClashCallerDatabase(object):
             True for success, False otherwise.
         """
         try:
-            delete_row = f'DELETE FROM message_data WHERE id = \'{tid}\''
+            delete_row = f'DELETE FROM message_data WHERE id = \'{tid}\';'
             self.cursor.execute(delete_row)
             self.mysql_connection.commit()
 
