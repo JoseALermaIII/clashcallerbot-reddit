@@ -16,10 +16,11 @@ import praw.exceptions
 
 import logging.config
 import re
+import configparser
 import datetime
 import time
 
-import clashcallerbot_database as db
+from clashcallerbot_database import ClashCallerDatabase
 
 # Logger
 logging.config.fileConfig('logging.conf', disable_existing_loggers=False)
@@ -50,6 +51,11 @@ message_re = re.compile(r'''
                         [\W|\s]*  # non-word character or space (optional)
                         (\d){1,2} # single or double digit (required)
                         ''', re.VERBOSE | re.IGNORECASE)  # case-insensitive
+
+# Read database.ini file and make database instance
+config = configparser.ConfigParser()
+config.read("database.ini")
+db = ClashCallerDatabase(config, False)
 
 start_time = datetime.datetime.now(datetime.timezone.utc)
 
