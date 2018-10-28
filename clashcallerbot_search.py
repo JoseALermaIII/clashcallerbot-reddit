@@ -149,7 +149,7 @@ def main():
             send_confirmation_reply(comment.id, comment.permalink, expiration_datetime)
 
             # Save comment.id to database;
-            # TODO: Trim by checking saved permalinks? Wars take 48 hours, trim weekly.
+            # TODO: Wars take 48 hours, trim weekly based on start_time.
             db.save_comment_id(comment.id)
 
             # TODO: Add more functionality via PM: delete calls, list calls, add users to call reminder
