@@ -230,6 +230,7 @@ class ClashCallerDatabase(object):
         """
         try:
             self.select_database()
+            self.lock_write(tbl_name)
             self.cursor.execute(f'DROP TABLE IF EXISTS {tbl_name};')
 
             if tbl_name in self.get_tables():
@@ -269,6 +270,7 @@ class ClashCallerDatabase(object):
         """
         exp = self.convert_datetime(exp)
         try:
+            self.lock_write('message_data')
             add_row = f'INSERT INTO message_data (permalink, message, new_date, userID) ' \
                       f'VALUES (\'{link}\', \'{msg}\', \'{exp}\', \'{uid}\');'
             self.cursor.execute(add_row)
@@ -291,6 +293,7 @@ class ClashCallerDatabase(object):
             True for success, False otherwise.
         """
         try:
+            self.lock_write('message_data')
             delete_row = f'DELETE FROM message_data WHERE id = \'{tid}\';'
             self.cursor.execute(delete_row)
             self.mysql_connection.commit()
@@ -312,6 +315,7 @@ class ClashCallerDatabase(object):
             True for success, false otherwise.
         """
         try:
+            self.lock_write('comment_list')
             add_comment_id = f'INSERT INTO comment_list (comment_ids) VALUES (\'{cid}\');'
 
             self.cursor.execute(add_comment_id)
@@ -394,6 +398,33 @@ class ClashCallerDatabase(object):
 
         except mysql.Error as err:
             logger.exception(f'lock_read: {err}')
+            return False
+        return True
+
+    def lock_write(self, tbl_name: str) -> bool:
+        """Locks table for writing.
+
+        Method locks a given table for write access.
+
+        Args:
+            tbl_name:   Name of table to lock.
+
+        Returns:
+            True if successful, False otherwise.
+
+        Notes:
+            * Any previous locks are `implicitly released`_.
+            * Write locks have higher priority than read locks.
+
+        .. _implicitly released:
+            https://dev.mysql.com/doc/refman/8.0/en/lock-tables.html
+        """
+        try:
+            lock = f'LOCK TABLE {tbl_name} WRITE;'
+            self.cursor.execute(lock)
+
+        except mysql.Error as err:
+            logger.exception(f'lock_write: {err}')
             return False
         return True
 
