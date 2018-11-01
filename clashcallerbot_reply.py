@@ -33,6 +33,7 @@ db = ClashCallerDatabase(config, False)
 
 
 def main():
+    logger.info('Start reply.py...')
     while True:
         time.sleep(30)
 
