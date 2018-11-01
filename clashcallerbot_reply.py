@@ -41,7 +41,7 @@ def main():
         messages = db.get_messages(now)
 
         if not messages:
-            logger.error(f'No messages before: {now}.')
+            logger.debug(f'No messages before: {now}.')
             continue
 
         # Send reminder PM
