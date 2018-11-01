@@ -61,8 +61,8 @@ start_time = datetime.datetime.now(datetime.timezone.utc)
 
 
 def main():
+    logger.info('Start search.py...')
     # Search recent comments for ClashCaller! string
-
     for comment in subreddit.stream.comments():
         match = clashcaller_re.search(comment.body)
         if match and comment.author.name != 'ClashCallerBot' \
