@@ -254,16 +254,16 @@ class ClashCallerDatabase(object):
         """
         return dt.strftime('%Y-%m-%d %H:%M:%S')  # Convert to MySQL datetime
 
-    def save_message(self, link: str, msg: str, exp: datetime, uid: str) -> bool:
+    def save_message(self, link: str, msg: str, exp: datetime, usr_name: str) -> bool:
         """Saves given comment data into message_data table.
 
         Method saves given inputs in message_date table as a row.
 
         Args:
-            link:   Comment permalink.
-            msg:    Comment message.
-            exp:    Expiration datetime object.
-            uid:    Comment author UserID.
+            link:     Comment permalink.
+            msg:      Comment message.
+            exp:      Expiration datetime object.
+            usr_name: Comment author username.
 
         Returns:
             True for success, false otherwise.
@@ -272,7 +272,7 @@ class ClashCallerDatabase(object):
         try:
             self.lock_write('message_data')
             add_row = f'INSERT INTO message_data (permalink, message, new_date, userID) ' \
-                      f'VALUES (\'{link}\', \'{msg}\', \'{exp}\', \'{uid}\');'
+                      f'VALUES (\'{link}\', \'{msg}\', \'{exp}\', \'{usr_name}\');'
             self.cursor.execute(add_row)
             self.mysql_connection.commit()
 
