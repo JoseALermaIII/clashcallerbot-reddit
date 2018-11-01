@@ -184,6 +184,7 @@ class ClashCallerDatabase(object):
         """
         rows = ()
         try:
+            self.lock_read(tbl_name)
             self.cursor.execute(f'SELECT * FROM {tbl_name} GROUP BY id;')
             rows = tuple(self.cursor.fetchall())
 
@@ -333,6 +334,7 @@ class ClashCallerDatabase(object):
             True for success, false otherwise.
         """
         try:
+            self.lock_read('comment_list')
             query = f'SELECT * FROM comment_list WHERE comment_ids=\'{cid}\' GROUP BY id;'
             self.cursor.execute(query)
 
@@ -359,6 +361,7 @@ class ClashCallerDatabase(object):
         messages = []
         time_now = self.convert_datetime(time_now)
         try:
+            self.lock_read('message_data')
             find_messages = f'SELECT * FROM message_data WHERE new_date < \'{time_now}\' GROUP BY id;'
             self.cursor.execute(find_messages)
             messages = self.cursor.fetchall()
@@ -366,6 +369,33 @@ class ClashCallerDatabase(object):
         except mysql.Error as err:
             logger.exception(f'get_messages: {err}')
         return messages
+
+    def lock_read(self, tbl_name: str) -> bool:
+        """Locks table for reading.
+
+        Method locks a given table for read access.
+
+        Args:
+            tbl_name:   Name of table to lock.
+
+        Returns:
+            True if successful, False otherwise.
+
+        Notes:
+            * Any previous locks are `implicitly released`_.
+            * Read locks have lower priority than write locks.
+
+        .. _implicitly released:
+            https://dev.mysql.com/doc/refman/8.0/en/lock-tables.html
+        """
+        try:
+            lock = f'LOCK TABLE {tbl_name} READ;'
+            self.cursor.execute(lock)
+
+        except mysql.Error as err:
+            logger.exception(f'lock_read: {err}')
+            return False
+        return True
 
     def close_connections(self) -> None:
         """Close database connections.
