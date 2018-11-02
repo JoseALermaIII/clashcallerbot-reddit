@@ -21,8 +21,10 @@ import configparser
 import logging.config
 import datetime
 
+from logging_conf import LOGGING
+
 # Logger
-logging.config.fileConfig('logging.conf', disable_existing_loggers=False)
+logging.config.dictConfig(LOGGING)
 logging.raiseExceptions = True  # Production mode if False (no console sys.stderr output)
 logger = logging.getLogger('database')
 
