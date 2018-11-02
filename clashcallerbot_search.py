@@ -158,7 +158,7 @@ def main():
 
                 time.sleep(2)
 
-    except urllib3.exceptions as err:
+    except urllib3.exceptions.ConnectionError as err:
         logger.exception(f'urllib3: {err}')
         time.sleep(3)
 
