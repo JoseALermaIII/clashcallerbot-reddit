@@ -16,9 +16,10 @@ import datetime
 import time
 
 from clashcallerbot_database import ClashCallerDatabase
+from logging_conf import LOGGING
 
 # Logger
-logging.config.fileConfig('logging.conf', disable_existing_loggers=False)
+logging.config.dictConfig(LOGGING)
 logging.raiseExceptions = True  # Production mode if False (no console sys.stderr output)
 logger = logging.getLogger('reply')
 
