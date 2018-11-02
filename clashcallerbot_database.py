@@ -49,16 +49,16 @@ class ClashCallerDatabase(object):
             raise ValueError('A ConfigParser object must be given.')
         self._root_user = root_user
         if self._root_user:
-            self._db_user = config_file.get('root', 'user')
-            self._db_pass = config_file.get('root', 'password')
+            self._db_user = config_file['root']['user']
+            self._db_pass = config_file['root']['password']
 
-            self._bot_name = config_file.get('bot', 'user')
-            self._bot_passwd = config_file.get('bot', 'password')
+            self._bot_name = config_file['bot']['user']
+            self._bot_passwd = config_file['bot']['password']
         else:
-            self._db_user = config_file.get('bot', 'user')
-            self._db_pass = config_file.get('bot', 'password')
+            self._db_user = config_file['bot']['user']
+            self._db_pass = config_file['bot']['password']
 
-        self._db_name = config_file.get('bot', 'database')
+        self._db_name = config_file['bot']['database']
 
         # Setup MySQL-compatible database
         try:
