@@ -19,6 +19,7 @@ import re
 import configparser
 import datetime
 import time
+import urllib3.exceptions
 
 from clashcallerbot_database import ClashCallerDatabase
 
@@ -62,97 +63,104 @@ start_time = datetime.datetime.now(datetime.timezone.utc)
 
 def main():
     logger.info('Start search.py...')
-    # Search recent comments for ClashCaller! string
-    for comment in subreddit.stream.comments():
-        match = clashcaller_re.search(comment.body)
-        if match and comment.author.name != 'ClashCallerBot' \
-                and not db.find_comment_id(comment.id) and not have_replied(comment.id, 'ClashCallerBot')\
-                and is_recent(comment):
-            logger.info(f'In from {comment.author.name}: {comment}')
+    try:
+        # Search recent comments for ClashCaller! string
+        for comment in subreddit.stream.comments():
+            match = clashcaller_re.search(comment.body)
+            if match and comment.author.name != 'ClashCallerBot' \
+                    and not db.find_comment_id(comment.id) and not have_replied(comment.id, 'ClashCallerBot')\
+                    and is_recent(comment):
+                logger.info(f'In from {comment.author.name}: {comment}')
 
-            # Strip everything before and including ClashCaller! string
-            comment.body = comment.body[match.end():].strip()
-            logger.debug(f'Stripped comment body: {comment.body}')
+                # Strip everything before and including ClashCaller! string
+                comment.body = comment.body[match.end():].strip()
+                logger.debug(f'Stripped comment body: {comment.body}')
 
-            # Check for expiration time
-            minute_tokens = ('min', 'minute', 'minutes')
-            match = expiration_re.search(comment.body)
-            if not match:
-                timedelta = datetime.timedelta(hours=1)  # Default to 1 hour
-            else:
-                exp_digit = int(match.group('exp_digit').strip())
-                if exp_digit == 0:  # ignore zeros
-                    # Send message and ignore comment
-                    error = 'Expiration time is zero.'
-                    # send_error_message(comment.author.name, comment.permalink, error)
-                    db.save_comment_id(comment.id)
-                    logging.error(error)
-                    continue
-                exp_unit = match.group('exp_unit').strip().lower()
-                if exp_unit in minute_tokens:
-                    timedelta = datetime.timedelta(minutes=exp_digit)
+                # Check for expiration time
+                minute_tokens = ('min', 'minute', 'minutes')
+                match = expiration_re.search(comment.body)
+                if not match:
+                    timedelta = datetime.timedelta(hours=1)  # Default to 1 hour
                 else:
-                    if exp_digit >= 24:  # ignore days
+                    exp_digit = int(match.group('exp_digit').strip())
+                    if exp_digit == 0:  # ignore zeros
                         # Send message and ignore comment
-                        error = 'Expiration time is >= 1 day.'
+                        error = 'Expiration time is zero.'
                         # send_error_message(comment.author.name, comment.permalink, error)
                         db.save_comment_id(comment.id)
                         logging.error(error)
                         continue
-                    timedelta = datetime.timedelta(hours=exp_digit)
-            logger.debug(f'timedelta = {timedelta.seconds} seconds')
+                    exp_unit = match.group('exp_unit').strip().lower()
+                    if exp_unit in minute_tokens:
+                        timedelta = datetime.timedelta(minutes=exp_digit)
+                    else:
+                        if exp_digit >= 24:  # ignore days
+                            # Send message and ignore comment
+                            error = 'Expiration time is >= 1 day.'
+                            # send_error_message(comment.author.name, comment.permalink, error)
+                            db.save_comment_id(comment.id)
+                            logging.error(error)
+                            continue
+                        timedelta = datetime.timedelta(hours=exp_digit)
+                logger.debug(f'timedelta = {timedelta.seconds} seconds')
 
-            # Apply expiration time to comment date
-            comment_datetime = datetime.datetime.fromtimestamp(comment.created_utc, datetime.timezone.utc)
-            expiration_datetime = comment_datetime + timedelta
-            logger.info(f'comment_datetime = {comment_datetime}')
-            logger.info(f'expiration_datetime = {expiration_datetime}')
+                # Apply expiration time to comment date
+                comment_datetime = datetime.datetime.fromtimestamp(comment.created_utc, datetime.timezone.utc)
+                expiration_datetime = comment_datetime + timedelta
+                logger.info(f'comment_datetime = {comment_datetime}')
+                logger.info(f'expiration_datetime = {expiration_datetime}')
 
-            # Ignore if expire time passed
-            if expiration_datetime < datetime.datetime.now(datetime.timezone.utc):
-                # Send message and ignore comment
-                error = 'Expiration time has already passed.'
-                # send_error_message(comment.author.name, comment.permalink, error)
+                # Ignore if expire time passed
+                if expiration_datetime < datetime.datetime.now(datetime.timezone.utc):
+                    # Send message and ignore comment
+                    error = 'Expiration time has already passed.'
+                    # send_error_message(comment.author.name, comment.permalink, error)
+                    db.save_comment_id(comment.id)
+                    logging.error(error)
+                    continue
+
+                # Strip expiration time
+                comment.body = comment.body[match.end():].strip()
+
+                # Evaluate message
+                if len(comment.body) > 100:
+                    # Send message and ignore comment
+                    error = 'Message length > 100 characters.'
+                    # send_error_message(comment.author.name, comment.permalink, error)
+                    db.save_comment_id(comment.id)
+                    logger.error(error)
+                    continue
+
+                match = message_re.search(comment.body)
+                if not match:
+                    # Send message and ignore comment
+                    error = 'Message not properly formatted.'
+                    # send_error_message(comment.author.name, comment.permalink, error)
+                    db.save_comment_id(comment.id)
+                    logger.error(error)
+                    continue
+
+                message = comment.body
+                logger.debug(f'message = {message}')
+
+                # Save message data to MySQL-compatible database
+                db.save_message(comment.permalink, message, expiration_datetime, comment.author.name)
+
+                # Reply and send PM
+                send_confirmation(comment.author.name, comment.permalink, expiration_datetime)
+                send_confirmation_reply(comment.id, comment.permalink, expiration_datetime)
+
+                # Save comment.id to database
+                # TODO: Replaced by is_recent()? Wars take 48 hours, trim weekly based on start_time.
                 db.save_comment_id(comment.id)
-                logging.error(error)
-                continue
 
-            # Strip expiration time
-            comment.body = comment.body[match.end():].strip()
+                # TODO: Add more functionality via PM: delete calls, list calls, add users to call reminder
 
-            # Evaluate message
-            if len(comment.body) > 100:
-                # Send message and ignore comment
-                error = 'Message length > 100 characters.'
-                # send_error_message(comment.author.name, comment.permalink, error)
-                db.save_comment_id(comment.id)
-                logger.error(error)
-                continue
+                time.sleep(10)
 
-            match = message_re.search(comment.body)
-            if not match:
-                # Send message and ignore comment
-                error = 'Message not properly formatted.'
-                # send_error_message(comment.author.name, comment.permalink, error)
-                db.save_comment_id(comment.id)
-                logger.error(error)
-                continue
-
-            message = comment.body
-            logger.debug(f'message = {message}')
-
-            # Save message data to MySQL-compatible database
-            db.save_message(comment.permalink, message, expiration_datetime, comment.author.name)
-
-            # Reply and send PM
-            send_confirmation(comment.author.name, comment.permalink, expiration_datetime)
-            send_confirmation_reply(comment.id, comment.permalink, expiration_datetime)
-
-            # Save comment.id to database
-            # TODO: Replaced by is_recent()? Wars take 48 hours, trim weekly based on start_time.
-            db.save_comment_id(comment.id)
-
-            # TODO: Add more functionality via PM: delete calls, list calls, add users to call reminder
+    except urllib3.exceptions as err:
+        logger.exception(f'urllib3: {err}')
+        time.sleep(3)
 
 
 def send_confirmation(u_name: str, link: str, exp: datetime.datetime) -> bool:
