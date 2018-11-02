@@ -20,6 +20,7 @@ import configparser
 import datetime
 import time
 import urllib3.exceptions
+from socket import gaierror
 
 from clashcallerbot_database import ClashCallerDatabase
 from logging_conf import LOGGING
@@ -161,6 +162,10 @@ def main():
 
     except urllib3.exceptions.ConnectionError as err:
         logger.exception(f'urllib3: {err}')
+        time.sleep(3)
+
+    except gaierror as err:
+        logger.exception(f'socket: {err}')
         time.sleep(3)
 
 
