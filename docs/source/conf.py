@@ -14,10 +14,8 @@
 #
 import os
 import sys
-# TODO: autodoc and ConfigParser() don't share file paths
+# FIXME: autodoc and ConfigParser() don't share file paths
 sys.path.insert(0, os.path.abspath('../..'))
-
-
 
 
 # -- Project information -----------------------------------------------------
@@ -26,10 +24,11 @@ project = 'clashcallerbot-reddit'
 copyright = '2018, Jose A. Lerma III'
 author = 'Jose A. Lerma III'
 
+# TODO: Add versioning file to automate this
 # The short X.Y version
 version = '2.0'
 # The full version, including alpha/beta/rc tags
-release = '2.0.4'
+release = '2.0.5'
 
 
 # -- General configuration ---------------------------------------------------
