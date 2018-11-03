@@ -13,6 +13,7 @@ The comment is replied to, then the userID is PM'ed confirmation."""
 
 import praw
 import praw.exceptions
+import prawcore.exceptions
 
 import logging.config
 import re
@@ -165,6 +166,10 @@ def main():
 
     except gaierror as err:
         logger.exception(f'socket: {err}')
+        time.sleep(3)
+
+    except prawcore.exceptions as err:
+        logger.exception(f'prawcore: {err}')
         time.sleep(3)
 
 
