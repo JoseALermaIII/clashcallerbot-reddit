@@ -13,6 +13,7 @@ The comment is replied to, then the userID is PM'ed confirmation."""
 
 import praw
 import praw.exceptions
+import prawcore.exceptions
 
 import logging.config
 import re
@@ -158,7 +159,7 @@ def main():
 
                 # TODO: Add more functionality via PM: delete calls, list calls, add users to call reminder
 
-                time.sleep(2)
+        time.sleep(2)
 
     except urllib3.exceptions.ConnectionError as err:
         logger.exception(f'urllib3: {err}')
@@ -166,6 +167,10 @@ def main():
 
     except gaierror as err:
         logger.exception(f'socket: {err}')
+        time.sleep(3)
+
+    except prawcore.exceptions as err:
+        logger.exception(f'prawcore: {err}')
         time.sleep(3)
 
 
