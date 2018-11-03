@@ -158,7 +158,7 @@ def main():
 
                 # TODO: Add more functionality via PM: delete calls, list calls, add users to call reminder
 
-                time.sleep(2)
+        time.sleep(2)
 
     except urllib3.exceptions.ConnectionError as err:
         logger.exception(f'urllib3: {err}')
