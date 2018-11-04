@@ -105,7 +105,7 @@ class ClashCallerDatabase(object):
         Method returns a list with the names of the tables.
 
         Returns:
-            table_names: List of table names.
+            List of table names.
         """
         table_names = []
         try:
@@ -159,7 +159,7 @@ class ClashCallerDatabase(object):
             tbl_name:  Name of table to describe
 
         Returns:
-            description: List with table description, empty list otherwise.
+            List with table description, empty list otherwise.
         """
         description = []
         try:
@@ -177,8 +177,9 @@ class ClashCallerDatabase(object):
 
         Args:
             tbl_name:   Name of table to get rows from.
+
         Returns:
-            rows:   Tuple containing each row's data, empty tuple otherwise.
+            Tuple containing each row's data, empty tuple otherwise.
         """
         rows = ()
         try:
@@ -358,7 +359,7 @@ class ClashCallerDatabase(object):
             time_now:   Current datetime.
 
         Returns:
-            messages:   List containing results of query.
+            List containing results of query.
         """
         messages = []
         time_now = self.convert_datetime(time_now)
