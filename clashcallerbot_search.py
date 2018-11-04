@@ -17,7 +17,6 @@ import prawcore.exceptions
 
 import logging.config
 import re
-import configparser
 import datetime
 import time
 import urllib3.exceptions
@@ -25,6 +24,7 @@ from socket import gaierror
 
 from clashcallerbot_database import ClashCallerDatabase
 from logging_conf import LOGGING
+from config import config
 
 # Logger
 logging.config.dictConfig(LOGGING)
@@ -56,9 +56,7 @@ message_re = re.compile(r'''
                         (\d){1,2} # single or double digit (required)
                         ''', re.VERBOSE | re.IGNORECASE)  # case-insensitive
 
-# Read database.ini file and make database instance
-config = configparser.ConfigParser()
-config.read("database.ini")
+# Make database instance
 db = ClashCallerDatabase(config, False)
 
 start_time = datetime.datetime.now(datetime.timezone.utc)
