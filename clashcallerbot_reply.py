@@ -11,12 +11,12 @@ import praw
 import praw.exceptions
 
 import logging.config
-import configparser
 import datetime
 import time
 
 from clashcallerbot_database import ClashCallerDatabase
 from logging_conf import LOGGING
+from config import config
 
 # Logger
 logging.config.dictConfig(LOGGING)
@@ -27,9 +27,7 @@ logger = logging.getLogger('reply')
 reddit = praw.Reddit('clashcallerreply')  # Section name in praw.ini
 subreddit = reddit.subreddit('ClashCallerBot')  # Limit scope for testing purposes
 
-# Read database.ini file and make database instance
-config = configparser.ConfigParser()
-config.read("database.ini")
+# Make database instance
 db = ClashCallerDatabase(config, False)
 
 
