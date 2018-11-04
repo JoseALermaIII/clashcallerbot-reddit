@@ -251,7 +251,7 @@ def send_confirmation_reply(cid: str, link: str, exp: datetime.datetime) -> str:
         exp:    Expiration datetime of call.
 
     Returns:
-        comment_id: id of new comment if successful, None otherwise
+        id of new comment if successful, None otherwise
     """
     permalink = 'https://np.reddit.com' + link  # Permalinks are missing prefix
     exp = datetime.datetime.strftime(exp, '%b. %d, %Y at %I:%M:%S %p (%Z)')
