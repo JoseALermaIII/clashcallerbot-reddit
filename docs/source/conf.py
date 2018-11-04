@@ -15,11 +15,9 @@
 import os
 import sys
 
-from version import __version__
-
-# FIXME: autodoc and ConfigParser() don't share file paths
 sys.path.insert(0, os.path.abspath('../..'))
 
+from version import __version__
 
 # -- Project information -----------------------------------------------------
 
