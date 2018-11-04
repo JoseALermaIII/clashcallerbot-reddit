@@ -168,7 +168,7 @@ def main():
         logger.exception(f'socket: {err}')
         time.sleep(3)
 
-    except prawcore.exceptions as err:
+    except prawcore.exceptions.PrawcoreException as err:
         logger.exception(f'prawcore: {err}')
         time.sleep(3)
 
