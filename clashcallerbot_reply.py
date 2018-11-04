@@ -99,7 +99,7 @@ def get_parent(link: str) -> str:
          link:  Permalink to get parent of.
 
     Returns:
-        parent: Parent comment link or default string.
+        Parent comment link or default string.
     """
     permalink = 'https://www.reddit.com' + link  # Permalink is missing prefix
     parent = 'Parent comment not found.'  # Default string
