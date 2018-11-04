@@ -14,6 +14,9 @@
 #
 import os
 import sys
+
+from version import __version__
+
 # FIXME: autodoc and ConfigParser() don't share file paths
 sys.path.insert(0, os.path.abspath('../..'))
 
@@ -24,11 +27,10 @@ project = 'clashcallerbot-reddit'
 copyright = '2018, Jose A. Lerma III'
 author = 'Jose A. Lerma III'
 
-# TODO: Add versioning file to automate this
 # The short X.Y version
-version = '2.0'
+version = '.'.join(__version__.split('.', 2)[:2])
 # The full version, including alpha/beta/rc tags
-release = '2.0.5'
+release = __version__
 
 
 # -- General configuration ---------------------------------------------------
