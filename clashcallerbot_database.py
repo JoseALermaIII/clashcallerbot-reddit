@@ -17,20 +17,16 @@ MySQL-compatible database:
 
 import mysql.connector as mysql
 
-import configparser
 import logging.config
 import datetime
 
 from logging_conf import LOGGING
+from config import config
 
 # Logger
 logging.config.dictConfig(LOGGING)
 logging.raiseExceptions = True  # Production mode if False (no console sys.stderr output)
 logger = logging.getLogger('database')
-
-# Read database.ini file
-config = configparser.ConfigParser()
-config.read("database.ini")
 
 
 class ClashCallerDatabase(object):
