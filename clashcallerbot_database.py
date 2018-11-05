@@ -426,16 +426,22 @@ class ClashCallerDatabase(object):
             return False
         return True
 
-    def close_connections(self) -> None:
+    def close_connections(self) -> bool:
         """Close database connections.
 
         Method closes database cursor and connection.
 
         Returns:
-             None
+             True if successful, False otherwise.
         """
-        self.cursor.close()
-        self.mysql_connection.close()
+        try:
+            self.cursor.close()
+            self.mysql_connection.close()
+
+        except mysql.Error as err:
+            logger.exception(f'close_connections: {err}')
+            return False
+        return True
 
 
 def main():
