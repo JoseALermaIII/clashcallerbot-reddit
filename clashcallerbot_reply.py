@@ -35,13 +35,14 @@ def main():
     logger.info('Start reply.py...')
     while True:
         time.sleep(30)
-
+        db.open_connections()
         # Get list of messages older than current datetime
         now = datetime.datetime.now(datetime.timezone.utc)
         messages = db.get_messages(now)
 
         if not messages:
             logger.debug(f'No messages before: {now}.')
+            db.close_connections()
             continue
 
         # Send reminder PM
@@ -54,6 +55,7 @@ def main():
             # Delete message from database
             if db.delete_message(tid):
                 logger.info(f'Message deleted.')
+        db.close_connections()
 
 
 def send_reminder(link: str, msg: str, usr: str)-> bool:
