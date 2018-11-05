@@ -45,6 +45,12 @@ At the moment, usage information can be found on the
    modules
 
 .. toctree::
+   :maxdepth: 2
+   :caption: About
+
+   about/references
+
+.. toctree::
    :hidden:
 
    genindex
