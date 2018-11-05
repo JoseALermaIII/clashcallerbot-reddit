@@ -67,6 +67,7 @@ def main():
     try:
         # Search recent comments for ClashCaller! string
         for comment in subreddit.stream.comments():
+            db.open_connections()
             match = clashcaller_re.search(comment.body)
             if match and comment.author.name != 'ClashCallerBot' \
                     and not db.find_comment_id(comment.id) and not have_replied(comment.id, 'ClashCallerBot')\
@@ -156,6 +157,8 @@ def main():
                 db.save_comment_id(comment.id)
 
                 # TODO: Add more functionality via PM: delete calls, list calls, add users to call reminder
+
+                db.close_connections()
 
         time.sleep(2)
 
