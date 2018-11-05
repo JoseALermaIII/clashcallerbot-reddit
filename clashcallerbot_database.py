@@ -56,12 +56,9 @@ class ClashCallerDatabase(object):
 
         self._db_name = config_file['bot']['database']
 
-        # Setup MySQL-compatible database
-        try:
-            self.mysql_connection = mysql.connect(user=self._db_user, password=self._db_pass, database=self._db_name)
-            self.cursor = self.mysql_connection.cursor()
-        except mysql.Error as err:
-            logger.exception(f'mySQL connector and cursor: {err}')
+        # Initialize connections to None
+        self.mysql_connection = None
+        self.cursor = None
 
     def __repr__(self):
         return f'ClashCallerDatabase(configparser.ConfigParser(\'database.ini\'), {self._root_user})'
@@ -69,8 +66,25 @@ class ClashCallerDatabase(object):
     def __str__(self):
         return f'Logged into database: {self._db_name} as: {self._db_user}'
 
+    def open_connections(self) -> bool:
+        """Open database connections.
+
+        Method makes database connection and cursor.
+
+        Returns:
+             True if successful, False otherwise.
+        """
+        try:
+            self.mysql_connection = mysql.connect(user=self._db_user, password=self._db_pass, database=self._db_name)
+            self.cursor = self.mysql_connection.cursor()
+
+        except mysql.Error as err:
+            logger.exception(f'open_connections: {err}')
+            return False
+        return True
+
     def create_database(self) -> bool:
-        """Create database
+        """Create database.
 
         Method creates database with database name.
 
