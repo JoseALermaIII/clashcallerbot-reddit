@@ -50,8 +50,13 @@ I particularly like that it has pip and python pre-installed.
    no_root_setup
    ubuntu_setup
 
+Building Documentation
+----------------------
+
+.. TODO: add section
+
 Disclaimer
-^^^^^^^^^^
+----------
 
 Though covered by the MIT License, I reiterate: executing code from the Internet in terminal can end up doing bad things.
 
