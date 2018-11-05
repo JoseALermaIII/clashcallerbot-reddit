@@ -44,9 +44,7 @@ At the moment, usage information can be found on the
 
    modules
 
-Indices and tables
-==================
+.. toctree::
+   :hidden:
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+   genindex
