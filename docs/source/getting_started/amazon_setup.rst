@@ -118,8 +118,6 @@ Now that the database has been set up, more dependencies need to be installed in
 
     source clashcallerbot-reddit/bin/activate    # set virtual environment, if needed
     pip install MySQL-python
-    pip install pytz
-    pip install parsedatetime
 
 Once all relevant files have been added, the bot can be started, output redirected to a null terminal,
 and process put in the background. ::
