@@ -1,5 +1,5 @@
-Ubuntu 14.04 LTS Setup:
-=======================
+Ubuntu 14.04 LTS Setup
+======================
 
 `Ubuntu Desktop <http://www.ubuntu.com/download>`_ is a good choice because most IDEs need a GUI, but other versions
 are available (like Server). The following instructions are a combination of setting up the Ubuntu OS to run the bot
