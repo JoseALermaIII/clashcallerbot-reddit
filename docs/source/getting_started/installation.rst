@@ -53,7 +53,46 @@ I particularly like that it has pip and python pre-installed.
 Building Documentation
 ----------------------
 
-.. TODO: add section
+.. note::
+
+    Building the documentation is **not needed or recommended** unless contributing to the documentation. The latest
+    version of the documentation is available at `josealermaiii@github.io/clashcallerbot-reddit
+    <http://josealermaiii.github.io/clashcallerbot-reddit/>`_ or as a `PDF in the source code
+    <https://github.com/JoseALermaIII/clashcallerbot-reddit/blob/master/manual.pdf>`_. You have been warned.
+
+Building the docs requires a few more pip packages:
+
+* Sphinx
+* sphinxcontrib-napoleon
+* sphinx-rtd-theme
+
+If that wasn't bad enough, a symbolic link to *praw.ini* must be made from within ``~/.config``.::
+
+    cd ~/.config
+    ln -s absolute_path_here/clashcallerbot-reddit/praw.ini praw.ini
+
+This has to do with how `praw` finds the *praw.ini* file. This may get fixed later much like the *database.ini* fix in
+`config.py`.
+
+Now, we can build the docs in HTML format::
+
+    cd absolute_path_here/clashcallerbot-reddit/docs
+    make html
+
+This will save the docs website in ``../../clashcallerbot-reddit-docs/``.
+
+Building the PDF is even more involved. First, LaTeX must be installed on the OS. For example, in Ubuntu 18.04::
+
+    sudo apt-get install texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended
+
+Installing these dependencies is not recommended, if not needed, because they require > 300 MB of disk space.
+
+Now, we can build the docs in PDF format::
+
+    cd absolute_path_here/clashcallerbot-reddit/docs
+    make latexpdf
+
+This will save the doc's PDF in ``../manual.pdf``.
 
 Disclaimer
 ----------
