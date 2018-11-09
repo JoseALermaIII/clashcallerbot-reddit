@@ -41,12 +41,6 @@ Now that MySQL is setup, install more dependencies. ::
     pip install  --user pytz
     pip install --user parsedatetime
 
-.. TODO: now using logging_conf.py
-
-Logging and logging.config are used, so here is the `syntax for a logging.conf file
-<https://docs.python.org/3.6/library/logging.config.html#configuration-file-format>`_.
-
-
 Start, redirect output, and background process. ::
 
     nohup python clashcallerbot_reply.py > /dev/null 2>&1 &
