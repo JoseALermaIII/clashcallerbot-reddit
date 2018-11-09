@@ -61,7 +61,7 @@ As the **new user**, `set up the needed environment
     pip install -U wheel
     pip install -U setuptools
     pip install -U ndg-httpsclient
-    pip install praw==3.6.1       # bot is currently only compatible with praw 3.6.x
+    pip install praw
 
 `Set up a MySQL database within an EBS volume <https://aws.amazon.com/articles/1663>`_ as the **default user**. The
 guide is for Ubuntu, but setup for Amazon Linux is very similar. Once the EBS volume is created and attached, the
