@@ -10,9 +10,13 @@ First, enable compiling from source. There will be a lot of compiling from sourc
 
     sudo apt-get install build-essential python-dev libffi-dev libssl-dev
 
-Next, set up pip and some dependencies. ::
+Next, set up pip::
 
     sudo apt-get install python-pip && sudo pip install pip
+
+Then, `set up the needed environment
+<http://python-guide-pt-br.readthedocs.io/en/latest/dev/virtualenvs/>`_. From within the virtual environment, run::
+
     sudo pip install praw
 
 Now, setup MySQL/MariaDB. ::
@@ -37,10 +41,12 @@ From within the MySQL/MariaDB prompt, set up the database itself. ::
 
 Now that MySQL/MariaDB is set up, install more dependencies. ::
 
+    source clashcallerbot-reddit/bin/activate    # set virtual environment, if needed
     sudo pip install mysql-connector
 
 Start, redirect output, and background process. ::
 
+    source clashcallerbot-reddit/bin/activate    # set virtual environment, if needed
     nohup python3 clashcallerbot_reply.py > /dev/null 2>&1 &
     nohup python3 clashcallerbot_search.py > /dev/null 2>&1 &
 
