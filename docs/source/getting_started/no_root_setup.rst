@@ -16,9 +16,13 @@ Since root is not available, pip needs to be installed locally. ::
 To ``~/.bashrc``, add ``PATH=$PATH:~/.local/bin`` and ``PYTHONPATH=$PYTHONPATH:~/.local/lib/python/site-packages/``,
 then run ``source ~./bashrc`` to apply changes.
 
-Next, update pip and wheel, then install a few dependencies. ::
+Next, update pip and wheel,::
 
     pip install --user -U pip wheel
+
+Then, `set up the needed environment
+<http://python-guide-pt-br.readthedocs.io/en/latest/dev/virtualenvs/>`_. From within the virtual environment, run::
+
     pip install --user praw
 
 From within the MySQL prompt, setup the database itself. ::
@@ -35,13 +39,14 @@ From within the MySQL prompt, setup the database itself. ::
 
 Now that MySQL is setup, install more dependencies. ::
 
+    source clashcallerbot-reddit/bin/activate    # set virtual environment, if needed
     pip install --user mysql-connector
 
 Start, redirect output, and background process. ::
 
+    source clashcallerbot-reddit/bin/activate    # set virtual environment, if needed
     nohup python clashcallerbot_reply.py > /dev/null 2>&1 &
     nohup python clashcallerbot_search.py > /dev/null 2>&1 &
-
 
 .. tip::
 
