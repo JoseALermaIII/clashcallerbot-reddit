@@ -44,8 +44,6 @@ From within the MySQL prompt, setup the database itself. ::
 Now that MySQL is setup, install more dependencies. ::
 
     pip install MySQL-python
-    pip install pytz
-    pip install parsedatetime
 
 Start, redirect output, and background process. ::
 
