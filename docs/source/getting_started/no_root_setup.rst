@@ -35,7 +35,7 @@ From within the MySQL prompt, setup the database itself. ::
 
 Now that MySQL is setup, install more dependencies. ::
 
-    pip install --user MySQL-python
+    pip install --user mysql-connector
 
 Start, redirect output, and background process. ::
 
