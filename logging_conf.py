@@ -3,6 +3,10 @@
 """Defines logging dictionary.
 
 Module defines dictionary for logging.config.dictConfig()
+
+Attributes:
+    LOGGING (dict): Dictionary containing definitions for the loggers, handlers,
+        and formatters.
 """
 
 LOGGING = {
