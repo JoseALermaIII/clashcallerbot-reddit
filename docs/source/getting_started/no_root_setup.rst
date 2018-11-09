@@ -1,5 +1,5 @@
-No Root Setup:
-==============
+No Root Setup
+=============
 
 What system you install to is your choice, but this setup assumes a CloudLinux OS without root access and with both
 Python and MySQL installed. Everything is run from terminal (ssh compatible).
