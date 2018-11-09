@@ -177,6 +177,11 @@ def main():
         time.sleep(3)
         pass
 
+    except praw.exceptions.PRAWException as err:
+        logger.exception(f'praw: {err}')
+        time.sleep(10)
+        pass
+
 
 def send_confirmation(u_name: str, link: str, exp: datetime.datetime) -> bool:
     """Send confirmation to reddit user.
