@@ -16,10 +16,6 @@ Next, set up pip and some dependencies. ::
     sudo pip install setuptools
     sudo pip install ndg-httpsclient
     sudo pip install praw
-    sudo pip install praw-oauth2util
-
-OAuth2Util needs a `configured oauth.ini file
-<https://github.com/SmBe19/praw-OAuth2Util/blob/master/OAuth2Util/README.md#config>`_.
 
 Now, setup MySQL/MariaDB. ::
 
