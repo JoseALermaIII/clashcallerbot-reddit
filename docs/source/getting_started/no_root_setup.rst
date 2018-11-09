@@ -19,8 +19,6 @@ then run ``source ~./bashrc`` to apply changes.
 Next, update pip and wheel, then install a few dependencies. ::
 
     pip install --user -U pip wheel
-    pip install --user -U setuptools
-    pip install --user -U ndg-httpsclient
     pip install --user praw
 
 From within the MySQL prompt, setup the database itself. ::
