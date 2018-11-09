@@ -124,11 +124,6 @@ Now that the database has been set up, more dependencies need to be installed in
     pip install pytz
     pip install parsedatetime
 
-.. TODO: now using logging_conf.py
-
-Logging and logging.config are used, so here is the `syntax for a logging.conf file
-<https://docs.python.org/3.6/library/logging.config.html#configuration-file-format>`_.
-
 Once all relevant files have been added, the bot can be started, output redirected to a null terminal,
 and process put in the background. ::
 
