@@ -18,8 +18,6 @@ Enable compiling from source. The list of what won't be compiled from source is 
 Install and upgrade pip and wheel, then add some dependencies. ::
 
     yum install python-pip python-wheel && pip install -U pip wheel
-    pip install -U setuptools
-    pip install -U ndg-httpsclient
     pip install praw
 
 Now, setup MySQL/MariaDB. ::
