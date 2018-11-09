@@ -27,7 +27,7 @@ Setup
 
 First, add the database's root and desired bot user credentials to `database-example.ini`.
 
-Next, change the following line in `clashcallerbot_database`
+Next, change the following line in :doc:`../clashcallerbot_database`
 
 .. literalinclude:: ../../../clashcallerbot_database.py
     :linenos:
@@ -44,7 +44,8 @@ Now, the MySQL-compatible database can be setup by running clashcallerbot_databa
 Starting
 --------
 
-Once the database is setup, the bot can be run by calling the two scripts directly from within terminal::
+Once the database is setup, the bot can be run by calling :doc:`../clashcallerbot_search` and
+:doc:`../clashcallerbot_reply` directly from within terminal::
 
     python3 ./clashcallerbot_search.py && python3 ./clashcallerbot_reply.py
 
