@@ -59,8 +59,6 @@ As the **new user**, `set up the needed environment
 <http://python-guide-pt-br.readthedocs.io/en/latest/dev/virtualenvs/>`_. From within the virtual environment, run::
 
     pip install -U wheel
-    pip install -U setuptools
-    pip install -U ndg-httpsclient
     pip install praw
 
 `Set up a MySQL database within an EBS volume <https://aws.amazon.com/articles/1663>`_ as the **default user**. The
