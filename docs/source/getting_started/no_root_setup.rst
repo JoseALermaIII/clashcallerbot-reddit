@@ -22,12 +22,6 @@ Next, update pip and wheel, then install a few dependencies. ::
     pip install --user -U setuptools
     pip install --user -U ndg-httpsclient
     pip install --user praw
-    pip install --user praw-oauth2util
-
-.. TODO: oauth.ini depreciated?
-
-OAuth2Util needs a `configured oauth.ini file
-<https://github.com/SmBe19/praw-OAuth2Util/blob/master/OAuth2Util/README.md#config>`_.
 
 From within the MySQL prompt, setup the database itself. ::
 
