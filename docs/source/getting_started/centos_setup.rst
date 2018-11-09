@@ -15,9 +15,13 @@ Enable compiling from source. The list of what won't be compiled from source is 
 
     yum install gcc python-devel openssl-devel libffi-devel
 
-Install and upgrade pip and wheel, then add some dependencies. ::
+Install and upgrade pip and wheel,::
 
     yum install python-pip python-wheel && pip install -U pip wheel
+
+Then, `set up the needed environment
+<http://python-guide-pt-br.readthedocs.io/en/latest/dev/virtualenvs/>`_. From within the virtual environment, run::
+
     pip install praw
 
 Now, setup MySQL/MariaDB. ::
@@ -43,10 +47,12 @@ From within the MySQL prompt, setup the database itself. ::
 
 Now that MySQL is setup, install more dependencies. ::
 
+    source clashcallerbot-reddit/bin/activate    # set virtual environment, if needed
     pip install mysql-connector
 
 Start, redirect output, and background process. ::
 
+    source clashcallerbot-reddit/bin/activate    # set virtual environment, if needed
     nohup python clashcallerbot_reply.py > /dev/null 2>&1 &
     nohup python clashcallerbot_search.py > /dev/null 2>&1 &
 
