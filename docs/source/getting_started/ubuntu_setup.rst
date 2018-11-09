@@ -13,8 +13,6 @@ First, enable compiling from source. There will be a lot of compiling from sourc
 Next, set up pip and some dependencies. ::
 
     sudo apt-get install python-pip && sudo pip install pip
-    sudo pip install setuptools
-    sudo pip install ndg-httpsclient
     sudo pip install praw
 
 Now, setup MySQL/MariaDB. ::
