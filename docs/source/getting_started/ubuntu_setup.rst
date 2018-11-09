@@ -40,8 +40,6 @@ From within the MySQL/MariaDB prompt, set up the database itself. ::
 Now that MySQL/MariaDB is set up, install more dependencies. ::
 
     sudo pip install MySQL-python
-    sudo pip install pytz
-    sudo pip install parsedatetime
 
 Start, redirect output, and background process. ::
 
