@@ -12,15 +12,15 @@ mv -f ./clashcallerbot_search.py ./clashcallerbot_search.py.bak
 chmod -f -x ./clashcallerbot_reply.py.bak
 chmod -f -x ./clashcallerbot_search.py.bak
 echo "*****"
-ping 127.0.0.1 -c 2 > /dev/null 2>&1
+sleep 2
 
 # Redownload
 wget https://github.com/JoseALermaIII/clashcallerbot-reddit/raw/master/clashcallerbot_reply.py > /dev/null 2>&1
 echo "*****"
-ping 127.0.0.1 -c 3 > /dev/null 2>&1
+sleep 2
 wget https://github.com/JoseALermaIII/clashcallerbot-reddit/raw/master/clashcallerbot_search.py > /dev/null 2>&1
 echo "*****"
-ping 127.0.0.1 -c 3 > /dev/null 2>&1
+sleep 2
 
 # Set Executable
 chmod -f +x ./clashcallerbot_reply.py
