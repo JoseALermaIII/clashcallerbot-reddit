@@ -17,7 +17,7 @@ Think of **ClashCallerBot** as an independent time keeper that runs entirely wit
 Documentation
 -------------
 For more information (like usage, and setting up your own bot), head to the
-`Docs <http://josealermaiii.github.io/clashcallerbot-reddit/>`_.
+`Docs <https://josealermaiii.github.io/clashcallerbot-reddit/>`_.
 
 License
 -------
