@@ -26,10 +26,22 @@ I plan to make a few more tweaks to make it even more useful.
 Usage Information
 =================
 
-At the moment, usage information can be found on the
-`/r/ClashCallerBot info post <https://www.reddit.com/r/ClashCallerBot/comments/4e9vo7/clashcallerbot_info/>`_
+Usage can be inferred from the regular expressions used to process each comment in the :doc:`clashcallerbot_search`:
 
+.. literalinclude:: ../../clashcallerbot_search.py
+    :linenos:
+    :lineno-start: 38
+    :language: python
+    :lines: 38-60
 
+To sum:
+
+* The ``clashcaller`` string must be present in either lower or camelcase with an exclamation point ``!`` either
+  before or after.
+* The expiration time in minutes or hours must follow either abbreviated or with full spelling with an
+  optional space between the number and word, but mandatory space after the word: ``4min``. Case is ignored.
+* The message within quotes must follow with the singular or plural form of ``base`` and a required single or double
+  digit number. Case is ignored.
 
 .. toctree::
    :maxdepth: 3
