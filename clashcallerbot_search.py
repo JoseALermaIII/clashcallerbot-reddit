@@ -50,10 +50,13 @@ expiration_re = re.compile(r'''
                            hr\s                        # hour abbr. (space after required)
                            )+''', re.VERBOSE | re.IGNORECASE)  # case-insensitive
 message_re = re.compile(r'''
-                        (\s)*     # space (optional)
-                        base(s)?  # string: base(s) (required)
-                        [\W|\s]*  # non-word character or space (optional)
-                        (\d){1,2} # single or double digit (required)
+                        (\s)*       # space (optional)
+                        "           # opening double quote (required)
+                        base(s)?    # string: base(s) (required)
+                        [\W|\s]*    # non-word character or space (optional)
+                        (\d){1,2}   # single or double digit (required)
+                        .*          # any character after (optional)
+                        "           # closing double quote (required)
                         ''', re.VERBOSE | re.IGNORECASE)  # case-insensitive
 
 # Make database instance
