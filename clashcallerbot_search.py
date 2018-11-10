@@ -38,7 +38,7 @@ subreddit = reddit.subreddit('ClashCallerBot')  # Limit scope for testing purpos
 # Regular expressions
 clashcaller_re = re.compile(r'''
                             [!|\s]?             # prefix ! or space (optional)
-                            [C|c]lash[C|c]aller # upper or lowercase ClashCaller (required)
+                            [C|c]lash[C|c]aller # lower or camelcase ClashCaller (required)
                             [!|\s]              # suffix ! or space (required)
                             ''', re.VERBOSE)
 expiration_re = re.compile(r'''
