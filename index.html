@@ -1,0 +1,350 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Welcome to clashcallerbot-reddit! &mdash; clashcallerbot-reddit 2.2.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Quickstart" href="getting_started/quickstart.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="#" class="icon icon-home"> clashcallerbot-reddit
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="getting_started/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started/installation.html">Installation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">clashcallerbot-reddit</a></li>
+</ul>
+<p class="caption"><span class="caption-text">About</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="about/references.html">References</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="genindex.html">Index</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">clashcallerbot-reddit</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="#">Docs</a> &raquo;</li>
+        
+      <li>Welcome to clashcallerbot-reddit!</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="welcome-to-clashcallerbot-reddit">
+<h1>Welcome to clashcallerbot-reddit!<a class="headerlink" href="#welcome-to-clashcallerbot-reddit" title="Permalink to this headline">¶</a></h1>
+<p><strong>ClashCallerBot</strong> was made to help <a class="reference external" href="https://np.reddit.com/r/ClashOfClans">/r/ClashOfClans</a> clans
+to coordinate attacks during war from within reddit.</p>
+<p>For example, someone wants to attack base 1 and 7, but they haven’t posted an update in over an hour
+and those two bases still haven’t been attacked. Is it okay to attack those bases? Did your fellow
+clan member die? Who knows‽</p>
+<p>Well, if s/he (or someone on their behalf) had called those bases for a set period of time, you would
+know for certain.</p>
+<p>Think of <strong>ClashCallerBot</strong> as an independent time keeper that runs entirely within reddit.</p>
+<p>If not obvious enough, it’s a fork of <a class="reference external" href="https://github.com/SIlver--/remindmebot-reddit">SIlver–’s RemindMeBot</a>.
+It’s a sweet (as in awesome) little program.</p>
+<p>I plan to make a few more tweaks to make it even more useful.</p>
+</div>
+<div class="section" id="usage-information">
+<h1>Usage Information<a class="headerlink" href="#usage-information" title="Permalink to this headline">¶</a></h1>
+<p>Usage can be inferred from the regular expressions used to process each comment in the <a class="reference internal" href="clashcallerbot_search.html"><span class="doc">clashcallerbot_search module</span></a>:</p>
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1"># Regular expressions</span>
+<span class="n">clashcaller_re</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">                            [!|\s]?             # prefix ! or space (optional)</span>
+<span class="s1">                            [C|c]lash[C|c]aller # lower or camelcase ClashCaller (required)</span>
+<span class="s1">                            [!|\s]              # suffix ! or space (required)</span>
+<span class="s1">                            &#39;&#39;&#39;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">VERBOSE</span><span class="p">)</span>
+<span class="n">expiration_re</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">                           (?P&lt;exp_digit&gt;(\d){1,2})    # single or double digit (required)</span>
+<span class="s1">                           (\s)?                       # space (optional)</span>
+<span class="s1">                           (?P&lt;exp_unit&gt;minute(s)?\s|  # minute(s) (space after required)</span>
+<span class="s1">                           min\s|                      # minute abbr. (space after required)</span>
+<span class="s1">                           hour(s)?\s|                 # hour(s) (space after required)</span>
+<span class="s1">                           hr\s                        # hour abbr. (space after required)</span>
+<span class="s1">                           )+&#39;&#39;&#39;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">VERBOSE</span> <span class="o">|</span> <span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">)</span>  <span class="c1"># case-insensitive</span>
+<span class="n">message_re</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">                        (\s)*       # space (optional)</span>
+<span class="s1">                        &quot;           # opening double quote (required)</span>
+<span class="s1">                        base(s)?    # string: base(s) (required)</span>
+<span class="s1">                        [\W|\s]*    # non-word character or space (optional)</span>
+<span class="s1">                        (\d){1,2}   # single or double digit (required)</span>
+<span class="s1">                        .*          # any character after (optional)</span>
+<span class="s1">                        &quot;           # closing double quote (required)</span>
+<span class="s1">                        &#39;&#39;&#39;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">VERBOSE</span> <span class="o">|</span> <span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">)</span>  <span class="c1"># case-insensitive</span>
+</pre></div>
+</td></tr></table></div>
+<p>To sum:</p>
+<ul class="simple">
+<li>The <code class="docutils literal notranslate"><span class="pre">clashcaller</span></code> string must be present in either lower or camelcase with an exclamation point <code class="docutils literal notranslate"><span class="pre">!</span></code> either
+before or after.</li>
+<li>The expiration time in minutes or hours must follow either abbreviated or with full spelling with an
+optional space between the number and word, but mandatory space after the word: <code class="docutils literal notranslate"><span class="pre">4min</span></code>. Case is ignored.</li>
+<li>The message within quotes must follow with the singular or plural form of <code class="docutils literal notranslate"><span class="pre">base</span></code> and a required single or double
+digit number. Case is ignored.</li>
+</ul>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="getting_started/quickstart.html">Quickstart</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="getting_started/quickstart.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started/quickstart.html#setup">Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started/quickstart.html#starting">Starting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started/quickstart.html#updating">Updating</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started/installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="getting_started/installation.html#deployment-options">Deployment Options</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="getting_started/amazon_setup.html">Amazon Linux AMI Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="getting_started/centos_setup.html">CentOS 7.0 Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="getting_started/no_root_setup.html">No Root Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="getting_started/ubuntu_setup.html">Ubuntu 14.04 LTS Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="getting_started/installation.html#ubuntu">Ubuntu</a></li>
+<li class="toctree-l3"><a class="reference internal" href="getting_started/installation.html#centos">CentOS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="getting_started/installation.html#no-root">No Root</a></li>
+<li class="toctree-l3"><a class="reference internal" href="getting_started/installation.html#amazon-ec2">Amazon EC2</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started/installation.html#building-documentation">Building Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started/installation.html#disclaimer">Disclaimer</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">clashcallerbot-reddit</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="clashcallerbot_database.html">clashcallerbot_database module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="clashcallerbot_reply.html">clashcallerbot_reply module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="clashcallerbot_search.html">clashcallerbot_search module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logging_conf.html">logging_conf module</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">About</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="about/references.html">References</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="about/references.html#python">Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="about/references.html#praw">PRAW</a></li>
+<li class="toctree-l2"><a class="reference internal" href="about/references.html#database">Database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="about/references.html#documentation">Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="about/references.html#miscellaneous">Miscellaneous</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="getting_started/quickstart.html" class="btn btn-neutral float-right" title="Quickstart" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Jose A. Lerma III
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

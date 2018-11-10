@@ -1,0 +1,291 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Ubuntu 14.04 LTS Setup &mdash; clashcallerbot-reddit 2.2.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="clashcallerbot-reddit" href="../modules.html" />
+    <link rel="prev" title="No Root Setup" href="no_root_setup.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> clashcallerbot-reddit
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="installation.html">Installation</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="installation.html#deployment-options">Deployment Options</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="amazon_setup.html">Amazon Linux AMI Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="centos_setup.html">CentOS 7.0 Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="no_root_setup.html">No Root Setup</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Ubuntu 14.04 LTS Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation.html#ubuntu">Ubuntu</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation.html#centos">CentOS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation.html#no-root">No Root</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation.html#amazon-ec2">Amazon EC2</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#building-documentation">Building Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#disclaimer">Disclaimer</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">clashcallerbot-reddit</a></li>
+</ul>
+<p class="caption"><span class="caption-text">About</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../about/references.html">References</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../genindex.html">Index</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">clashcallerbot-reddit</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="installation.html">Installation</a> &raquo;</li>
+        
+      <li>Ubuntu 14.04 LTS Setup</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/getting_started/ubuntu_setup.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="ubuntu-14-04-lts-setup">
+<h1>Ubuntu 14.04 LTS Setup<a class="headerlink" href="#ubuntu-14-04-lts-setup" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="http://www.ubuntu.com/download">Ubuntu Desktop</a> is a good choice because most IDEs need a GUI, but other versions
+are available (like Server). The following instructions are a combination of setting up the Ubuntu OS to run the bot
+(build packages and setting up MySQL tables) as well as adding all the needed dependencies into python. Everything here
+is run in a terminal.</p>
+<p>First, enable compiling from source. There will be a lot of compiling from source in the future…</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">build</span><span class="o">-</span><span class="n">essential</span> <span class="n">python</span><span class="o">-</span><span class="n">dev</span> <span class="n">libffi</span><span class="o">-</span><span class="n">dev</span> <span class="n">libssl</span><span class="o">-</span><span class="n">dev</span>
+</pre></div>
+</div>
+<p>Next, set up pip:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">python</span><span class="o">-</span><span class="n">pip</span> <span class="o">&amp;&amp;</span> <span class="n">sudo</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">pip</span>
+</pre></div>
+</div>
+<p>Then, <a class="reference external" href="http://python-guide-pt-br.readthedocs.io/en/latest/dev/virtualenvs/">set up the needed environment</a>. From within the virtual environment, run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">praw</span>
+</pre></div>
+</div>
+<p>Now, setup MySQL/MariaDB.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">mysql</span><span class="o">-</span><span class="n">server</span> <span class="c1"># For MariaDB: sudo apt-get install mariadb-server mariadb</span>
+                                  <span class="c1"># Set MySQL `root` pw when prompted (recommended)</span>
+<span class="n">mysql_secure_installation</span>         <span class="c1"># say yes to everything after first prompt</span>
+<span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">libmysqlclient</span><span class="o">-</span><span class="n">dev</span> <span class="c1"># For MariaDB: sudo apt-get install libmariadbclient-dev</span>
+</pre></div>
+</div>
+<p>From within the MySQL/MariaDB prompt, set up the database itself.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mysql</span> <span class="o">-</span><span class="n">uroot</span> <span class="o">-</span><span class="n">p</span><span class="s2">&quot;password&quot;</span> <span class="c1"># login as root</span>
+<span class="n">CREATE</span> <span class="n">DATABASE</span> <span class="n">db_name</span><span class="p">;</span>
+<span class="n">USE</span> <span class="n">db_name</span><span class="p">;</span>
+<span class="n">CREATE</span> <span class="n">TABLE</span> <span class="n">message_table</span> <span class="p">(</span><span class="nb">id</span> <span class="n">INT</span> <span class="n">UNSIGNED</span> <span class="n">NOT</span> <span class="n">NULL</span> <span class="n">AUTO_INCREMENT</span><span class="p">,</span> <span class="n">permalink</span> <span class="n">VARCHAR</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span> <span class="n">message</span> <span class="n">VARCHAR</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span>
+<span class="n">new_date</span> <span class="n">DATETIME</span><span class="p">,</span> <span class="n">userID</span> <span class="n">VARCHAR</span><span class="p">(</span><span class="mi">20</span><span class="p">),</span> <span class="n">PRIMARY</span> <span class="n">KEY</span><span class="p">(</span><span class="nb">id</span><span class="p">));</span>
+<span class="n">ALTER</span> <span class="n">TABLE</span> <span class="n">message_table</span> <span class="n">AUTO_INCREMENT</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>
+<span class="n">CREATE</span> <span class="n">TABLE</span> <span class="n">comment_table</span> <span class="p">(</span><span class="nb">id</span> <span class="n">MEDIUMINT</span> <span class="n">NOT</span> <span class="n">NULL</span><span class="p">,</span> <span class="nb">list</span> <span class="n">VARCHAR</span><span class="p">(</span><span class="mi">35</span><span class="p">),</span> <span class="n">PRIMARY</span> <span class="n">KEY</span><span class="p">(</span><span class="nb">id</span><span class="p">));</span>
+<span class="n">INSERT</span> <span class="n">INTO</span> <span class="n">comment_table</span> <span class="n">VALUES</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;&#39;0&#39;&quot;</span><span class="p">);</span>
+<span class="n">GRANT</span> <span class="n">SELECT</span><span class="p">,</span> <span class="n">INSERT</span><span class="p">,</span> <span class="n">UPDATE</span><span class="p">,</span> <span class="n">DELETE</span><span class="p">,</span> <span class="n">CREATE</span><span class="p">,</span> <span class="n">DROP</span><span class="p">,</span> <span class="n">INDEX</span><span class="p">,</span> <span class="n">ALTER</span><span class="p">,</span> <span class="n">CREATE</span> <span class="n">TEMPORARY</span> <span class="n">TABLES</span><span class="p">,</span> <span class="n">LOCK</span> <span class="n">TABLES</span> <span class="n">ON</span> <span class="n">db_name</span><span class="o">.*</span>
+<span class="n">TO</span> <span class="s1">&#39;botname&#39;</span><span class="nd">@localhost</span> <span class="n">IDENTIFIED</span> <span class="n">BY</span> <span class="s1">&#39;password&#39;</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>Now that MySQL/MariaDB is set up, install more dependencies.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">source</span> <span class="n">clashcallerbot</span><span class="o">-</span><span class="n">reddit</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">activate</span>    <span class="c1"># set virtual environment, if needed</span>
+<span class="n">sudo</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">mysql</span><span class="o">-</span><span class="n">connector</span>
+</pre></div>
+</div>
+<p>Start, redirect output, and background process.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">source</span> <span class="n">clashcallerbot</span><span class="o">-</span><span class="n">reddit</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">activate</span>    <span class="c1"># set virtual environment, if needed</span>
+<span class="n">nohup</span> <span class="n">python3</span> <span class="n">clashcallerbot_reply</span><span class="o">.</span><span class="n">py</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">null</span> <span class="mi">2</span><span class="o">&gt;&amp;</span><span class="mi">1</span> <span class="o">&amp;</span>
+<span class="n">nohup</span> <span class="n">python3</span> <span class="n">clashcallerbot_search</span><span class="o">.</span><span class="n">py</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">null</span> <span class="mi">2</span><span class="o">&gt;&amp;</span><span class="mi">1</span> <span class="o">&amp;</span>
+</pre></div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../modules.html" class="btn btn-neutral float-right" title="clashcallerbot-reddit" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="no_root_setup.html" class="btn btn-neutral" title="No Root Setup" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Jose A. Lerma III
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,717 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>clashcallerbot_database &mdash; clashcallerbot-reddit 2.2.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> clashcallerbot-reddit
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/installation.html">Installation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">clashcallerbot-reddit</a></li>
+</ul>
+<p class="caption"><span class="caption-text">About</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../about/references.html">References</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../genindex.html">Index</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">clashcallerbot-reddit</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Module code</a> &raquo;</li>
+        
+      <li>clashcallerbot_database</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for clashcallerbot_database</h1><div class="highlight"><pre>
+<span></span><span class="ch">#! python3</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;Setup the MySQL-compatible database.</span>
+
+<span class="sd">If run directly, this module will setup the clashcallerbot database with</span>
+<span class="sd">tables and display their format and contents. Additionally,</span>
+<span class="sd">this module provides a class with various methods for managing the</span>
+<span class="sd">MySQL-compatible database:</span>
+
+<span class="sd">* Create database and tables.</span>
+<span class="sd">* View table data and properties.</span>
+<span class="sd">* Grant user permissions (if logged into database as root).</span>
+<span class="sd">* Add rows to tables.</span>
+<span class="sd">* Delete tables and rows.</span>
+<span class="sd">* Convert python datetime to MySQL datetime.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">mysql.connector</span> <span class="k">as</span> <span class="nn">mysql</span>
+
+<span class="kn">import</span> <span class="nn">logging.config</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+
+<span class="kn">from</span> <span class="nn">logging_conf</span> <span class="k">import</span> <span class="n">LOGGING</span>
+<span class="kn">from</span> <span class="nn">config</span> <span class="k">import</span> <span class="n">config</span>
+
+<span class="c1"># Logger</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">dictConfig</span><span class="p">(</span><span class="n">LOGGING</span><span class="p">)</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">raiseExceptions</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1"># Production mode if False (no console sys.stderr output)</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;database&#39;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="ClashCallerDatabase"><a class="viewcode-back" href="../clashcallerbot_database.html#clashcallerbot_database.ClashCallerDatabase">[docs]</a><span class="k">class</span> <span class="nc">ClashCallerDatabase</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Implements a class for a ClashCaller Database.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        config_file (configparser.ConfigParser()): A configparser object with database.ini file pre-read.</span>
+<span class="sd">        root_user (bool): Specifies whether the database will be setup as root user.</span>
+<span class="sd">        mysql_connection (mysql.connect()): A mysql.connector.connect() object.</span>
+<span class="sd">        cursor (mysql.connect().cursor()): A mysql.connector.connect().cursor() object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">root_user</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">root_user</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;root_user must be given.&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">config_file</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;A ConfigParser object must be given.&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_root_user</span> <span class="o">=</span> <span class="n">root_user</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_root_user</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_db_user</span> <span class="o">=</span> <span class="n">config_file</span><span class="p">[</span><span class="s1">&#39;root&#39;</span><span class="p">][</span><span class="s1">&#39;user&#39;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_db_pass</span> <span class="o">=</span> <span class="n">config_file</span><span class="p">[</span><span class="s1">&#39;root&#39;</span><span class="p">][</span><span class="s1">&#39;password&#39;</span><span class="p">]</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_bot_name</span> <span class="o">=</span> <span class="n">config_file</span><span class="p">[</span><span class="s1">&#39;bot&#39;</span><span class="p">][</span><span class="s1">&#39;user&#39;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_bot_passwd</span> <span class="o">=</span> <span class="n">config_file</span><span class="p">[</span><span class="s1">&#39;bot&#39;</span><span class="p">][</span><span class="s1">&#39;password&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_db_user</span> <span class="o">=</span> <span class="n">config_file</span><span class="p">[</span><span class="s1">&#39;bot&#39;</span><span class="p">][</span><span class="s1">&#39;user&#39;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_db_pass</span> <span class="o">=</span> <span class="n">config_file</span><span class="p">[</span><span class="s1">&#39;bot&#39;</span><span class="p">][</span><span class="s1">&#39;password&#39;</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_db_name</span> <span class="o">=</span> <span class="n">config_file</span><span class="p">[</span><span class="s1">&#39;bot&#39;</span><span class="p">][</span><span class="s1">&#39;database&#39;</span><span class="p">]</span>
+
+        <span class="c1"># Initialize connections to None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mysql_connection</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">f</span><span class="s1">&#39;ClashCallerDatabase(configparser.ConfigParser(</span><span class="se">\&#39;</span><span class="s1">database.ini</span><span class="se">\&#39;</span><span class="s1">), </span><span class="si">{self._root_user}</span><span class="s1">)&#39;</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">f</span><span class="s1">&#39;Logged into database: </span><span class="si">{self._db_name}</span><span class="s1"> as: </span><span class="si">{self._db_user}</span><span class="s1">&#39;</span>
+
+<div class="viewcode-block" id="ClashCallerDatabase.open_connections"><a class="viewcode-back" href="../clashcallerbot_database.html#clashcallerbot_database.ClashCallerDatabase.open_connections">[docs]</a>    <span class="k">def</span> <span class="nf">open_connections</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Open database connections.</span>
+
+<span class="sd">        Method makes database connection and cursor.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">             True if successful, False otherwise.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mysql_connection</span> <span class="o">=</span> <span class="n">mysql</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_db_user</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_db_pass</span><span class="p">,</span> <span class="n">database</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_db_name</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mysql_connection</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+
+        <span class="k">except</span> <span class="n">mysql</span><span class="o">.</span><span class="n">Error</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;open_connections: </span><span class="si">{err}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="ClashCallerDatabase.create_database"><a class="viewcode-back" href="../clashcallerbot_database.html#clashcallerbot_database.ClashCallerDatabase.create_database">[docs]</a>    <span class="k">def</span> <span class="nf">create_database</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Create database.</span>
+
+<span class="sd">        Method creates database with database name.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            True if successful, False otherwise.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;CREATE DATABASE </span><span class="si">{self._db_name}</span><span class="s1">;&#39;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">mysql</span><span class="o">.</span><span class="n">Error</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;create_database: </span><span class="si">{err}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="ClashCallerDatabase.select_database"><a class="viewcode-back" href="../clashcallerbot_database.html#clashcallerbot_database.ClashCallerDatabase.select_database">[docs]</a>    <span class="k">def</span> <span class="nf">select_database</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Select database for command execution.</span>
+
+<span class="sd">        Method selects database within MySQL for command execution.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            True if successful, False otherwise.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;USE </span><span class="si">{self._db_name}</span><span class="s1">;&#39;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">mysql</span><span class="o">.</span><span class="n">Error</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;select_database: </span><span class="si">{err}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="ClashCallerDatabase.get_tables"><a class="viewcode-back" href="../clashcallerbot_database.html#clashcallerbot_database.ClashCallerDatabase.get_tables">[docs]</a>    <span class="k">def</span> <span class="nf">get_tables</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return table list of database.</span>
+
+<span class="sd">        Method returns a list with the names of the tables.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List of table names.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">table_names</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">select_database</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s1">&#39;SHOW TABLES;&#39;</span><span class="p">)</span>
+            <span class="n">tables</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+
+            <span class="k">for</span> <span class="n">table</span> <span class="ow">in</span> <span class="n">tables</span><span class="p">:</span>
+                <span class="n">table_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">table</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+        <span class="k">except</span> <span class="n">mysql</span><span class="o">.</span><span class="n">Error</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;get_tables: </span><span class="si">{err}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">table_names</span></div>
+
+<div class="viewcode-block" id="ClashCallerDatabase.create_table"><a class="viewcode-back" href="../clashcallerbot_database.html#clashcallerbot_database.ClashCallerDatabase.create_table">[docs]</a>    <span class="k">def</span> <span class="nf">create_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tbl_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">cols</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Create table in database.</span>
+
+<span class="sd">        Method creates table in database with given name and specifications.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            tbl_name:   Name to give table.</span>
+<span class="sd">            cols:       Columns to put in table.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; tbl_name = &#39;table&#39;</span>
+<span class="sd">            &gt;&gt;&gt; cols = &#39;id INT UNSIGNED NOT NULL AUTO_INCREMENT, &#39;</span>
+<span class="sd">            ...        &#39;permalink VARCHAR(100), message VARCHAR(100), new_date DATETIME, &#39;</span>
+<span class="sd">            ...        &#39;userID VARCHAR(20), PRIMARY KEY(id)&#39;</span>
+<span class="sd">            ...</span>
+<span class="sd">            &gt;&gt;&gt; create_table(tbl_name, cols)</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            True if successful, False otherwise.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;CREATE TABLE </span><span class="si">{tbl_name}</span><span class="s1"> (</span><span class="si">{cols}</span><span class="s1">)  ENGINE=InnoDB;&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">select_database</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+
+        <span class="k">except</span> <span class="n">mysql</span><span class="o">.</span><span class="n">Error</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;create_table: </span><span class="si">{err}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="ClashCallerDatabase.describe_table"><a class="viewcode-back" href="../clashcallerbot_database.html#clashcallerbot_database.ClashCallerDatabase.describe_table">[docs]</a>    <span class="k">def</span> <span class="nf">describe_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tbl_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Gets description of table.</span>
+
+<span class="sd">        Method returns a list describing the structure of the given table.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            tbl_name:  Name of table to describe</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List with table description, empty list otherwise.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">description</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;DESCRIBE </span><span class="si">{tbl_name}</span><span class="s1">;&#39;</span><span class="p">)</span>
+            <span class="n">description</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+
+        <span class="k">except</span> <span class="n">mysql</span><span class="o">.</span><span class="n">Error</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;describe_table: </span><span class="si">{err}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">description</span></div>
+
+<div class="viewcode-block" id="ClashCallerDatabase.get_rows"><a class="viewcode-back" href="../clashcallerbot_database.html#clashcallerbot_database.ClashCallerDatabase.get_rows">[docs]</a>    <span class="k">def</span> <span class="nf">get_rows</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tbl_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Fetch table rows.</span>
+
+<span class="sd">        Method gets rows of given table by order of id in a tuple.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            tbl_name:   Name of table to get rows from.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Tuple containing each row&#39;s data, empty tuple otherwise.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">rows</span> <span class="o">=</span> <span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lock_read</span><span class="p">(</span><span class="n">tbl_name</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;SELECT * FROM </span><span class="si">{tbl_name}</span><span class="s1"> GROUP BY id;&#39;</span><span class="p">)</span>
+            <span class="n">rows</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">())</span>
+
+        <span class="k">except</span> <span class="n">mysql</span><span class="o">.</span><span class="n">Error</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;get_rows: </span><span class="si">{err}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">rows</span></div>
+
+<div class="viewcode-block" id="ClashCallerDatabase.grant_permissions"><a class="viewcode-back" href="../clashcallerbot_database.html#clashcallerbot_database.ClashCallerDatabase.grant_permissions">[docs]</a>    <span class="k">def</span> <span class="nf">grant_permissions</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Grants bot user permissions to database.</span>
+
+<span class="sd">        Method grants bot user permissions to database.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            True if successful, False otherwise.</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">            Only database root user can grant database permissions.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_root_user</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Only root user can grant database permissions.&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX, ALTER, &#39;</span> \
+                  <span class="n">f</span><span class="s1">&#39;CREATE TEMPORARY TABLES, LOCK TABLES ON </span><span class="si">{self._db_name}</span><span class="s1">.* TO </span><span class="se">\&#39;</span><span class="si">{self._bot_name}</span><span class="se">\&#39;</span><span class="s1">@localhost &#39;</span> \
+                  <span class="n">f</span><span class="s1">&#39;IDENTIFIED BY </span><span class="se">\&#39;</span><span class="si">{self._bot_passwd}</span><span class="se">\&#39;</span><span class="s1">;&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">mysql</span><span class="o">.</span><span class="n">Error</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;grant_permissions: </span><span class="si">{err}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="ClashCallerDatabase.drop_table"><a class="viewcode-back" href="../clashcallerbot_database.html#clashcallerbot_database.ClashCallerDatabase.drop_table">[docs]</a>    <span class="k">def</span> <span class="nf">drop_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tbl_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Drop table from database.</span>
+
+<span class="sd">        Function drops given table from given database.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            tbl_name:   Table to drop.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            True if successful, False otherwise.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">select_database</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lock_write</span><span class="p">(</span><span class="n">tbl_name</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;DROP TABLE IF EXISTS </span><span class="si">{tbl_name}</span><span class="s1">;&#39;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">tbl_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_tables</span><span class="p">():</span>
+                <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">except</span> <span class="n">mysql</span><span class="o">.</span><span class="n">Error</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;drop_table: </span><span class="si">{err}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="ClashCallerDatabase.convert_datetime"><a class="viewcode-back" href="../clashcallerbot_database.html#clashcallerbot_database.ClashCallerDatabase.convert_datetime">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">convert_datetime</span><span class="p">(</span><span class="n">dt</span><span class="p">:</span> <span class="n">datetime</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">datetime</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Converts python datetime to MySQL datetime.</span>
+
+<span class="sd">        Method converts given python datetime object to MySQL datetime format.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            dt: Datetime object in default format.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Datetime object in MySQL format.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">dt</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S&#39;</span><span class="p">)</span>  <span class="c1"># Convert to MySQL datetime</span></div>
+
+<div class="viewcode-block" id="ClashCallerDatabase.save_message"><a class="viewcode-back" href="../clashcallerbot_database.html#clashcallerbot_database.ClashCallerDatabase.save_message">[docs]</a>    <span class="k">def</span> <span class="nf">save_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">link</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">exp</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">usr_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Saves given comment data into message_data table.</span>
+
+<span class="sd">        Method saves given inputs in message_date table as a row.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            link:     Comment permalink.</span>
+<span class="sd">            msg:      Comment message.</span>
+<span class="sd">            exp:      Expiration datetime object.</span>
+<span class="sd">            usr_name: Comment author username.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            True for success, false otherwise.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">exp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">convert_datetime</span><span class="p">(</span><span class="n">exp</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lock_write</span><span class="p">(</span><span class="s1">&#39;message_data&#39;</span><span class="p">)</span>
+            <span class="n">add_row</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;INSERT INTO message_data (permalink, message, new_date, userID) &#39;</span> \
+                      <span class="n">f</span><span class="s1">&#39;VALUES (</span><span class="se">\&#39;</span><span class="si">{link}</span><span class="se">\&#39;</span><span class="s1">, </span><span class="se">\&#39;</span><span class="si">{msg}</span><span class="se">\&#39;</span><span class="s1">, </span><span class="se">\&#39;</span><span class="si">{exp}</span><span class="se">\&#39;</span><span class="s1">, </span><span class="se">\&#39;</span><span class="si">{usr_name}</span><span class="se">\&#39;</span><span class="s1">);&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">add_row</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mysql_connection</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+        <span class="k">except</span> <span class="n">mysql</span><span class="o">.</span><span class="n">Error</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;save_message: </span><span class="si">{err}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="ClashCallerDatabase.delete_message"><a class="viewcode-back" href="../clashcallerbot_database.html#clashcallerbot_database.ClashCallerDatabase.delete_message">[docs]</a>    <span class="k">def</span> <span class="nf">delete_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tid</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Deletes message from message_data table.</span>
+
+<span class="sd">        Method deletes given table id (row) from message_data table.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            tid:    Table id from id column of message_data table.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            True for success, False otherwise.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lock_write</span><span class="p">(</span><span class="s1">&#39;message_data&#39;</span><span class="p">)</span>
+            <span class="n">delete_row</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;DELETE FROM message_data WHERE id = </span><span class="se">\&#39;</span><span class="si">{tid}</span><span class="se">\&#39;</span><span class="s1">;&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">delete_row</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mysql_connection</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+        <span class="k">except</span> <span class="n">mysql</span><span class="o">.</span><span class="n">Error</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;delete_message: </span><span class="si">{err}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="ClashCallerDatabase.save_comment_id"><a class="viewcode-back" href="../clashcallerbot_database.html#clashcallerbot_database.ClashCallerDatabase.save_comment_id">[docs]</a>    <span class="k">def</span> <span class="nf">save_comment_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cid</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Saves comment id into comment_list table.</span>
+
+<span class="sd">        Method saves given comment id into the comment_list table.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            cid:    Comment id to save.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            True for success, false otherwise.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lock_write</span><span class="p">(</span><span class="s1">&#39;comment_list&#39;</span><span class="p">)</span>
+            <span class="n">add_comment_id</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;INSERT INTO comment_list (comment_ids) VALUES (</span><span class="se">\&#39;</span><span class="si">{cid}</span><span class="se">\&#39;</span><span class="s1">);&#39;</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">add_comment_id</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mysql_connection</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+        <span class="k">except</span> <span class="n">mysql</span><span class="o">.</span><span class="n">Error</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;save_comment_id: </span><span class="si">{err}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="ClashCallerDatabase.find_comment_id"><a class="viewcode-back" href="../clashcallerbot_database.html#clashcallerbot_database.ClashCallerDatabase.find_comment_id">[docs]</a>    <span class="k">def</span> <span class="nf">find_comment_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cid</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Check comment_list table for comment id.</span>
+
+<span class="sd">        Method checks comment_list table for given comment id.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            cid:    Comment id to search for.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            True for success, false otherwise.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lock_read</span><span class="p">(</span><span class="s1">&#39;comment_list&#39;</span><span class="p">)</span>
+            <span class="n">query</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;SELECT * FROM comment_list WHERE comment_ids=</span><span class="se">\&#39;</span><span class="si">{cid}</span><span class="se">\&#39;</span><span class="s1"> GROUP BY id;&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+
+            <span class="n">rows</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">rows</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">except</span> <span class="n">mysql</span><span class="o">.</span><span class="n">Error</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;find_comment_id: </span><span class="si">{err}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="ClashCallerDatabase.get_messages"><a class="viewcode-back" href="../clashcallerbot_database.html#clashcallerbot_database.ClashCallerDatabase.get_messages">[docs]</a>    <span class="k">def</span> <span class="nf">get_messages</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_now</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Retrieves list of messages that have expired.</span>
+
+<span class="sd">        Method returns list of messages whose expiration times are before current datetime.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            time_now:   Current datetime.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List containing results of query.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">messages</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">time_now</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">convert_datetime</span><span class="p">(</span><span class="n">time_now</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lock_read</span><span class="p">(</span><span class="s1">&#39;message_data&#39;</span><span class="p">)</span>
+            <span class="n">find_messages</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;SELECT * FROM message_data WHERE new_date &lt; </span><span class="se">\&#39;</span><span class="si">{time_now}</span><span class="se">\&#39;</span><span class="s1"> GROUP BY id;&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">find_messages</span><span class="p">)</span>
+            <span class="n">messages</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+
+        <span class="k">except</span> <span class="n">mysql</span><span class="o">.</span><span class="n">Error</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;get_messages: </span><span class="si">{err}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">messages</span></div>
+
+<div class="viewcode-block" id="ClashCallerDatabase.lock_read"><a class="viewcode-back" href="../clashcallerbot_database.html#clashcallerbot_database.ClashCallerDatabase.lock_read">[docs]</a>    <span class="k">def</span> <span class="nf">lock_read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tbl_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Locks table for reading.</span>
+
+<span class="sd">        Method locks a given table for read access.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            tbl_name:   Name of table to lock.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            True if successful, False otherwise.</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">            * Any previous locks are `implicitly released`_.</span>
+<span class="sd">            * Read locks have lower priority than write locks.</span>
+
+<span class="sd">        .. _implicitly released:</span>
+<span class="sd">            https://dev.mysql.com/doc/refman/8.0/en/lock-tables.html</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">lock</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;LOCK TABLE </span><span class="si">{tbl_name}</span><span class="s1"> READ;&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">lock</span><span class="p">)</span>
+
+        <span class="k">except</span> <span class="n">mysql</span><span class="o">.</span><span class="n">Error</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;lock_read: </span><span class="si">{err}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="ClashCallerDatabase.lock_write"><a class="viewcode-back" href="../clashcallerbot_database.html#clashcallerbot_database.ClashCallerDatabase.lock_write">[docs]</a>    <span class="k">def</span> <span class="nf">lock_write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tbl_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Locks table for writing.</span>
+
+<span class="sd">        Method locks a given table for write access.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            tbl_name:   Name of table to lock.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            True if successful, False otherwise.</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">            * Any previous locks are `implicitly released`_.</span>
+<span class="sd">            * Write locks have higher priority than read locks.</span>
+
+<span class="sd">        .. _implicitly released:</span>
+<span class="sd">            https://dev.mysql.com/doc/refman/8.0/en/lock-tables.html</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">lock</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;LOCK TABLE </span><span class="si">{tbl_name}</span><span class="s1"> WRITE;&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">lock</span><span class="p">)</span>
+
+        <span class="k">except</span> <span class="n">mysql</span><span class="o">.</span><span class="n">Error</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;lock_write: </span><span class="si">{err}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="ClashCallerDatabase.close_connections"><a class="viewcode-back" href="../clashcallerbot_database.html#clashcallerbot_database.ClashCallerDatabase.close_connections">[docs]</a>    <span class="k">def</span> <span class="nf">close_connections</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Close database connections.</span>
+
+<span class="sd">        Method closes database cursor and connection.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">             True if successful, False otherwise.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mysql_connection</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="k">except</span> <span class="n">mysql</span><span class="o">.</span><span class="n">Error</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;close_connections: </span><span class="si">{err}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="kc">True</span></div></div>
+
+
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../clashcallerbot_database.html#clashcallerbot_database.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="c1"># Create the clashcaller database</span>
+    <span class="n">database</span> <span class="o">=</span> <span class="n">ClashCallerDatabase</span><span class="p">(</span><span class="n">config_file</span><span class="o">=</span><span class="n">config</span><span class="p">,</span> <span class="n">root_user</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1"># Select the clashcaller database</span>
+    <span class="n">database</span><span class="o">.</span><span class="n">select_database</span><span class="p">()</span>
+
+    <span class="c1"># Show the tables</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">database</span><span class="o">.</span><span class="n">get_tables</span><span class="p">())</span>
+
+    <span class="c1"># Create message table</span>
+    <span class="c1"># TODO: Store comment.id instead of permalink?</span>
+    <span class="n">col</span> <span class="o">=</span> <span class="s1">&#39;id INT UNSIGNED NOT NULL AUTO_INCREMENT, &#39;</span> \
+          <span class="s1">&#39;permalink VARCHAR(100), message VARCHAR(100), new_date DATETIME, &#39;</span> \
+          <span class="s1">&#39;userID VARCHAR(20), PRIMARY KEY(id)&#39;</span>
+    <span class="n">database</span><span class="o">.</span><span class="n">create_table</span><span class="p">(</span><span class="s1">&#39;message_data&#39;</span><span class="p">,</span> <span class="n">col</span><span class="p">)</span>
+
+    <span class="c1"># Describe message table</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">database</span><span class="o">.</span><span class="n">describe_table</span><span class="p">(</span><span class="s1">&#39;message_data&#39;</span><span class="p">))</span>
+
+    <span class="c1"># Fetch rows from message_data as tuple of tuples</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">database</span><span class="o">.</span><span class="n">get_rows</span><span class="p">(</span><span class="s1">&#39;message_data&#39;</span><span class="p">))</span>
+
+    <span class="c1"># Create comment_list table</span>
+    <span class="c1"># TODO: Add last run datetime to table for trimming</span>
+    <span class="n">col</span> <span class="o">=</span> <span class="s1">&#39;id MEDIUMINT NOT NULL AUTO_INCREMENT, comment_ids VARCHAR(35), &#39;</span> \
+          <span class="s1">&#39;PRIMARY KEY(id)&#39;</span>
+    <span class="n">database</span><span class="o">.</span><span class="n">create_table</span><span class="p">(</span><span class="s1">&#39;comment_list&#39;</span><span class="p">,</span> <span class="n">col</span><span class="p">)</span>
+
+    <span class="c1"># Describe comment list table</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">database</span><span class="o">.</span><span class="n">describe_table</span><span class="p">(</span><span class="s1">&#39;comment_list&#39;</span><span class="p">))</span>
+
+    <span class="c1"># Fetch rows from comment_list as tuple of tuples</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">database</span><span class="o">.</span><span class="n">get_rows</span><span class="p">(</span><span class="s1">&#39;comment_list&#39;</span><span class="p">))</span>
+
+    <span class="c1"># Grant database bot permissions</span>
+    <span class="n">database</span><span class="o">.</span><span class="n">grant_permissions</span><span class="p">()</span>
+
+    <span class="c1"># Close database connections</span>
+    <span class="n">database</span><span class="o">.</span><span class="n">close_connections</span><span class="p">()</span></div>
+
+
+<span class="c1"># If run directly, instead of imported as a module, run main():</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Jose A. Lerma III
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

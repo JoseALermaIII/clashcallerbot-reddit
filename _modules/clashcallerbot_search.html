@@ -1,0 +1,559 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>clashcallerbot_search &mdash; clashcallerbot-reddit 2.2.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> clashcallerbot-reddit
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/installation.html">Installation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">clashcallerbot-reddit</a></li>
+</ul>
+<p class="caption"><span class="caption-text">About</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../about/references.html">References</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../genindex.html">Index</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">clashcallerbot-reddit</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Module code</a> &raquo;</li>
+        
+      <li>clashcallerbot_search</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for clashcallerbot_search</h1><div class="highlight"><pre>
+<span></span><span class="ch">#! python3</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;Searches recent reddit comments for ClashCaller! string and saves to database.</span>
+
+<span class="sd">This module uses the Python Reddit API Wrapper (PRAW) to search recent reddit comments</span>
+<span class="sd">for the ClashCaller! string.</span>
+
+<span class="sd">If found, the userID, permalink, comment time, message, and</span>
+<span class="sd">expiration time (if any) are parsed. The default, or provided, expiration time is</span>
+<span class="sd">applied, then all the comment data is saved to a MySQL-compatible database.</span>
+
+<span class="sd">The comment is replied to, then the userID is PM&#39;ed confirmation.&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">praw</span>
+<span class="kn">import</span> <span class="nn">praw.exceptions</span>
+<span class="kn">import</span> <span class="nn">prawcore.exceptions</span>
+
+<span class="kn">import</span> <span class="nn">logging.config</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">urllib3.exceptions</span>
+<span class="kn">from</span> <span class="nn">socket</span> <span class="k">import</span> <span class="n">gaierror</span>
+
+<span class="kn">from</span> <span class="nn">clashcallerbot_database</span> <span class="k">import</span> <span class="n">ClashCallerDatabase</span>
+<span class="kn">from</span> <span class="nn">logging_conf</span> <span class="k">import</span> <span class="n">LOGGING</span>
+<span class="kn">from</span> <span class="nn">config</span> <span class="k">import</span> <span class="n">config</span>
+
+<span class="c1"># Logger</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">dictConfig</span><span class="p">(</span><span class="n">LOGGING</span><span class="p">)</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">raiseExceptions</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1"># Production mode if False (no console sys.stderr output)</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;search&#39;</span><span class="p">)</span>
+
+<span class="c1"># Generate reddit instance</span>
+<span class="n">reddit</span> <span class="o">=</span> <span class="n">praw</span><span class="o">.</span><span class="n">Reddit</span><span class="p">(</span><span class="s1">&#39;clashcallersearch&#39;</span><span class="p">)</span>  <span class="c1"># Section name in praw.ini</span>
+<span class="n">subreddit</span> <span class="o">=</span> <span class="n">reddit</span><span class="o">.</span><span class="n">subreddit</span><span class="p">(</span><span class="s1">&#39;ClashCallerBot&#39;</span><span class="p">)</span>  <span class="c1"># Limit scope for testing purposes</span>
+
+<span class="c1"># Regular expressions</span>
+<span class="n">clashcaller_re</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">                            [!|\s]?             # prefix ! or space (optional)</span>
+<span class="s1">                            [C|c]lash[C|c]aller # lower or camelcase ClashCaller (required)</span>
+<span class="s1">                            [!|\s]              # suffix ! or space (required)</span>
+<span class="s1">                            &#39;&#39;&#39;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">VERBOSE</span><span class="p">)</span>
+<span class="n">expiration_re</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">                           (?P&lt;exp_digit&gt;(\d){1,2})    # single or double digit (required)</span>
+<span class="s1">                           (\s)?                       # space (optional)</span>
+<span class="s1">                           (?P&lt;exp_unit&gt;minute(s)?\s|  # minute(s) (space after required)</span>
+<span class="s1">                           min\s|                      # minute abbr. (space after required)</span>
+<span class="s1">                           hour(s)?\s|                 # hour(s) (space after required)</span>
+<span class="s1">                           hr\s                        # hour abbr. (space after required)</span>
+<span class="s1">                           )+&#39;&#39;&#39;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">VERBOSE</span> <span class="o">|</span> <span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">)</span>  <span class="c1"># case-insensitive</span>
+<span class="n">message_re</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">                        (\s)*       # space (optional)</span>
+<span class="s1">                        &quot;           # opening double quote (required)</span>
+<span class="s1">                        base(s)?    # string: base(s) (required)</span>
+<span class="s1">                        [\W|\s]*    # non-word character or space (optional)</span>
+<span class="s1">                        (\d){1,2}   # single or double digit (required)</span>
+<span class="s1">                        .*          # any character after (optional)</span>
+<span class="s1">                        &quot;           # closing double quote (required)</span>
+<span class="s1">                        &#39;&#39;&#39;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">VERBOSE</span> <span class="o">|</span> <span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">)</span>  <span class="c1"># case-insensitive</span>
+
+<span class="c1"># Make database instance</span>
+<span class="n">db</span> <span class="o">=</span> <span class="n">ClashCallerDatabase</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
+<span class="n">start_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../clashcallerbot_search.html#clashcallerbot_search.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Start search.py...&#39;</span><span class="p">)</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># Search recent comments for ClashCaller! string</span>
+            <span class="k">for</span> <span class="n">comment</span> <span class="ow">in</span> <span class="n">subreddit</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">comments</span><span class="p">():</span>
+                <span class="n">db</span><span class="o">.</span><span class="n">open_connections</span><span class="p">()</span>
+                <span class="n">match</span> <span class="o">=</span> <span class="n">clashcaller_re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">comment</span><span class="o">.</span><span class="n">body</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">match</span> <span class="ow">and</span> <span class="n">comment</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">name</span> <span class="o">!=</span> <span class="s1">&#39;ClashCallerBot&#39;</span> \
+                        <span class="ow">and</span> <span class="ow">not</span> <span class="n">db</span><span class="o">.</span><span class="n">find_comment_id</span><span class="p">(</span><span class="n">comment</span><span class="o">.</span><span class="n">id</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">have_replied</span><span class="p">(</span><span class="n">comment</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="s1">&#39;ClashCallerBot&#39;</span><span class="p">)</span>\
+                        <span class="ow">and</span> <span class="n">is_recent</span><span class="p">(</span><span class="n">comment</span><span class="p">):</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;In from </span><span class="si">{comment.author.name}</span><span class="s1">: </span><span class="si">{comment}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+                    <span class="c1"># Strip everything before and including ClashCaller! string</span>
+                    <span class="n">comment</span><span class="o">.</span><span class="n">body</span> <span class="o">=</span> <span class="n">comment</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="n">match</span><span class="o">.</span><span class="n">end</span><span class="p">():]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Stripped comment body: </span><span class="si">{comment.body}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+                    <span class="c1"># Check for expiration time</span>
+                    <span class="n">minute_tokens</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="s1">&#39;minute&#39;</span><span class="p">,</span> <span class="s1">&#39;minutes&#39;</span><span class="p">)</span>
+                    <span class="n">match</span> <span class="o">=</span> <span class="n">expiration_re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">comment</span><span class="o">.</span><span class="n">body</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">match</span><span class="p">:</span>
+                        <span class="n">timedelta</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># Default to 1 hour</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">exp_digit</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s1">&#39;exp_digit&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+                        <span class="k">if</span> <span class="n">exp_digit</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>  <span class="c1"># ignore zeros</span>
+                            <span class="c1"># Send message and ignore comment</span>
+                            <span class="n">error</span> <span class="o">=</span> <span class="s1">&#39;Expiration time is zero.&#39;</span>
+                            <span class="c1"># send_error_message(comment.author.name, comment.permalink, error)</span>
+                            <span class="n">db</span><span class="o">.</span><span class="n">save_comment_id</span><span class="p">(</span><span class="n">comment</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+                            <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+                            <span class="k">continue</span>
+                        <span class="n">exp_unit</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s1">&#39;exp_unit&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+                        <span class="k">if</span> <span class="n">exp_unit</span> <span class="ow">in</span> <span class="n">minute_tokens</span><span class="p">:</span>
+                            <span class="n">timedelta</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">minutes</span><span class="o">=</span><span class="n">exp_digit</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="n">exp_digit</span> <span class="o">&gt;=</span> <span class="mi">24</span><span class="p">:</span>  <span class="c1"># ignore days</span>
+                                <span class="c1"># Send message and ignore comment</span>
+                                <span class="n">error</span> <span class="o">=</span> <span class="s1">&#39;Expiration time is &gt;= 1 day.&#39;</span>
+                                <span class="c1"># send_error_message(comment.author.name, comment.permalink, error)</span>
+                                <span class="n">db</span><span class="o">.</span><span class="n">save_comment_id</span><span class="p">(</span><span class="n">comment</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+                                <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+                                <span class="k">continue</span>
+                            <span class="n">timedelta</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="n">exp_digit</span><span class="p">)</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;timedelta = </span><span class="si">{timedelta.seconds}</span><span class="s1"> seconds&#39;</span><span class="p">)</span>
+
+                    <span class="c1"># Apply expiration time to comment date</span>
+                    <span class="n">comment_datetime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="n">comment</span><span class="o">.</span><span class="n">created_utc</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span>
+                    <span class="n">expiration_datetime</span> <span class="o">=</span> <span class="n">comment_datetime</span> <span class="o">+</span> <span class="n">timedelta</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;comment_datetime = </span><span class="si">{comment_datetime}</span><span class="s1">&#39;</span><span class="p">)</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;expiration_datetime = </span><span class="si">{expiration_datetime}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+                    <span class="c1"># Ignore if expire time passed</span>
+                    <span class="k">if</span> <span class="n">expiration_datetime</span> <span class="o">&lt;</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">):</span>
+                        <span class="c1"># Send message and ignore comment</span>
+                        <span class="n">error</span> <span class="o">=</span> <span class="s1">&#39;Expiration time has already passed.&#39;</span>
+                        <span class="c1"># send_error_message(comment.author.name, comment.permalink, error)</span>
+                        <span class="n">db</span><span class="o">.</span><span class="n">save_comment_id</span><span class="p">(</span><span class="n">comment</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+                        <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+                        <span class="k">continue</span>
+
+                    <span class="c1"># Strip expiration time</span>
+                    <span class="n">comment</span><span class="o">.</span><span class="n">body</span> <span class="o">=</span> <span class="n">comment</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="n">match</span><span class="o">.</span><span class="n">end</span><span class="p">():]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+                    <span class="c1"># Evaluate message</span>
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">comment</span><span class="o">.</span><span class="n">body</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">100</span><span class="p">:</span>
+                        <span class="c1"># Send message and ignore comment</span>
+                        <span class="n">error</span> <span class="o">=</span> <span class="s1">&#39;Message length &gt; 100 characters.&#39;</span>
+                        <span class="c1"># send_error_message(comment.author.name, comment.permalink, error)</span>
+                        <span class="n">db</span><span class="o">.</span><span class="n">save_comment_id</span><span class="p">(</span><span class="n">comment</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+                        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+                        <span class="k">continue</span>
+
+                    <span class="n">match</span> <span class="o">=</span> <span class="n">message_re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">comment</span><span class="o">.</span><span class="n">body</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">match</span><span class="p">:</span>
+                        <span class="c1"># Send message and ignore comment</span>
+                        <span class="n">error</span> <span class="o">=</span> <span class="s1">&#39;Message not properly formatted.&#39;</span>
+                        <span class="c1"># send_error_message(comment.author.name, comment.permalink, error)</span>
+                        <span class="n">db</span><span class="o">.</span><span class="n">save_comment_id</span><span class="p">(</span><span class="n">comment</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+                        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+                        <span class="k">continue</span>
+
+                    <span class="n">message</span> <span class="o">=</span> <span class="n">comment</span><span class="o">.</span><span class="n">body</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;message = </span><span class="si">{message}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+                    <span class="c1"># Save message data to MySQL-compatible database</span>
+                    <span class="n">db</span><span class="o">.</span><span class="n">save_message</span><span class="p">(</span><span class="n">comment</span><span class="o">.</span><span class="n">permalink</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">expiration_datetime</span><span class="p">,</span> <span class="n">comment</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+                    <span class="c1"># Reply and send PM</span>
+                    <span class="n">send_confirmation</span><span class="p">(</span><span class="n">comment</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">comment</span><span class="o">.</span><span class="n">permalink</span><span class="p">,</span> <span class="n">expiration_datetime</span><span class="p">)</span>
+                    <span class="n">send_confirmation_reply</span><span class="p">(</span><span class="n">comment</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">comment</span><span class="o">.</span><span class="n">permalink</span><span class="p">,</span> <span class="n">expiration_datetime</span><span class="p">)</span>
+
+                    <span class="c1"># Save comment.id to database</span>
+                    <span class="c1"># TODO: Replaced by is_recent()? Wars take 48 hours, trim weekly based on start_time.</span>
+                    <span class="n">db</span><span class="o">.</span><span class="n">save_comment_id</span><span class="p">(</span><span class="n">comment</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+
+                    <span class="c1"># TODO: Add more functionality via PM: delete calls, list calls, add users to call reminder</span>
+
+                    <span class="n">db</span><span class="o">.</span><span class="n">close_connections</span><span class="p">()</span>
+
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="k">except</span> <span class="n">urllib3</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">ConnectionError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;urllib3: </span><span class="si">{err}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+            <span class="k">pass</span>
+
+        <span class="k">except</span> <span class="n">gaierror</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;socket: </span><span class="si">{err}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+            <span class="k">pass</span>
+
+        <span class="k">except</span> <span class="n">prawcore</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">PrawcoreException</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;prawcore: </span><span class="si">{err}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+            <span class="k">pass</span>
+
+        <span class="k">except</span> <span class="n">praw</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">PRAWException</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;praw: </span><span class="si">{err}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+            <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="send_confirmation"><a class="viewcode-back" href="../clashcallerbot_search.html#clashcallerbot_search.send_confirmation">[docs]</a><span class="k">def</span> <span class="nf">send_confirmation</span><span class="p">(</span><span class="n">u_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">link</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">exp</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Send confirmation to reddit user.</span>
+
+<span class="sd">    Function sends given user confirmation of given expiration time with given link.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        u_name: username of user.</span>
+<span class="sd">        link:   Permalink of comment.</span>
+<span class="sd">        exp:    Expiration datetime of call.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        True if successful, False otherwise.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">subject</span> <span class="o">=</span> <span class="s1">&#39;ClashCallerBot Confirmation Sent&#39;</span>
+    <span class="n">permalink</span> <span class="o">=</span> <span class="s1">&#39;https://np.reddit.com&#39;</span> <span class="o">+</span> <span class="n">link</span>  <span class="c1"># Permalinks are missing prefix</span>
+    <span class="n">exp</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">exp</span><span class="p">,</span> <span class="s1">&#39;%b. </span><span class="si">%d</span><span class="s1">, %Y at %I:%M:%S %p (%Z)&#39;</span><span class="p">)</span>
+    <span class="n">message</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;&quot;&quot;ClashCallerBot here!  </span>
+<span class="s2">              I will be messaging you on </span><span class="si">{exp}</span><span class="s2"> to remind you of [**this link.**](</span><span class="si">{permalink}</span><span class="s2">)</span>
+<span class="s2"> </span>
+<span class="s2">              Thank you for entrusting us with your warring needs,  </span>
+<span class="s2">              - ClashCallerBot</span>
+<span class="s2"> </span>
+<span class="s2">              [^(More info)](https://www.reddit.com/r/ClashCallerBot/comments/4e9vo7/clashcallerbot_info/)</span>
+<span class="s2">              &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">reddit</span><span class="o">.</span><span class="n">redditor</span><span class="p">(</span><span class="n">u_name</span><span class="p">)</span><span class="o">.</span><span class="n">message</span><span class="p">(</span><span class="n">subject</span><span class="p">,</span> <span class="n">message</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;              &#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">))</span>
+
+    <span class="k">except</span> <span class="n">praw</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">PRAWException</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;send_confirmation: </span><span class="si">{err}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="send_error_message"><a class="viewcode-back" href="../clashcallerbot_search.html#clashcallerbot_search.send_error_message">[docs]</a><span class="k">def</span> <span class="nf">send_error_message</span><span class="p">(</span><span class="n">u_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">link</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">error</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Send error message to reddit user.</span>
+
+<span class="sd">    Function sends given error to given user.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        u_name:   username of user.</span>
+<span class="sd">        link:     Permalink of comment.</span>
+<span class="sd">        error:    Error to send to user.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        True if successful, False otherwise.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">subject</span> <span class="o">=</span> <span class="s1">&#39;Unable to save call due to error&#39;</span>
+    <span class="n">permalink</span> <span class="o">=</span> <span class="s1">&#39;https://np.reddit.com&#39;</span> <span class="o">+</span> <span class="n">link</span>  <span class="c1"># Permalinks are missing prefix</span>
+    <span class="n">message</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;&quot;&quot;ClashCallerBot here!  </span>
+<span class="s2">              I regret to inform you that I could not save [**your call**](</span><span class="si">{permalink}</span><span class="s2">) because of:</span>
+<span class="s2">              </span><span class="si">{error}</span><span class="s2">  </span>
+<span class="s2">              Please delete your call to reduce spam and try again after making the</span>
+<span class="s2">              above change.</span>
+<span class="s2"> </span>
+<span class="s2">              Thank you for entrusting us with your warring needs,  </span>
+<span class="s2">              - ClashCallerBot</span>
+<span class="s2"> </span>
+<span class="s2">              [^(More info)](https://www.reddit.com/r/ClashCallerBot/comments/4e9vo7/clashcallerbot_info/)</span>
+<span class="s2">              &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">reddit</span><span class="o">.</span><span class="n">redditor</span><span class="p">(</span><span class="n">u_name</span><span class="p">)</span><span class="o">.</span><span class="n">message</span><span class="p">(</span><span class="n">subject</span><span class="p">,</span> <span class="n">message</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;              &#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">))</span>
+
+    <span class="k">except</span> <span class="n">praw</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">PRAWException</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;send_error_message: </span><span class="si">{err}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="send_confirmation_reply"><a class="viewcode-back" href="../clashcallerbot_search.html#clashcallerbot_search.send_confirmation_reply">[docs]</a><span class="k">def</span> <span class="nf">send_confirmation_reply</span><span class="p">(</span><span class="n">cid</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">link</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">exp</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Replies to a comment.</span>
+
+<span class="sd">    Function replies to a given comment ID with a given message.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        cid:    Comment ID to reply to.</span>
+<span class="sd">        link:   Permalink of comment.</span>
+<span class="sd">        exp:    Expiration datetime of call.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        id of new comment if successful, None otherwise</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">permalink</span> <span class="o">=</span> <span class="s1">&#39;https://np.reddit.com&#39;</span> <span class="o">+</span> <span class="n">link</span>  <span class="c1"># Permalinks are missing prefix</span>
+    <span class="n">exp</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">exp</span><span class="p">,</span> <span class="s1">&#39;%b. </span><span class="si">%d</span><span class="s1">, %Y at %I:%M:%S %p (%Z)&#39;</span><span class="p">)</span>
+    <span class="n">message</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;&quot;&quot;ClashCallerBot here!  </span>
+<span class="s2">              I will be messaging you on </span><span class="si">{exp}</span><span class="s2"> to remind you of [**this call.**](</span><span class="si">{permalink}</span><span class="s2">)</span>
+<span class="s2"> </span>
+<span class="s2">              Thank you for entrusting us with your warring needs!</span>
+<span class="s2"> </span>
+<span class="s2">              [^(More info)](https://www.reddit.com/r/ClashCallerBot/comments/4e9vo7/clashcallerbot_info/)</span>
+<span class="s2">              &quot;&quot;&quot;</span>
+    <span class="n">comment_id</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">comment_obj</span> <span class="o">=</span> <span class="n">reddit</span><span class="o">.</span><span class="n">comment</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">cid</span><span class="p">)</span>
+        <span class="n">comment_id</span> <span class="o">=</span> <span class="n">comment_obj</span><span class="o">.</span><span class="n">reply</span><span class="p">(</span><span class="n">message</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;              &#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">))</span>
+
+    <span class="k">except</span> <span class="n">praw</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">PRAWException</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;send_confirmation_reply: </span><span class="si">{err}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">comment_id</span></div>
+
+
+<div class="viewcode-block" id="have_replied"><a class="viewcode-back" href="../clashcallerbot_search.html#clashcallerbot_search.have_replied">[docs]</a><span class="k">def</span> <span class="nf">have_replied</span><span class="p">(</span><span class="n">cid</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">bot_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Checks if bot user has replied to a comment.</span>
+
+<span class="sd">    Function checks reply authors for bot user.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        cid:        Comment ID to get replies of.</span>
+<span class="sd">        bot_name:   Name of bot to check for.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        True if successful, False otherwise.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">comment</span> <span class="o">=</span> <span class="n">reddit</span><span class="o">.</span><span class="n">comment</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">cid</span><span class="p">)</span>
+        <span class="n">comment</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>  <span class="c1"># Refreshes attributes of comment to load replies</span>
+
+        <span class="c1"># Keep fetching 20 new replies until it finishes</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">replies</span> <span class="o">=</span> <span class="n">comment</span><span class="o">.</span><span class="n">replies</span><span class="o">.</span><span class="n">replace_more</span><span class="p">()</span>
+                <span class="k">break</span>
+            <span class="k">except</span> <span class="n">praw</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">PRAWException</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;comment.replies.replace_more: </span><span class="si">{err}</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">replies</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">for</span> <span class="n">reply</span> <span class="ow">in</span> <span class="n">replies</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">reply</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">bot_name</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="k">except</span> <span class="n">praw</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">PRAWException</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;have_replied: </span><span class="si">{err}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="is_recent"><a class="viewcode-back" href="../clashcallerbot_search.html#clashcallerbot_search.is_recent">[docs]</a><span class="k">def</span> <span class="nf">is_recent</span><span class="p">(</span><span class="n">cmnt</span><span class="p">:</span> <span class="n">praw</span><span class="o">.</span><span class="n">reddit</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">Comment</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Checks if comment is a recent comment.</span>
+
+<span class="sd">    Function compares comment time with program start time.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        cmnt:  praw comment object.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        True if comment time is after start time, False otherwise.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">cmnt_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="n">cmnt</span><span class="o">.</span><span class="n">created_utc</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">cmnt_time</span> <span class="o">&gt;</span> <span class="n">start_time</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<span class="c1"># If run directly, instead of imported as a module, run main():</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Jose A. Lerma III
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

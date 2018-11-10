@@ -1,0 +1,326 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Installation &mdash; clashcallerbot-reddit 2.2.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Amazon Linux AMI Setup" href="amazon_setup.html" />
+    <link rel="prev" title="Quickstart" href="quickstart.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> clashcallerbot-reddit
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#deployment-options">Deployment Options</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="amazon_setup.html">Amazon Linux AMI Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="centos_setup.html">CentOS 7.0 Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="no_root_setup.html">No Root Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ubuntu_setup.html">Ubuntu 14.04 LTS Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ubuntu">Ubuntu</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#centos">CentOS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#no-root">No Root</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#amazon-ec2">Amazon EC2</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#building-documentation">Building Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#disclaimer">Disclaimer</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">clashcallerbot-reddit</a></li>
+</ul>
+<p class="caption"><span class="caption-text">About</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../about/references.html">References</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../genindex.html">Index</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">clashcallerbot-reddit</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Installation</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/getting_started/installation.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
+<p>This thing has to run 24/7. As a proof of concept, I set it up in an Ubuntu VM for the open alpha and a CentOS VM
+for the open beta. Production version was running on CloudLinux OS at one point, but has since moved to Amazon Linux
+AMI on AWS. If you are using a different OS, your mileage may vary.</p>
+<div class="section" id="deployment-options">
+<h2>Deployment Options<a class="headerlink" href="#deployment-options" title="Permalink to this headline">¶</a></h2>
+<p>Believe me, the list of where I have not deployed it is shorter. I mostly went with virtual machines for the
+development, and tried putting the production version on a shared host. It has been migrated to an Amazon EC2
+instance in hopes of minimizing costs.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="amazon_setup.html">Amazon Linux AMI Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="centos_setup.html">CentOS 7.0 Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="no_root_setup.html">No Root Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ubuntu_setup.html">Ubuntu 14.04 LTS Setup</a></li>
+</ul>
+</div>
+<div class="section" id="ubuntu">
+<h3>Ubuntu<a class="headerlink" href="#ubuntu" title="Permalink to this headline">¶</a></h3>
+<p>For the open alpha, I went with an OS that is convenient (need something? There’s a package for that) as a proof
+of concept and debugging environment.</p>
+<p><a class="reference internal" href="ubuntu_setup.html"><span class="doc">Ubuntu 14.04 LTS Setup</span></a></p>
+</div>
+<div class="section" id="centos">
+<h3>CentOS<a class="headerlink" href="#centos" title="Permalink to this headline">¶</a></h3>
+<p>For the open beta, I went with an OS that is often available for production environments.</p>
+<p><a class="reference internal" href="centos_setup.html"><span class="doc">CentOS 7.0 Setup</span></a></p>
+</div>
+<div class="section" id="no-root">
+<h3>No Root<a class="headerlink" href="#no-root" title="Permalink to this headline">¶</a></h3>
+<p>For my first attempt at a production version, I got a shared host running CloudLinux OS that does not provide
+root access, but has both Python and MySQL pre-installed.</p>
+<p><a class="reference internal" href="no_root_setup.html"><span class="doc">No Root Setup</span></a></p>
+</div>
+<div class="section" id="amazon-ec2">
+<h3>Amazon EC2<a class="headerlink" href="#amazon-ec2" title="Permalink to this headline">¶</a></h3>
+<p>For what I hope is the final production version, I set up an Amazon EC2 instance running Amazon Linux AMI.
+I particularly like that it has pip and python pre-installed.</p>
+<p><a class="reference internal" href="amazon_setup.html"><span class="doc">Amazon Linux AMI Setup</span></a></p>
+</div>
+</div>
+<div class="section" id="building-documentation">
+<h2>Building Documentation<a class="headerlink" href="#building-documentation" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Building the documentation is <strong>not needed or recommended</strong> unless contributing to the documentation. The latest
+version of the documentation is available at <a class="reference external" href="http://josealermaiii.github.io/clashcallerbot-reddit/">josealermaiii&#64;github.io/clashcallerbot-reddit</a> or as a <a class="reference external" href="https://github.com/JoseALermaIII/clashcallerbot-reddit/blob/master/manual.pdf">PDF in the source code</a>. You have been warned.</p>
+</div>
+<p>Building the docs requires a few more pip packages:</p>
+<ul class="simple">
+<li>Sphinx</li>
+<li>sphinxcontrib-napoleon</li>
+<li>sphinx-rtd-theme</li>
+</ul>
+<p>If that wasn’t bad enough, a symbolic link to <em>praw.ini</em> must be made from within <code class="docutils literal notranslate"><span class="pre">~/.config</span></code>.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="o">~/.</span><span class="n">config</span>
+<span class="n">ln</span> <span class="o">-</span><span class="n">s</span> <span class="n">absolute_path_here</span><span class="o">/</span><span class="n">clashcallerbot</span><span class="o">-</span><span class="n">reddit</span><span class="o">/</span><span class="n">praw</span><span class="o">.</span><span class="n">ini</span> <span class="n">praw</span><span class="o">.</span><span class="n">ini</span>
+</pre></div>
+</div>
+<p>This has to do with how <cite>praw</cite> finds the <em>praw.ini</em> file. This may get fixed later much like the <em>database.ini</em> fix in
+<cite>config.py</cite>.</p>
+<p>Now, we can build the docs in HTML format:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">absolute_path_here</span><span class="o">/</span><span class="n">clashcallerbot</span><span class="o">-</span><span class="n">reddit</span><span class="o">/</span><span class="n">docs</span>
+<span class="n">make</span> <span class="n">html</span>
+</pre></div>
+</div>
+<p>This will save the docs website in <code class="docutils literal notranslate"><span class="pre">../../clashcallerbot-reddit-docs/</span></code>.</p>
+<p>Building the PDF is even more involved. First, LaTeX must be installed on the OS. For example, in Ubuntu 18.04:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">texlive</span><span class="o">-</span><span class="n">latex</span><span class="o">-</span><span class="n">recommended</span> <span class="n">texlive</span><span class="o">-</span><span class="n">latex</span><span class="o">-</span><span class="n">extra</span> <span class="n">texlive</span><span class="o">-</span><span class="n">fonts</span><span class="o">-</span><span class="n">recommended</span>
+</pre></div>
+</div>
+<p>Installing these dependencies is not recommended, if not needed, because they require &gt; 300 MB of disk space.</p>
+<p>Now, we can build the docs in PDF format:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">absolute_path_here</span><span class="o">/</span><span class="n">clashcallerbot</span><span class="o">-</span><span class="n">reddit</span><span class="o">/</span><span class="n">docs</span>
+<span class="n">make</span> <span class="n">latexpdf</span>
+</pre></div>
+</div>
+<p>This will save the doc’s PDF in <code class="docutils literal notranslate"><span class="pre">../manual.pdf</span></code>.</p>
+</div>
+<div class="section" id="disclaimer">
+<h2>Disclaimer<a class="headerlink" href="#disclaimer" title="Permalink to this headline">¶</a></h2>
+<p>Though covered by the MIT License, I reiterate: executing code from the Internet in terminal can end up doing bad things.</p>
+<blockquote>
+<div>Read and understand all code you copy and paste before running it.</div></blockquote>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="amazon_setup.html" class="btn btn-neutral float-right" title="Amazon Linux AMI Setup" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="quickstart.html" class="btn btn-neutral" title="Quickstart" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Jose A. Lerma III
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
