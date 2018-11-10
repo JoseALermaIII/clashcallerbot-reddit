@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>clashcallerbot_search &mdash; clashcallerbot-reddit 2.2.0 documentation</title>
+  <title>clashcallerbot_search &mdash; clashcallerbot-reddit 2.2.3 documentation</title>
   
 
   
@@ -328,17 +328,17 @@
 
         <span class="k">except</span> <span class="n">urllib3</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">ConnectionError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;urllib3: </span><span class="si">{err}</span><span class="s1">&#39;</span><span class="p">)</span>
-            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
             <span class="k">pass</span>
 
         <span class="k">except</span> <span class="n">gaierror</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;socket: </span><span class="si">{err}</span><span class="s1">&#39;</span><span class="p">)</span>
-            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
             <span class="k">pass</span>
 
         <span class="k">except</span> <span class="n">prawcore</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">PrawcoreException</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;prawcore: </span><span class="si">{err}</span><span class="s1">&#39;</span><span class="p">)</span>
-            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
             <span class="k">pass</span>
 
         <span class="k">except</span> <span class="n">praw</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">PRAWException</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
