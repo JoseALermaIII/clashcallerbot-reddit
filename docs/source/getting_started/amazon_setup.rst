@@ -46,9 +46,10 @@ progress, if persistence was not enabled previously.
 
 .. tip::
 
-    * `Install and enable yum-cron
-       <https://community.centminmod.com/threads/automatic-nightly-yum-updates-with-yum-cron.1507/?PageSpeed=noscript>`_
-       to keep the EC2 instance updated automatically.
+    * `Install and enable yum-cron`_ to keep the EC2 instance updated automatically.
+
+.. _Install and enable yum-cron:
+    https://community.centminmod.com/threads/automatic-nightly-yum-updates-with-yum-cron.1507/?PageSpeed=noscript
 
 Install some dependencies as the **default user**, not the new one. ::
 
