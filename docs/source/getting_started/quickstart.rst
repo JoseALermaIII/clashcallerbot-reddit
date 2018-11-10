@@ -61,7 +61,7 @@ Alternatively, by running the provided bash script from within terminal::
     * How often to run as a crontab depends on how long you want the bot to be down/broken.
     * If you have access to root, check :doc:`installation` for info on setting up systemd instead.
     * Logfile can be removed if not necessary (remove variable and ``>> $logfile``).
-    * ``python2.7`` can be replaced with relevant python version.
+    * ``python`` can be replaced with relevant python version.
     * The function in ``kill`` returns all script PIDs, so it must be restarted.
     * If you have access to ``pidof``, you can avoid killing all script instances.
 
