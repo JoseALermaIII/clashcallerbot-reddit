@@ -24,6 +24,8 @@ It's a sweet (as in awesome) little program.
 
 I plan to make a few more tweaks to make it even more useful.
 
+Check us out on `/r/ClashCallerBot <https://np.reddit.com/r/ClashCallerBot/>`_.
+
 Usage Information
 =================
 
