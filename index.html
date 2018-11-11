@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Welcome to clashcallerbot-reddit! &mdash; clashcallerbot-reddit 2.2.3 documentation</title>
+  <title>Welcome to clashcallerbot-reddit! &mdash; clashcallerbot-reddit 2.2.4 documentation</title>
   
 
   
@@ -92,6 +92,7 @@
 </ul>
 <p class="caption"><span class="caption-text">About</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="about/faqs.html">FAQs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="about/references.html">References</a></li>
 </ul>
 <ul>
@@ -162,8 +163,8 @@
             
   <div class="section" id="welcome-to-clashcallerbot-reddit">
 <h1>Welcome to clashcallerbot-reddit!<a class="headerlink" href="#welcome-to-clashcallerbot-reddit" title="Permalink to this headline">¶</a></h1>
-<p><strong>ClashCallerBot</strong> was made to help <a class="reference external" href="https://np.reddit.com/r/ClashOfClans">/r/ClashOfClans</a> clans
-to coordinate attacks during war from within reddit.</p>
+<p><strong>ClashCallerBot</strong> was made to help <a class="reference external" href="https://np.reddit.com/r/ClashOfClans">/r/ClashOfClans</a> clans coordinate attacks
+during <a class="reference external" href="https://clashofclans.fandom.com/wiki/Clan_Wars">Clan Wars</a> (or <a class="reference external" href="https://clashofclans.fandom.com/wiki/Clan_War_Leagues">Clan War Leagues</a>) from within reddit.</p>
 <p>For example, someone wants to attack base 1 and 7, but they haven’t posted an update in over an hour
 and those two bases still haven’t been attacked. Is it okay to attack those bases? Did your fellow
 clan member die? Who knows‽</p>
@@ -173,6 +174,7 @@ know for certain.</p>
 <p>If not obvious enough, it’s a fork of <a class="reference external" href="https://github.com/SIlver--/remindmebot-reddit">SIlver–’s RemindMeBot</a>.
 It’s a sweet (as in awesome) little program.</p>
 <p>I plan to make a few more tweaks to make it even more useful.</p>
+<p>Check us out on <a class="reference external" href="https://np.reddit.com/r/ClashCallerBot/">/r/ClashCallerBot</a>.</p>
 </div>
 <div class="section" id="usage-information">
 <h1>Usage Information<a class="headerlink" href="#usage-information" title="Permalink to this headline">¶</a></h1>
@@ -228,10 +230,11 @@ It’s a sweet (as in awesome) little program.</p>
 <ul class="simple">
 <li>The <code class="docutils literal notranslate"><span class="pre">clashcaller</span></code> string must be present in either lower or camelcase with an exclamation point <code class="docutils literal notranslate"><span class="pre">!</span></code> either
 before or after.</li>
-<li>The expiration time in minutes or hours must follow either abbreviated or with full spelling with an
-optional space between the number and word, but mandatory space after the word: <code class="docutils literal notranslate"><span class="pre">4min</span></code>. Case is ignored.</li>
+<li>The expiration time in minutes or hours may follow either abbreviated or with full spelling with an
+optional space between the number and word, but mandatory space after the word: <code class="docutils literal notranslate"><span class="pre">4min</span></code>. Case is ignored. If not
+given, defaults to 1 hour. The expiration time is limited to within 24 hours.</li>
 <li>The message within quotes must follow with the singular or plural form of <code class="docutils literal notranslate"><span class="pre">base</span></code> and a required single or double
-digit number. Case is ignored.</li>
+digit number. Case is ignored. Maximum message length is 100 characters to save database space.</li>
 </ul>
 <div class="toctree-wrapper compound">
 <p class="caption"><span class="caption-text">Getting Started</span></p>
@@ -276,6 +279,18 @@ digit number. Case is ignored.</li>
 <div class="toctree-wrapper compound">
 <p class="caption"><span class="caption-text">About</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="about/faqs.html">FAQs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="about/faqs.html#what-is-the-point-of-clashcallerbot">What is the point of ClashCallerBot?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="about/faqs.html#is-it-ready-yet">Is it ready yet?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="about/faqs.html#how-do-you-call-clashcallerbot">How do you call ClashCallerBot?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="about/faqs.html#do-pms-work">Do PMs work?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="about/faqs.html#what-options-does-it-have">What options does it have?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="about/faqs.html#hey-why-didn-t-it-notice-me">Hey, why didn’t it notice me?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="about/faqs.html#why-was-the-message-off-by-a-few-minutes">Why was the message off by a few minutes?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="about/faqs.html#what-happens-if-it-gets-banned">What happens if it gets banned?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="about/faqs.html#can-i-delete-my-comment">Can I delete my comment?</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="about/references.html">References</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="about/references.html#python">Python</a></li>
 <li class="toctree-l2"><a class="reference internal" href="about/references.html#praw">PRAW</a></li>

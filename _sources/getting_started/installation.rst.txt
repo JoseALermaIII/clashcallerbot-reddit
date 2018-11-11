@@ -58,7 +58,7 @@ Building Documentation
 
     Building the documentation is **not needed or recommended** unless contributing to the documentation. The latest
     version of the documentation is available at `josealermaiii@github.io/clashcallerbot-reddit
-    <http://josealermaiii.github.io/clashcallerbot-reddit/>`_ or as a `PDF in the source code
+    <https://josealermaiii.github.io/clashcallerbot-reddit/>`_ or as a `PDF in the source code
     <https://github.com/JoseALermaIII/clashcallerbot-reddit/blob/master/manual.pdf>`_. You have been warned.
 
 Building the docs requires a few more pip packages:

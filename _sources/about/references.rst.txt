@@ -99,7 +99,7 @@ Miscellaneous
 
 .. _JoseALermaIII/clashcallerbot-reddit: https://github.com/JoseALermaIII/clashcallerbot-reddit
 .. _Regex Tester: https://www.regexpal.com/
-.. _Testing Thread Trois\: ClashCallerBot: https://www.reddit.com/r/ClashCallerBot/comments/9q14ho/testing_thread_trois/
+.. _Testing Thread Trois\: ClashCallerBot: https://np.reddit.com/r/ClashCallerBot/comments/9q14ho/testing_thread_trois/
 .. _commenting - reddit.com: https://www.reddit.com/wiki/commenting
 .. _Logging module is causing Sphinx to crash. - Google Groups:
     https://groups.google.com/forum/#!topic/sphinx-users/Y23nri47y7A
