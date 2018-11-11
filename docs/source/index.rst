@@ -64,6 +64,7 @@ To sum:
    :maxdepth: 2
    :caption: About
 
+   about/faqs
    about/references
 
 .. toctree::
