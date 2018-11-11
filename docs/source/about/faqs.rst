@@ -6,15 +6,29 @@ No one really asked them, but these are the anticipated :abbr:`FAQs (Frequently 
 What is the point of ClashCallerBot?
 ------------------------------------
 
-.. include:: ../index.rst
-    :start-after: clashcallerbot-reddit!
-    :end-before: Usage Information
+**ClashCallerBot** was made to help `/r/ClashOfClans <https://np.reddit.com/r/ClashOfClans>`_ clans coordinate attacks
+during `Clan Wars <https://clashofclans.fandom.com/wiki/Clan_Wars>`_ (or `Clan War Leagues
+<https://clashofclans.fandom.com/wiki/Clan_War_Leagues>`_) from within reddit.
+
+For example, someone wants to attack base 1 and 7, but they haven't posted an update in over an hour
+and those two bases still haven't been attacked. Is it okay to attack those bases? Did your fellow
+clan member die? Who knows‽
+
+Well, if s/he (or someone on their behalf) had called those bases for a set period of time, you would
+know for certain.
+
+Think of **ClashCallerBot** as an independent time keeper that runs entirely within reddit.
+
+If not obvious enough, it's a fork of `SIlver--'s RemindMeBot <https://github.com/SIlver--/remindmebot-reddit>`_.
+It's a sweet (as in awesome) little program.
+
+I plan to make a few more tweaks to make it even more useful.
 
 Is it ready yet?
 ----------------
 
 **Closed Beta** until I add a few more features. Let me know in `/r/ClashCallerBot
-<https://np.reddit.com/r/ClashCallerBot/comments/4e9vo7/clashcallerbot_info/>`_ or via `PM
+<https://np.reddit.com/r/ClashCallerBot/>`_ or via `PM
 <https://www.reddit.com/message/compose/?to=ClashCallerBotDbuggr&subject=Closed%20Beta>`_ if you'd like your subreddit
 to be added to the closed beta.
 
@@ -38,11 +52,23 @@ No, they don't. Everyone needs to see what you called so they know not to attack
 What options does it have?
 --------------------------
 
-All options are listed here:
+Usage can be inferred from the regular expressions used to process each comment in the :doc:`../clashcallerbot_search`:
 
-.. include:: ../index.rst
-    :start-after: Usage Information
-    :end-before: toctree
+.. literalinclude:: ../../../clashcallerbot_search.py
+    :linenos:
+    :lineno-start: 38
+    :language: python
+    :lines: 38-60
+
+To sum:
+
+* The ``clashcaller`` string must be present in either lower or camelcase with an exclamation point ``!`` either
+  before or after.
+* The expiration time in minutes or hours may follow either abbreviated or with full spelling with an
+  optional space between the number and word, but mandatory space after the word: ``4min``. Case is ignored. If not
+  given, defaults to 1 hour. The expiration time is limited to within 24 hours.
+* The message within quotes must follow with the singular or plural form of ``base`` and a required single or double
+  digit number. Case is ignored. Maximum message length is 100 characters to save database space.
 
 **ClashCallerBot** will then make this comment and will message you at the given time::
 
@@ -52,9 +78,6 @@ All options are listed here:
     Thank you for entrusting us with your warring needs!
 
     [^(More info)](https://www.reddit.com/r/ClashCallerBot/comments/4e9vo7/clashcallerbot_info/)
-
-The expiration time is limited to within 24 hours. Call messages can't be longer than 100 characters to save database
-space. It is suggested that the bot be used with a multiple of an hour value, but minutes can also be used.
 
 Hey, why didn't it notice me?
 -----------------------------
