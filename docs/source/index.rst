@@ -38,8 +38,9 @@ To sum:
 
 * The ``clashcaller`` string must be present in either lower or camelcase with an exclamation point ``!`` either
   before or after.
-* The expiration time in minutes or hours must follow either abbreviated or with full spelling with an
-  optional space between the number and word, but mandatory space after the word: ``4min``. Case is ignored.
+* The expiration time in minutes or hours may follow either abbreviated or with full spelling with an
+  optional space between the number and word, but mandatory space after the word: ``4min``. Case is ignored. If not
+  given, defaults to 1 hour.
 * The message within quotes must follow with the singular or plural form of ``base`` and a required single or double
   digit number. Case is ignored.
 
