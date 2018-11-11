@@ -45,7 +45,7 @@ To sum:
   optional space between the number and word, but mandatory space after the word: ``4min``. Case is ignored. If not
   given, defaults to 1 hour.
 * The message within quotes must follow with the singular or plural form of ``base`` and a required single or double
-  digit number. Case is ignored.
+  digit number. Case is ignored. Maximum message length is 100 characters to save database space.
 
 .. toctree::
    :maxdepth: 3
