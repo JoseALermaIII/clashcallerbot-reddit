@@ -168,17 +168,17 @@ def main():
 
         except urllib3.exceptions.ConnectionError as err:
             logger.exception(f'urllib3: {err}')
-            time.sleep(10)
+            time.sleep(20)
             pass
 
         except gaierror as err:
             logger.exception(f'socket: {err}')
-            time.sleep(10)
+            time.sleep(20)
             pass
 
         except prawcore.exceptions.PrawcoreException as err:
             logger.exception(f'prawcore: {err}')
-            time.sleep(10)
+            time.sleep(20)
             pass
 
         except praw.exceptions.PRAWException as err:
