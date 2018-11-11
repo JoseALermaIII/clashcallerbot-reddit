@@ -6,8 +6,9 @@
 Welcome to clashcallerbot-reddit!
 =================================
 
-**ClashCallerBot** was made to help `/r/ClashOfClans <https://np.reddit.com/r/ClashOfClans>`_ clans
-to coordinate attacks during war from within reddit.
+**ClashCallerBot** was made to help `/r/ClashOfClans <https://np.reddit.com/r/ClashOfClans>`_ clans coordinate attacks
+during `Clan Wars <https://clashofclans.fandom.com/wiki/Clan_Wars>`_ (or `Clan War Leagues
+<https://clashofclans.fandom.com/wiki/Clan_War_Leagues>`_ from within reddit.
 
 For example, someone wants to attack base 1 and 7, but they haven't posted an update in over an hour
 and those two bases still haven't been attacked. Is it okay to attack those bases? Did your fellow
