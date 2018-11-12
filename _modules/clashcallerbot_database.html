@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>clashcallerbot_database &mdash; clashcallerbot-reddit 2.2.4 documentation</title>
+  <title>clashcallerbot_database &mdash; clashcallerbot-reddit 2.2.5 documentation</title>
   
 
   
@@ -163,13 +163,14 @@
 <span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="sd">&quot;&quot;&quot;Setup the MySQL-compatible database.</span>
 
-<span class="sd">If run directly, this module will setup the clashcallerbot database with</span>
+<span class="sd">If run directly, this module will setup the ClashCallerBot database with</span>
 <span class="sd">tables and display their format and contents. Additionally,</span>
 <span class="sd">this module provides a class with various methods for managing the</span>
 <span class="sd">MySQL-compatible database:</span>
 
 <span class="sd">* Create database and tables.</span>
 <span class="sd">* View table data and properties.</span>
+<span class="sd">* Lock tables for reading and writing.</span>
 <span class="sd">* Grant user permissions (if logged into database as root).</span>
 <span class="sd">* Add rows to tables.</span>
 <span class="sd">* Delete tables and rows.</span>
@@ -193,11 +194,13 @@
 <div class="viewcode-block" id="ClashCallerDatabase"><a class="viewcode-back" href="../clashcallerbot_database.html#clashcallerbot_database.ClashCallerDatabase">[docs]</a><span class="k">class</span> <span class="nc">ClashCallerDatabase</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Implements a class for a ClashCaller Database.</span>
 
+<span class="sd">    Acts as an object-relational mapper for mysql.connector specific to ClashCallerBot.</span>
+
 <span class="sd">    Attributes:</span>
 <span class="sd">        config_file (configparser.ConfigParser()): A configparser object with database.ini file pre-read.</span>
 <span class="sd">        root_user (bool): Specifies whether the database will be setup as root user.</span>
-<span class="sd">        mysql_connection (mysql.connect()): A mysql.connector.connect() object.</span>
-<span class="sd">        cursor (mysql.connect().cursor()): A mysql.connector.connect().cursor() object.</span>
+<span class="sd">        mysql_connection (mysql.connector.connect()): A mysql.connector.connect() object.</span>
+<span class="sd">        cursor (mysql.connector.connect().cursor()): A mysql.connector.connect().cursor() object.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">root_user</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">root_user</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>

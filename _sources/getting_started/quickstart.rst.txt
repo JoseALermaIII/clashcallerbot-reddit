@@ -7,12 +7,12 @@ is developed on various Linux distros, so :doc:`installation` is assumed to be o
 Prerequisites
 -------------
 
-:Python: **clashcallerbot-reddit** is a massive `python` script, so at least `Python 3.6`_ is needed.
+:Python: clashcallerbot-reddit is a massive `python` script, so at least `Python 3.6`_ is needed.
 
 :Pip: Configuring `python` is easiest using `pip`_. Once pip is installed, the requirements can be installed by
       running ``pip install -r requirements.txt`` from within the source code directory.
 
-:MySQL: **clashcallerbot-reddit** uses a MySQL-compatible database to store calls and to keep track of comments that
+:MySQL: clashcallerbot-reddit uses a MySQL-compatible database to store calls and to keep track of comments that
         were replied to. Either `MySQL`_ or `MariaDB`_ can be used.
 
 .. _Python 3.6: https://www.python.org/downloads/
@@ -28,7 +28,7 @@ Setup
 First, add the `bot's reddit metadata`_ to `praw-example.ini` and rename to `praw.ini`, then add the database's root and
 desired bot user credentials to `database-example.ini` and rename to `database.ini`.
 
-Next, change the following line in :doc:`../clashcallerbot_database`
+Next, change the following line in the :doc:`../clashcallerbot_database`
 
 .. literalinclude:: ../../../clashcallerbot_database.py
     :linenos:
@@ -38,7 +38,8 @@ Next, change the following line in :doc:`../clashcallerbot_database`
 
 to ``database = ClashCallerDatabase(config_file=config, root_user=True)``. This may get updated to be default later.
 
-Now, the MySQL-compatible database can be setup by running clashcallerbot_database.py directly from within terminal::
+Now, the MySQL-compatible database can be setup by running the :doc:`../clashcallerbot_database` directly from within
+terminal::
 
     python3 ./clashcallerbot_database.py
 
@@ -48,8 +49,8 @@ Now, the MySQL-compatible database can be setup by running clashcallerbot_databa
 Starting
 --------
 
-Once the database is setup, the bot can be run by calling :doc:`../clashcallerbot_search` and
-:doc:`../clashcallerbot_reply` directly from within terminal::
+Once the database is setup, the bot can be run by calling the :doc:`../clashcallerbot_search` and
+the :doc:`../clashcallerbot_reply` directly from within terminal::
 
     python3 ./clashcallerbot_search.py && python3 ./clashcallerbot_reply.py
 

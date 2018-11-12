@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>clashcallerbot_database module &mdash; clashcallerbot-reddit 2.2.4 documentation</title>
+  <title>clashcallerbot_database module &mdash; clashcallerbot-reddit 2.2.5 documentation</title>
   
 
   
@@ -99,6 +99,7 @@
 </ul>
 <p class="caption"><span class="caption-text">About</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="about/faqs.html">FAQs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="about/references.html">References</a></li>
 </ul>
 <ul>
@@ -172,13 +173,14 @@
   <div class="section" id="module-clashcallerbot_database">
 <span id="clashcallerbot-database-module"></span><h1>clashcallerbot_database module<a class="headerlink" href="#module-clashcallerbot_database" title="Permalink to this headline">¶</a></h1>
 <p>Setup the MySQL-compatible database.</p>
-<p>If run directly, this module will setup the clashcallerbot database with
+<p>If run directly, this module will setup the ClashCallerBot database with
 tables and display their format and contents. Additionally,
 this module provides a class with various methods for managing the
 MySQL-compatible database:</p>
 <ul class="simple">
 <li>Create database and tables.</li>
 <li>View table data and properties.</li>
+<li>Lock tables for reading and writing.</li>
 <li>Grant user permissions (if logged into database as root).</li>
 <li>Add rows to tables.</li>
 <li>Delete tables and rows.</li>
@@ -189,6 +191,7 @@ MySQL-compatible database:</p>
 <em class="property">class </em><code class="descclassname">clashcallerbot_database.</code><code class="descname">ClashCallerDatabase</code><span class="sig-paren">(</span><em>config_file=None</em>, <em>root_user=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clashcallerbot_database.html#ClashCallerDatabase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clashcallerbot_database.ClashCallerDatabase" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Implements a class for a ClashCaller Database.</p>
+<p>Acts as an object-relational mapper for mysql.connector specific to ClashCallerBot.</p>
 <dl class="attribute">
 <dt id="clashcallerbot_database.ClashCallerDatabase.config_file">
 <code class="descname">config_file</code><a class="headerlink" href="#clashcallerbot_database.ClashCallerDatabase.config_file" title="Permalink to this definition">¶</a></dt>
@@ -225,7 +228,7 @@ MySQL-compatible database:</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">mysql.connect()</td>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">mysql.connector.connect()</td>
 </tr>
 </tbody>
 </table>
@@ -239,7 +242,7 @@ MySQL-compatible database:</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">mysql.connect()cursor()</td>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">mysql.connector.connect()cursor()</td>
 </tr>
 </tbody>
 </table>

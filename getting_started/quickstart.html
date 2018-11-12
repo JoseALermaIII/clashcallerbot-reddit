@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Quickstart &mdash; clashcallerbot-reddit 2.2.4 documentation</title>
+  <title>Quickstart &mdash; clashcallerbot-reddit 2.2.5 documentation</title>
   
 
   
@@ -99,6 +99,7 @@
 </ul>
 <p class="caption"><span class="caption-text">About</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="../about/faqs.html">FAQs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../about/references.html">References</a></li>
 </ul>
 <ul>
@@ -177,12 +178,12 @@ is developed on various Linux distros, so <a class="reference internal" href="in
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Python:</th><td class="field-body"><strong>clashcallerbot-reddit</strong> is a massive <cite>python</cite> script, so at least <a class="reference external" href="https://www.python.org/downloads/">Python 3.6</a> is needed.</td>
+<tr class="field-odd field"><th class="field-name">Python:</th><td class="field-body">clashcallerbot-reddit is a massive <cite>python</cite> script, so at least <a class="reference external" href="https://www.python.org/downloads/">Python 3.6</a> is needed.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Pip:</th><td class="field-body">Configuring <cite>python</cite> is easiest using <a class="reference external" href="https://pip.pypa.io/en/stable/installing/">pip</a>. Once pip is installed, the requirements can be installed by
 running <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-r</span> <span class="pre">requirements.txt</span></code> from within the source code directory.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">MySQL:</th><td class="field-body"><strong>clashcallerbot-reddit</strong> uses a MySQL-compatible database to store calls and to keep track of comments that
+<tr class="field-odd field"><th class="field-name">MySQL:</th><td class="field-body">clashcallerbot-reddit uses a MySQL-compatible database to store calls and to keep track of comments that
 were replied to. Either <a class="reference external" href="https://dev.mysql.com/doc/en/installing.html">MySQL</a> or <a class="reference external" href="https://mariadb.com/kb/en/library/where-to-download-mariadb/">MariaDB</a> can be used.</td>
 </tr>
 </tbody>
@@ -193,22 +194,23 @@ were replied to. Either <a class="reference external" href="https://dev.mysql.co
 <h2>Setup<a class="headerlink" href="#setup" title="Permalink to this headline">¶</a></h2>
 <p>First, add the <a class="reference external" href="https://praw.readthedocs.io/en/latest/getting_started/configuration/prawini.html#defining-additional-sites">bot’s reddit metadata</a> to <cite>praw-example.ini</cite> and rename to <cite>praw.ini</cite>, then add the database’s root and
 desired bot user credentials to <cite>database-example.ini</cite> and rename to <cite>database.ini</cite>.</p>
-<p>Next, change the following line in <a class="reference internal" href="../clashcallerbot_database.html"><span class="doc">clashcallerbot_database module</span></a></p>
+<p>Next, change the following line in the <a class="reference internal" href="../clashcallerbot_database.html"><span class="doc">clashcallerbot_database module</span></a></p>
 <div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>462
-463</pre></div></td><td class="code"><div class="highlight"><pre><span></span>    <span class="c1"># Create the clashcaller database</span>
-    <span class="n">database</span> <span class="o">=</span> <span class="n">ClashCallerDatabase</span><span class="p">(</span><span class="n">config_file</span><span class="o">=</span><span class="n">config</span><span class="p">,</span> <span class="n">root_user</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+463</pre></div></td><td class="code"><div class="highlight"><pre><span></span>
+
 </pre></div>
 </td></tr></table></div>
 <p>to <code class="docutils literal notranslate"><span class="pre">database</span> <span class="pre">=</span> <span class="pre">ClashCallerDatabase(config_file=config,</span> <span class="pre">root_user=True)</span></code>. This may get updated to be default later.</p>
-<p>Now, the MySQL-compatible database can be setup by running clashcallerbot_database.py directly from within terminal:</p>
+<p>Now, the MySQL-compatible database can be setup by running the <a class="reference internal" href="../clashcallerbot_database.html"><span class="doc">clashcallerbot_database module</span></a> directly from within
+terminal:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="o">./</span><span class="n">clashcallerbot_database</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="starting">
 <h2>Starting<a class="headerlink" href="#starting" title="Permalink to this headline">¶</a></h2>
-<p>Once the database is setup, the bot can be run by calling <a class="reference internal" href="../clashcallerbot_search.html"><span class="doc">clashcallerbot_search module</span></a> and
-<a class="reference internal" href="../clashcallerbot_reply.html"><span class="doc">clashcallerbot_reply module</span></a> directly from within terminal:</p>
+<p>Once the database is setup, the bot can be run by calling the <a class="reference internal" href="../clashcallerbot_search.html"><span class="doc">clashcallerbot_search module</span></a> and
+the <a class="reference internal" href="../clashcallerbot_reply.html"><span class="doc">clashcallerbot_reply module</span></a> directly from within terminal:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="o">./</span><span class="n">clashcallerbot_search</span><span class="o">.</span><span class="n">py</span> <span class="o">&amp;&amp;</span> <span class="n">python3</span> <span class="o">./</span><span class="n">clashcallerbot_reply</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>

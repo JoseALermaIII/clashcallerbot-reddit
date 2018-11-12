@@ -12,13 +12,6 @@ Believe me, the list of where I have not deployed it is shorter. I mostly went w
 development, and tried putting the production version on a shared host. It has been migrated to an Amazon EC2
 instance in hopes of minimizing costs.
 
-.. toctree::
-
-   amazon_setup
-   centos_setup
-   no_root_setup
-   ubuntu_setup
-
 Ubuntu
 ^^^^^^
 
@@ -101,3 +94,10 @@ Disclaimer
 Though covered by the MIT License, I reiterate: executing code from the Internet in terminal can end up doing bad things.
 
     Read and understand all code you copy and paste before running it.
+
+.. toctree::
+
+   amazon_setup
+   centos_setup
+   no_root_setup
+   ubuntu_setup
