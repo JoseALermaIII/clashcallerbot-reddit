@@ -2,13 +2,14 @@
 # -*- coding: utf-8 -*-
 """Setup the MySQL-compatible database.
 
-If run directly, this module will setup the clashcallerbot database with
+If run directly, this module will setup the ClashCallerBot database with
 tables and display their format and contents. Additionally,
 this module provides a class with various methods for managing the
 MySQL-compatible database:
 
 * Create database and tables.
 * View table data and properties.
+* Lock tables for reading and writing.
 * Grant user permissions (if logged into database as root).
 * Add rows to tables.
 * Delete tables and rows.
@@ -32,11 +33,13 @@ logger = logging.getLogger('database')
 class ClashCallerDatabase(object):
     """Implements a class for a ClashCaller Database.
 
+    Acts as an object-relational mapper for mysql.connector specific to ClashCallerBot.
+
     Attributes:
         config_file (configparser.ConfigParser()): A configparser object with database.ini file pre-read.
         root_user (bool): Specifies whether the database will be setup as root user.
-        mysql_connection (mysql.connect()): A mysql.connector.connect() object.
-        cursor (mysql.connect().cursor()): A mysql.connector.connect().cursor() object.
+        mysql_connection (mysql.connector.connect()): A mysql.connector.connect() object.
+        cursor (mysql.connector.connect().cursor()): A mysql.connector.connect().cursor() object.
     """
     def __init__(self, config_file=None, root_user=None):
         if root_user is None:
