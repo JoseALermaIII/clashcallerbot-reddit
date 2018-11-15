@@ -1,3 +1,5 @@
+:orphan:
+
 CentOS 7.0 Setup
 ================
 

@@ -1,3 +1,5 @@
+:orphan:
+
 Ubuntu 14.04 LTS Setup
 ======================
 
