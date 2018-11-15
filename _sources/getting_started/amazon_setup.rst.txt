@@ -1,3 +1,5 @@
+:orphan:
+
 Amazon Linux AMI Setup
 ======================
 
