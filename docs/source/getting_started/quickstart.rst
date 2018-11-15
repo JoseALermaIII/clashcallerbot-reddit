@@ -32,9 +32,9 @@ Next, change the following line in the :doc:`../clashcallerbot_database`
 
 .. literalinclude:: ../../../clashcallerbot_database.py
     :linenos:
-    :lineno-start: 462
+    :lineno-start: 465
     :language: python
-    :lines: 462-463
+    :lines: 465-466
 
 to ``database = ClashCallerDatabase(config_file=config, root_user=True)``. This may get updated to be default later.
 
