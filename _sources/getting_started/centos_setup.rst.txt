@@ -60,4 +60,4 @@ Start, redirect output, and background process. ::
 
 .. tip::
 
-    Alternatively, use `systemd service <https://stackoverflow.com/a/30189540)>`_.
+    Alternatively, use `systemd service <https://stackoverflow.com/a/30189540>`_.
