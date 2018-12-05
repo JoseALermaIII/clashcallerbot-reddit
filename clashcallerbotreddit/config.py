@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 """Loads database.ini.
 
-Module loads database.ini for use in clashcallerbot_database.py,
-clashcallerbot_search.py, and clashcallerbot_reply.py.
+Module loads database.ini for use in database.py,
+search.py, and reply.py.
 
 Attributes:
     config (complex): A configparser.ConfigParser() object containing the sections

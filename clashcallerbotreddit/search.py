@@ -22,9 +22,9 @@ import time
 import urllib3.exceptions
 from socket import gaierror
 
-from clashcallerbot_database import ClashCallerDatabase
-from logging_conf import LOGGING
-from config import config
+from clashcallerbotreddit.database import ClashCallerDatabase
+from clashcallerbotreddit.logging_conf import LOGGING
+from clashcallerbotreddit.config import config
 
 # Logger
 logging.config.dictConfig(LOGGING)
