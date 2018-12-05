@@ -29,13 +29,13 @@ Check us out on `/r/ClashCallerBot <https://np.reddit.com/r/ClashCallerBot/>`_.
 Usage Information
 =================
 
-Usage can be inferred from the regular expressions used to process each comment in the :doc:`clashcallerbot_search`:
+Usage can be inferred from the regular expressions used to process each comment in the :doc:`search`:
 
-.. literalinclude:: ../../clashcallerbot_search.py
+.. literalinclude:: ../../clashcallerbotreddit/search.py
     :linenos:
-    :lineno-start: 38
+    :lineno-start: 37
     :language: python
-    :lines: 38-60
+    :lines: 37-59
 
 To sum:
 
