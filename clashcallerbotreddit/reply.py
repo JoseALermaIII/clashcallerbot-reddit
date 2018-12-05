@@ -15,8 +15,7 @@ import datetime
 import time
 
 from clashcallerbotreddit.database import ClashCallerDatabase
-from clashcallerbotreddit.logging_conf import LOGGING
-from clashcallerbotreddit.config import config
+from clashcallerbotreddit import LOGGING, config
 
 # Logger
 logging.config.dictConfig(LOGGING)

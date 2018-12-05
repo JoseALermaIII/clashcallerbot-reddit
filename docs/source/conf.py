@@ -19,7 +19,7 @@ import sys
 
 sys.path.insert(0, os.path.abspath('../..'))
 
-from clashcallerbotreddit.version import __version__
+from clashcallerbotreddit import __version__
 
 # -- Project information -----------------------------------------------------
 

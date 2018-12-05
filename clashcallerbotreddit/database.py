@@ -21,8 +21,7 @@ import mysql.connector as mysql
 import logging.config
 import datetime
 
-from clashcallerbotreddit.logging_conf import LOGGING
-from clashcallerbotreddit.config import config
+from clashcallerbotreddit import LOGGING, config
 
 # Logger
 logging.config.dictConfig(LOGGING)
