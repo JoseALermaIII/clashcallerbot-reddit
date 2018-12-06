@@ -471,14 +471,16 @@ def main():
     database.select_database()
 
     # Show the tables
-    print(database.get_tables())
+    tables = database.get_tables()
+    print(tables)
 
-    # Create message table
+    # Create message table, if it doesn't exist
     # TODO: Store comment.id instead of permalink?
-    col = 'id INT UNSIGNED NOT NULL AUTO_INCREMENT, ' \
-          'permalink VARCHAR(100), message VARCHAR(100), new_date DATETIME, ' \
-          'userID VARCHAR(20), PRIMARY KEY(id)'
-    database.create_table('message_data', col)
+    if not tables:
+        col = 'id INT UNSIGNED NOT NULL AUTO_INCREMENT, ' \
+              'permalink VARCHAR(100), message VARCHAR(100), new_date DATETIME, ' \
+              'userID VARCHAR(20), PRIMARY KEY(id)'
+        database.create_table('message_data', col)
 
     # Describe message table
     print(database.describe_table('message_data'))
@@ -486,11 +488,12 @@ def main():
     # Fetch rows from message_data as tuple of tuples
     print(database.get_rows('message_data'))
 
-    # Create comment_list table
+    # Create comment_list table, if it doesn't exist
     # TODO: Add last run datetime to table for trimming
-    col = 'id MEDIUMINT NOT NULL AUTO_INCREMENT, comment_ids VARCHAR(35), ' \
-          'PRIMARY KEY(id)'
-    database.create_table('comment_list', col)
+    if not tables:
+        col = 'id MEDIUMINT NOT NULL AUTO_INCREMENT, comment_ids VARCHAR(35), ' \
+              'PRIMARY KEY(id)'
+        database.create_table('comment_list', col)
 
     # Describe comment list table
     print(database.describe_table('comment_list'))
@@ -498,8 +501,9 @@ def main():
     # Fetch rows from comment_list as tuple of tuples
     print(database.get_rows('comment_list'))
 
-    # Grant database bot permissions
-    database.grant_permissions()
+    # Grant database bot permissions, if root
+    if database._root_user:  # Direct access of protected member, but only to read. Should be okay...?
+        database.grant_permissions()
 
     # Close database connections
     database.close_connections()
