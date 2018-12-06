@@ -62,6 +62,9 @@ class ClashCallerDatabase(object):
         self.mysql_connection = None
         self.cursor = None
 
+        # Then open connections
+        self.open_connections()
+
     def __repr__(self):
         return f'ClashCallerDatabase(configparser.ConfigParser(\'database.ini\'), {self._root_user})'
 
