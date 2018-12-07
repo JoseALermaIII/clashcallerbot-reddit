@@ -19,7 +19,8 @@ with open(module_dir + 'README.rst', 'r') as readf:
 setup(
     name='clashcallerbot-reddit',
     version=version,
-    packages=find_packages(),
+    package_dir={'': 'clashcallerbotreddit'},
+    packages=find_packages('clashcallerbotreddit'),
     scripts=['reply.py', 'search.py', 'database.py'],
 
     install_requires=requirements,
