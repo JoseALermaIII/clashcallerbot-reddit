@@ -14,12 +14,19 @@ Python
 
 * `re - Regular expression operations`_
 * `configparser - Configuration file parser`_
+* `Python Packages and You`_
+* `Building and Distributing Packages with Setuptools`_
+* `os.path - Common pathname manipulations`_
 
 .. _logging.config - Logging configuration: https://docs.python.org/3.6/library/logging.config.html
 .. _datetime - Basic date and time types: https://docs.python.org/3/library/datetime.html
 .. _strftime() and strptime() Behavior: https://docs.python.org/3/library/datetime.html#strftime-strptime-behavior
 .. _re - Regular expression operations: https://docs.python.org/3/library/re.html
 .. _configparser - Configuration file parser: https://docs.python.org/3/library/configparser.html
+.. _Python Packages and You: http://blog.habnab.it/blog/2013/07/21/python-packages-and-you/
+.. _Building and Distributing Packages with Setuptools:
+    https://setuptools.readthedocs.io/en/latest/setuptools.html#basic-use
+.. _os.path - Common pathname manipulations: https://docs.python.org/3/library/os.path.html
 
 PRAW
 ----
