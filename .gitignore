@@ -219,7 +219,7 @@ pip-log.txt
 
 #Misc
 /oauth.ini
-/clashcallerbotreddit/praw.ini
+/praw.ini
 *.log.*
 /clashcallerbotreddit/database.ini
 /clashcallerbotlog.txt
