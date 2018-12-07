@@ -18,25 +18,25 @@ logfile="./clashcallerbotlog.txt"
 case "$(ps -ef | grep '[p]ython reply.py' | wc -l)" in
 
 0) echo "Restarting reply.py: $(date)" >> $logfile
-   nohup python ./clashcallerbotreddit/reply.py > /dev/null 2>&1 &
+   nohup python -m clashcallerbotreddit.reply > /dev/null 2>&1 &
    ;;
 1) # Normal
    ;;
 *) echo "Remove duplicate reply.py: $(date)" >> $logfile
    kill $(ps aux | grep '[p]ython reply.py' | awk '{print $2}')
-   nohup python ./clashcallerbotreddit/reply.py > /dev/null 2>&1 &
+   nohup python -m clashcallerbotreddit.reply > /dev/null 2>&1 &
    ;;
 esac
 
 case "$(ps -ef | grep '[p]ython search.py' | wc -l)" in
 
 0) echo "Restarting search.py: $(date)" >> $logfile
-   nohup python ./clashcallerbotreddit/search.py > /dev/null 2>&1 &
+   nohup python -m clashcallerbotreddit.search > /dev/null 2>&1 &
    ;;
 1) # Normal
    ;;
 *) echo "Remove duplicate search.py: $(date)" >> $logfile
    kill $(ps aux | grep '[p]ython search.py' | awk '{print $2}')
-   nohup python search.py > /dev/null 2>&1 &
+   nohup python -m clashcallerbotreddit.search > /dev/null 2>&1 &
    ;;
 esac
