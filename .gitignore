@@ -221,5 +221,5 @@ pip-log.txt
 /oauth.ini
 /praw.ini
 *.log.*
-/clashcallerbotreddit/database.ini
+/database.ini
 /clashcallerbotlog.txt
