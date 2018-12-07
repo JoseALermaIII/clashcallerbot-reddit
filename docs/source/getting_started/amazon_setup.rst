@@ -126,8 +126,8 @@ Once all relevant files have been added, the bot can be started, output redirect
 and process put in the background. ::
 
     source clashcallerbot-reddit/bin/activate    # set virtual environment, if needed
-    nohup python3 clashcallerbot_reply.py > /dev/null 2>&1 &
-    nohup python3 clashcallerbot_search.py > /dev/null 2>&1 &
+    nohup python3 -m clashcallerbotreddit.reply > /dev/null 2>&1 &
+    nohup python3 -m clashcallerbotreddit.search > /dev/null 2>&1 &
 
 .. tip::
 

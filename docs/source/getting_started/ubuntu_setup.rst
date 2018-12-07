@@ -49,6 +49,6 @@ Now that MySQL/MariaDB is set up, install more dependencies. ::
 Start, redirect output, and background process. ::
 
     source clashcallerbot-reddit/bin/activate    # set virtual environment, if needed
-    nohup python3 clashcallerbot_reply.py > /dev/null 2>&1 &
-    nohup python3 clashcallerbot_search.py > /dev/null 2>&1 &
+    nohup python3 -m clashcallerbotreddit.reply > /dev/null 2>&1 &
+    nohup python3 -m clashcallerbotreddit.search > /dev/null 2>&1 &
 

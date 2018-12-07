@@ -47,8 +47,8 @@ Now that MySQL is setup, install more dependencies. ::
 Start, redirect output, and background process. ::
 
     source clashcallerbot-reddit/bin/activate    # set virtual environment, if needed
-    nohup python clashcallerbot_reply.py > /dev/null 2>&1 &
-    nohup python clashcallerbot_search.py > /dev/null 2>&1 &
+    nohup python -m clashcallerbotreddit.reply > /dev/null 2>&1 &
+    nohup python -m clashcallerbotreddit.search > /dev/null 2>&1 &
 
 .. tip::
 
