@@ -38,7 +38,7 @@ setup(
     long_description_content_type='text/x-rst',
     license='MIT',
     keywords='reddit PRAW ClashOfClans',
-    url='http://JoseALerma.com/#ClashCallerBot',
+    url='http://clashcallerbotreddit.JoseALerma.com/',
     project_urls={
         'Documentation': 'https://josealermaiii.github.io/clashcallerbot-reddit',
         'Source Code': 'https://github.com/JoseALermaIII/clashcallerbot-reddit',
