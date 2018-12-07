@@ -8,8 +8,7 @@ Contains constant variables used in source files.
 
 Attributes:
     __version__ (str): String with version number using the `Semantic Versioning Scheme`_
-    config (complex): A configparser.ConfigParser() object containing the sections
-        inside database.ini
+    config (configparser.ConfigParser()): A configparser object containing the sections inside database.ini
     module_dir (str): String with the absolute path of the module's directory.
     locations (list): List containing all possible paths of database.ini
     LOGGING (dict): Dictionary containing definitions for the loggers, handlers,
@@ -29,7 +28,8 @@ __version__ = '2.2.8'
 # Loads database.ini for use in database.py, search.py, and reply.py.
 config = configparser.ConfigParser()
 module_dir = os.path.dirname(sys.modules[__name__].__file__)
-locations = [os.path.join(module_dir, 'database.ini'), 'database.ini']
+package_dir = os.path.split(module_dir)[0] + '/'
+locations = [os.path.join(package_dir, 'database.ini'), 'database.ini']
 config.read(locations)
 
 # Defines dictionary for logging.config.dictConfig()
