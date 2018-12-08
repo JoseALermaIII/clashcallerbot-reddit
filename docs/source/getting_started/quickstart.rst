@@ -80,4 +80,4 @@ A bash script is also provided for updating and can be run directly from within 
 
     * Don't forget to set executable mode with ``chmod +x ./redownload.sh``.
     * Script assumes files are all in same directory and that it is run in a :doc:`no_root_setup`.
-    * The ``-f`` switch and ``> /dev/null 2>&1`` silence outputs to certain degrees.
+    * The ``-f`` and ``-q`` switch silence outputs to certain degrees.
