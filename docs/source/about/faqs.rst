@@ -52,7 +52,7 @@ No, they don't. Everyone needs to see what you called so they know not to attack
 What options does it have?
 --------------------------
 
-Usage can be inferred from the regular expressions used to process each comment in the :mod:`clashcallerbotreddit.search`:
+Usage can be inferred from the regular expressions used to process each comment in :mod:`clashcallerbotreddit.search`:
 
 .. literalinclude:: ../../../clashcallerbotreddit/search.py
     :linenos:
