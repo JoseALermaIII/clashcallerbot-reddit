@@ -21,7 +21,7 @@ setup(
     version=version,
     package_dir={'': 'clashcallerbotreddit'},
     packages=find_packages('clashcallerbotreddit'),
-    scripts=['reply.py', 'search.py', 'database.py'],
+    scripts=['clashcallerbotreddit/reply.py', 'clashcallerbotreddit/search.py', 'clashcallerbotreddit/database.py'],
 
     install_requires=requirements,
 
