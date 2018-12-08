@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Welcome to clashcallerbot-reddit! &mdash; clashcallerbot-reddit 2.2.8 documentation</title>
+  <title>Welcome to clashcallerbot-reddit! &mdash; clashcallerbot-reddit 2.3.0 documentation</title>
   
 
   
@@ -57,7 +57,7 @@
             
             
               <div class="version">
-                2.2
+                2.3
               </div>
             
           
@@ -88,7 +88,7 @@
 </ul>
 <p class="caption"><span class="caption-text">API Reference</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="modules.html">clashcallerbot-reddit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">clashcallerbotreddit</a></li>
 </ul>
 <p class="caption"><span class="caption-text">About</span></p>
 <ul>
@@ -178,8 +178,9 @@ It’s a sweet (as in awesome) little program.</p>
 </div>
 <div class="section" id="usage-information">
 <h1>Usage Information<a class="headerlink" href="#usage-information" title="Permalink to this headline">¶</a></h1>
-<p>Usage can be inferred from the regular expressions used to process each comment in the <a class="reference internal" href="clashcallerbot_search.html"><span class="doc">clashcallerbot_search module</span></a>:</p>
-<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>38
+<p>Usage can be inferred from the regular expressions used to process each comment in <a class="reference internal" href="clashcallerbotreddit.html#module-clashcallerbotreddit.search" title="clashcallerbotreddit.search"><code class="xref py py-mod docutils literal notranslate"><span class="pre">clashcallerbotreddit.search</span></code></a>:</p>
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>37
+38
 39
 40
 41
@@ -200,8 +201,7 @@ It’s a sweet (as in awesome) little program.</p>
 56
 57
 58
-59
-60</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1"># Regular expressions</span>
+59</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1"># Regular expressions</span>
 <span class="n">clashcaller_re</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
 <span class="s1">                            [!|\s]?             # prefix ! or space (optional)</span>
 <span class="s1">                            [C|c]lash[C|c]aller # lower or camelcase ClashCaller (required)</span>
@@ -241,17 +241,25 @@ digit number. Case is ignored. Maximum message length is 100 characters to save 
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="getting_started/quickstart.html">Quickstart</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="getting_started/quickstart.html#prerequisites">Prerequisites</a></li>
-<li class="toctree-l2"><a class="reference internal" href="getting_started/quickstart.html#setup">Setup</a></li>
-<li class="toctree-l2"><a class="reference internal" href="getting_started/quickstart.html#starting">Starting</a></li>
-<li class="toctree-l2"><a class="reference internal" href="getting_started/quickstart.html#updating">Updating</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started/quickstart.html#python-installation">Python Installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="getting_started/quickstart.html#setup">Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="getting_started/quickstart.html#starting">Starting</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started/quickstart.html#running-scripts-directly">Running Scripts Directly</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="getting_started/quickstart.html#id1">Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="getting_started/quickstart.html#id2">Starting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="getting_started/quickstart.html#updating">Updating</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="getting_started/installation.html">Installation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="getting_started/installation.html#deployment-options">Deployment Options</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="getting_started/installation.html#ubuntu">Ubuntu</a></li>
-<li class="toctree-l3"><a class="reference internal" href="getting_started/installation.html#centos">CentOS</a></li>
-<li class="toctree-l3"><a class="reference internal" href="getting_started/installation.html#no-root">No Root</a></li>
-<li class="toctree-l3"><a class="reference internal" href="getting_started/installation.html#amazon-ec2">Amazon EC2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="getting_started/ubuntu_setup.html">Ubuntu 14.04 LTS Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="getting_started/centos_setup.html">CentOS 7.0 Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="getting_started/no_root_setup.html">No Root Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="getting_started/amazon_setup.html">Amazon Linux AMI Setup</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="getting_started/installation.html#building-documentation">Building Documentation</a></li>
@@ -263,11 +271,8 @@ digit number. Case is ignored. Maximum message length is 100 characters to save 
 <div class="toctree-wrapper compound">
 <p class="caption"><span class="caption-text">API Reference</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="modules.html">clashcallerbot-reddit</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="clashcallerbot_database.html">clashcallerbot_database module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="clashcallerbot_reply.html">clashcallerbot_reply module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="clashcallerbot_search.html">clashcallerbot_search module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="logging_conf.html">logging_conf module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">clashcallerbotreddit</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="clashcallerbotreddit.html">clashcallerbotreddit package</a></li>
 </ul>
 </li>
 </ul>

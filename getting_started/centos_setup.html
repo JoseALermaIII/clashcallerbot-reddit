@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>CentOS 7.0 Setup &mdash; clashcallerbot-reddit 2.2.8 documentation</title>
+  <title>CentOS 7.0 Setup &mdash; clashcallerbot-reddit 2.3.0 documentation</title>
   
 
   
@@ -27,7 +27,9 @@
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" /> 
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="No Root Setup" href="no_root_setup.html" />
+    <link rel="prev" title="Ubuntu 14.04 LTS Setup" href="ubuntu_setup.html" /> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
@@ -56,7 +58,7 @@
             
             
               <div class="version">
-                2.2
+                2.3
               </div>
             
           
@@ -81,13 +83,24 @@
             
             
               <p class="caption"><span class="caption-text">Getting Started</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
-<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="installation.html">Installation</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="installation.html#deployment-options">Deployment Options</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="ubuntu_setup.html">Ubuntu 14.04 LTS Setup</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">CentOS 7.0 Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="no_root_setup.html">No Root Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="amazon_setup.html">Amazon Linux AMI Setup</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#building-documentation">Building Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#disclaimer">Disclaimer</a></li>
+</ul>
+</li>
 </ul>
 <p class="caption"><span class="caption-text">API Reference</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../modules.html">clashcallerbot-reddit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">clashcallerbotreddit</a></li>
 </ul>
 <p class="caption"><span class="caption-text">About</span></p>
 <ul>
@@ -141,6 +154,8 @@
     
       <li><a href="../index.html">Docs</a> &raquo;</li>
         
+          <li><a href="installation.html">Installation</a> &raquo;</li>
+        
       <li>CentOS 7.0 Setup</li>
     
     
@@ -162,6 +177,7 @@
             
   <div class="section" id="centos-7-0-setup">
 <h1>CentOS 7.0 Setup<a class="headerlink" href="#centos-7-0-setup" title="Permalink to this headline">¶</a></h1>
+<p>For the open beta, I went with an OS that is often available for production environments.</p>
 <p>How you want CentOS installed is your choice. I went with the <a class="reference external" href="https://wiki.centos.org/Download">xxx-Minimal.iso</a> so
 that it would be as lean as possible (since I planned for it to be in the cloud) and would only be as large as necessary
 to run the bot. Installation settings are also up to you (security, networking, user accounts, etc.). Since it is a
@@ -211,8 +227,8 @@ minimal install, there is no <abbr title="Graphical User Interface">GUI</abbr> a
 </div>
 <p>Start, redirect output, and background process.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">source</span> <span class="n">clashcallerbot</span><span class="o">-</span><span class="n">reddit</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">activate</span>    <span class="c1"># set virtual environment, if needed</span>
-<span class="n">nohup</span> <span class="n">python</span> <span class="n">clashcallerbot_reply</span><span class="o">.</span><span class="n">py</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">null</span> <span class="mi">2</span><span class="o">&gt;&amp;</span><span class="mi">1</span> <span class="o">&amp;</span>
-<span class="n">nohup</span> <span class="n">python</span> <span class="n">clashcallerbot_search</span><span class="o">.</span><span class="n">py</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">null</span> <span class="mi">2</span><span class="o">&gt;&amp;</span><span class="mi">1</span> <span class="o">&amp;</span>
+<span class="n">nohup</span> <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">clashcallerbotreddit</span><span class="o">.</span><span class="n">reply</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">null</span> <span class="mi">2</span><span class="o">&gt;&amp;</span><span class="mi">1</span> <span class="o">&amp;</span>
+<span class="n">nohup</span> <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">clashcallerbotreddit</span><span class="o">.</span><span class="n">search</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">null</span> <span class="mi">2</span><span class="o">&gt;&amp;</span><span class="mi">1</span> <span class="o">&amp;</span>
 </pre></div>
 </div>
 <div class="admonition tip">
@@ -226,6 +242,15 @@ minimal install, there is no <abbr title="Graphical User Interface">GUI</abbr> a
            
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="no_root_setup.html" class="btn btn-neutral float-right" title="No Root Setup" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="ubuntu_setup.html" class="btn btn-neutral" title="Ubuntu 14.04 LTS Setup" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>FAQs &mdash; clashcallerbot-reddit 2.2.8 documentation</title>
+  <title>FAQs &mdash; clashcallerbot-reddit 2.3.0 documentation</title>
   
 
   
@@ -29,7 +29,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="References" href="references.html" />
-    <link rel="prev" title="logging_conf module" href="../logging_conf.html" /> 
+    <link rel="prev" title="clashcallerbotreddit package" href="../clashcallerbotreddit.html" /> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                2.2
+                2.3
               </div>
             
           
@@ -89,7 +89,7 @@
 </ul>
 <p class="caption"><span class="caption-text">API Reference</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../modules.html">clashcallerbot-reddit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">clashcallerbotreddit</a></li>
 </ul>
 <p class="caption"><span class="caption-text">About</span></p>
 <ul class="current">
@@ -210,8 +210,9 @@ So feel free to use it in long winded posts but make sure it’s after to avoid 
 </div>
 <div class="section" id="what-options-does-it-have">
 <h2>What options does it have?<a class="headerlink" href="#what-options-does-it-have" title="Permalink to this headline">¶</a></h2>
-<p>Usage can be inferred from the regular expressions used to process each comment in the <a class="reference internal" href="../clashcallerbot_search.html"><span class="doc">clashcallerbot_search module</span></a>:</p>
-<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>38
+<p>Usage can be inferred from the regular expressions used to process each comment in <a class="reference internal" href="../clashcallerbotreddit.html#module-clashcallerbotreddit.search" title="clashcallerbotreddit.search"><code class="xref py py-mod docutils literal notranslate"><span class="pre">clashcallerbotreddit.search</span></code></a>:</p>
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>37
+38
 39
 40
 41
@@ -232,8 +233,7 @@ So feel free to use it in long winded posts but make sure it’s after to avoid 
 56
 57
 58
-59
-60</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1"># Regular expressions</span>
+59</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1"># Regular expressions</span>
 <span class="n">clashcaller_re</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
 <span class="s1">                            [!|\s]?             # prefix ! or space (optional)</span>
 <span class="s1">                            [C|c]lash[C|c]aller # lower or camelcase ClashCaller (required)</span>
@@ -320,7 +320,7 @@ original parent comment.</p>
         <a href="references.html" class="btn btn-neutral float-right" title="References" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="../logging_conf.html" class="btn btn-neutral" title="logging_conf module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="../clashcallerbotreddit.html" class="btn btn-neutral" title="clashcallerbotreddit package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

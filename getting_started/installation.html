@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Installation &mdash; clashcallerbot-reddit 2.2.8 documentation</title>
+  <title>Installation &mdash; clashcallerbot-reddit 2.3.0 documentation</title>
   
 
   
@@ -28,7 +28,7 @@
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="clashcallerbot-reddit" href="../modules.html" />
+    <link rel="next" title="Ubuntu 14.04 LTS Setup" href="ubuntu_setup.html" />
     <link rel="prev" title="Quickstart" href="quickstart.html" /> 
 
   
@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                2.2
+                2.3
               </div>
             
           
@@ -87,10 +87,10 @@
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#deployment-options">Deployment Options</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#ubuntu">Ubuntu</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#centos">CentOS</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#no-root">No Root</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#amazon-ec2">Amazon EC2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ubuntu_setup.html">Ubuntu 14.04 LTS Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="centos_setup.html">CentOS 7.0 Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="no_root_setup.html">No Root Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="amazon_setup.html">Amazon Linux AMI Setup</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#building-documentation">Building Documentation</a></li>
@@ -100,7 +100,7 @@
 </ul>
 <p class="caption"><span class="caption-text">API Reference</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../modules.html">clashcallerbot-reddit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">clashcallerbotreddit</a></li>
 </ul>
 <p class="caption"><span class="caption-text">About</span></p>
 <ul>
@@ -183,28 +183,13 @@ AMI on AWS. If you are using a different OS, your mileage may vary.</p>
 <p>Believe me, the list of where I have not deployed it is shorter. I mostly went with virtual machines for the
 development, and tried putting the production version on a shared host. It has been migrated to an Amazon EC2
 instance in hopes of minimizing costs.</p>
-<div class="section" id="ubuntu">
-<h3>Ubuntu<a class="headerlink" href="#ubuntu" title="Permalink to this headline">¶</a></h3>
-<p>For the open alpha, I went with an OS that is convenient (need something? There’s a package for that) as a proof
-of concept and debugging environment.</p>
-<p><a class="reference internal" href="ubuntu_setup.html"><span class="doc">Ubuntu 14.04 LTS Setup</span></a></p>
-</div>
-<div class="section" id="centos">
-<h3>CentOS<a class="headerlink" href="#centos" title="Permalink to this headline">¶</a></h3>
-<p>For the open beta, I went with an OS that is often available for production environments.</p>
-<p><a class="reference internal" href="centos_setup.html"><span class="doc">CentOS 7.0 Setup</span></a></p>
-</div>
-<div class="section" id="no-root">
-<h3>No Root<a class="headerlink" href="#no-root" title="Permalink to this headline">¶</a></h3>
-<p>For my first attempt at a production version, I got a shared host running CloudLinux OS that does not provide
-root access, but has both Python and MySQL pre-installed.</p>
-<p><a class="reference internal" href="no_root_setup.html"><span class="doc">No Root Setup</span></a></p>
-</div>
-<div class="section" id="amazon-ec2">
-<h3>Amazon EC2<a class="headerlink" href="#amazon-ec2" title="Permalink to this headline">¶</a></h3>
-<p>For what I hope is the final production version, I set up an Amazon EC2 instance running Amazon Linux AMI.
-I particularly like that it has pip and python pre-installed.</p>
-<p><a class="reference internal" href="amazon_setup.html"><span class="doc">Amazon Linux AMI Setup</span></a></p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="ubuntu_setup.html">Ubuntu 14.04 LTS Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="centos_setup.html">CentOS 7.0 Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="no_root_setup.html">No Root Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="amazon_setup.html">Amazon Linux AMI Setup</a></li>
+</ul>
 </div>
 </div>
 <div class="section" id="building-documentation">
@@ -261,7 +246,7 @@ version of the documentation is available at <a class="reference external" href=
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../modules.html" class="btn btn-neutral float-right" title="clashcallerbot-reddit" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="ubuntu_setup.html" class="btn btn-neutral float-right" title="Ubuntu 14.04 LTS Setup" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="quickstart.html" class="btn btn-neutral" title="Quickstart" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

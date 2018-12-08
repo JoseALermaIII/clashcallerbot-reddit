@@ -1,7 +1,8 @@
-:orphan:
-
 Amazon Linux AMI Setup
 ======================
+
+For what I hope is the final production version, I set up an Amazon EC2 instance running Amazon Linux AMI.
+I particularly like that it has pip and python pre-installed.
 
 `Amazon Linux AMI <https://aws.amazon.com/amazon-linux-ami/>`_ is a fork of
 :abbr:`RHEL6 (Red Hat Enterprise Linux version 6)` made to run on the
@@ -126,8 +127,8 @@ Once all relevant files have been added, the bot can be started, output redirect
 and process put in the background. ::
 
     source clashcallerbot-reddit/bin/activate    # set virtual environment, if needed
-    nohup python3 clashcallerbot_reply.py > /dev/null 2>&1 &
-    nohup python3 clashcallerbot_search.py > /dev/null 2>&1 &
+    nohup python3 -m clashcallerbotreddit.reply > /dev/null 2>&1 &
+    nohup python3 -m clashcallerbotreddit.search > /dev/null 2>&1 &
 
 .. tip::
 

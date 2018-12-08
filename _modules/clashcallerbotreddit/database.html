@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>clashcallerbot_database &mdash; clashcallerbot-reddit 2.2.8 documentation</title>
+  <title>clashcallerbotreddit.database &mdash; clashcallerbot-reddit 2.3.0 documentation</title>
   
 
   
@@ -24,13 +24,13 @@
 
   
 
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" /> 
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
 
   
-  <script src="../_static/js/modernizr.min.js"></script>
+  <script src="../../_static/js/modernizr.min.js"></script>
 
 </head>
 
@@ -46,7 +46,7 @@
           
 
           
-            <a href="../index.html" class="icon icon-home"> clashcallerbot-reddit
+            <a href="../../index.html" class="icon icon-home"> clashcallerbot-reddit
           
 
           
@@ -56,14 +56,14 @@
             
             
               <div class="version">
-                2.2
+                2.3
               </div>
             
           
 
           
 <div role="search">
-  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
@@ -82,20 +82,20 @@
             
               <p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../getting_started/quickstart.html">Quickstart</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../getting_started/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started/installation.html">Installation</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API Reference</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../modules.html">clashcallerbot-reddit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">clashcallerbotreddit</a></li>
 </ul>
 <p class="caption"><span class="caption-text">About</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../about/faqs.html">FAQs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../about/references.html">References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../about/faqs.html">FAQs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../about/references.html">References</a></li>
 </ul>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../genindex.html">Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../genindex.html">Index</a></li>
 </ul>
 
             
@@ -110,7 +110,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../index.html">clashcallerbot-reddit</a>
+          <a href="../../index.html">clashcallerbot-reddit</a>
         
       </nav>
 
@@ -139,11 +139,11 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../index.html">Docs</a> &raquo;</li>
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
         
-          <li><a href="index.html">Module code</a> &raquo;</li>
+          <li><a href="../index.html">Module code</a> &raquo;</li>
         
-      <li>clashcallerbot_database</li>
+      <li>clashcallerbotreddit.database</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -158,7 +158,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>Source code for clashcallerbot_database</h1><div class="highlight"><pre>
+  <h1>Source code for clashcallerbotreddit.database</h1><div class="highlight"><pre>
 <span></span><span class="ch">#! python3</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="sd">&quot;&quot;&quot;Setup the MySQL-compatible database.</span>
@@ -182,8 +182,7 @@
 <span class="kn">import</span> <span class="nn">logging.config</span>
 <span class="kn">import</span> <span class="nn">datetime</span>
 
-<span class="kn">from</span> <span class="nn">logging_conf</span> <span class="k">import</span> <span class="n">LOGGING</span>
-<span class="kn">from</span> <span class="nn">config</span> <span class="k">import</span> <span class="n">config</span>
+<span class="kn">from</span> <span class="nn">clashcallerbotreddit</span> <span class="k">import</span> <span class="n">LOGGING</span><span class="p">,</span> <span class="n">config</span>
 
 <span class="c1"># Logger</span>
 <span class="n">logging</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">dictConfig</span><span class="p">(</span><span class="n">LOGGING</span><span class="p">)</span>
@@ -191,7 +190,7 @@
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;database&#39;</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="ClashCallerDatabase"><a class="viewcode-back" href="../clashcallerbot_database.html#clashcallerbot_database.ClashCallerDatabase">[docs]</a><span class="k">class</span> <span class="nc">ClashCallerDatabase</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="ClashCallerDatabase"><a class="viewcode-back" href="../../clashcallerbotreddit.html#clashcallerbotreddit.database.ClashCallerDatabase">[docs]</a><span class="k">class</span> <span class="nc">ClashCallerDatabase</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Implements a class for a ClashCaller Database.</span>
 
 <span class="sd">    Acts as an object-relational mapper for mysql.connector specific to ClashCallerBot.</span>
@@ -224,13 +223,16 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">mysql_connection</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span> <span class="o">=</span> <span class="kc">None</span>
 
+        <span class="c1"># Then open connections</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">open_connections</span><span class="p">()</span>
+
     <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">f</span><span class="s1">&#39;ClashCallerDatabase(configparser.ConfigParser(</span><span class="se">\&#39;</span><span class="s1">database.ini</span><span class="se">\&#39;</span><span class="s1">), </span><span class="si">{self._root_user}</span><span class="s1">)&#39;</span>
 
     <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">f</span><span class="s1">&#39;Logged into database: </span><span class="si">{self._db_name}</span><span class="s1"> as: </span><span class="si">{self._db_user}</span><span class="s1">&#39;</span>
 
-<div class="viewcode-block" id="ClashCallerDatabase.open_connections"><a class="viewcode-back" href="../clashcallerbot_database.html#clashcallerbot_database.ClashCallerDatabase.open_connections">[docs]</a>    <span class="k">def</span> <span class="nf">open_connections</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<div class="viewcode-block" id="ClashCallerDatabase.open_connections"><a class="viewcode-back" href="../../clashcallerbotreddit.html#clashcallerbotreddit.database.ClashCallerDatabase.open_connections">[docs]</a>    <span class="k">def</span> <span class="nf">open_connections</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Open database connections.</span>
 
 <span class="sd">        Method makes database connection and cursor.</span>
@@ -247,7 +249,7 @@
             <span class="k">return</span> <span class="kc">False</span>
         <span class="k">return</span> <span class="kc">True</span></div>
 
-<div class="viewcode-block" id="ClashCallerDatabase.create_database"><a class="viewcode-back" href="../clashcallerbot_database.html#clashcallerbot_database.ClashCallerDatabase.create_database">[docs]</a>    <span class="k">def</span> <span class="nf">create_database</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<div class="viewcode-block" id="ClashCallerDatabase.create_database"><a class="viewcode-back" href="../../clashcallerbotreddit.html#clashcallerbotreddit.database.ClashCallerDatabase.create_database">[docs]</a>    <span class="k">def</span> <span class="nf">create_database</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Create database.</span>
 
 <span class="sd">        Method creates database with database name.</span>
@@ -262,7 +264,7 @@
             <span class="k">return</span> <span class="kc">False</span>
         <span class="k">return</span> <span class="kc">True</span></div>
 
-<div class="viewcode-block" id="ClashCallerDatabase.select_database"><a class="viewcode-back" href="../clashcallerbot_database.html#clashcallerbot_database.ClashCallerDatabase.select_database">[docs]</a>    <span class="k">def</span> <span class="nf">select_database</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<div class="viewcode-block" id="ClashCallerDatabase.select_database"><a class="viewcode-back" href="../../clashcallerbotreddit.html#clashcallerbotreddit.database.ClashCallerDatabase.select_database">[docs]</a>    <span class="k">def</span> <span class="nf">select_database</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Select database for command execution.</span>
 
 <span class="sd">        Method selects database within MySQL for command execution.</span>
@@ -277,7 +279,7 @@
             <span class="k">return</span> <span class="kc">False</span>
         <span class="k">return</span> <span class="kc">True</span></div>
 
-<div class="viewcode-block" id="ClashCallerDatabase.get_tables"><a class="viewcode-back" href="../clashcallerbot_database.html#clashcallerbot_database.ClashCallerDatabase.get_tables">[docs]</a>    <span class="k">def</span> <span class="nf">get_tables</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<div class="viewcode-block" id="ClashCallerDatabase.get_tables"><a class="viewcode-back" href="../../clashcallerbotreddit.html#clashcallerbotreddit.database.ClashCallerDatabase.get_tables">[docs]</a>    <span class="k">def</span> <span class="nf">get_tables</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Return table list of database.</span>
 
 <span class="sd">        Method returns a list with the names of the tables.</span>
@@ -297,7 +299,7 @@
             <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;get_tables: </span><span class="si">{err}</span><span class="s1">&#39;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">table_names</span></div>
 
-<div class="viewcode-block" id="ClashCallerDatabase.create_table"><a class="viewcode-back" href="../clashcallerbot_database.html#clashcallerbot_database.ClashCallerDatabase.create_table">[docs]</a>    <span class="k">def</span> <span class="nf">create_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tbl_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">cols</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<div class="viewcode-block" id="ClashCallerDatabase.create_table"><a class="viewcode-back" href="../../clashcallerbotreddit.html#clashcallerbotreddit.database.ClashCallerDatabase.create_table">[docs]</a>    <span class="k">def</span> <span class="nf">create_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tbl_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">cols</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Create table in database.</span>
 
 <span class="sd">        Method creates table in database with given name and specifications.</span>
@@ -327,7 +329,7 @@
             <span class="k">return</span> <span class="kc">False</span>
         <span class="k">return</span> <span class="kc">True</span></div>
 
-<div class="viewcode-block" id="ClashCallerDatabase.describe_table"><a class="viewcode-back" href="../clashcallerbot_database.html#clashcallerbot_database.ClashCallerDatabase.describe_table">[docs]</a>    <span class="k">def</span> <span class="nf">describe_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tbl_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<div class="viewcode-block" id="ClashCallerDatabase.describe_table"><a class="viewcode-back" href="../../clashcallerbotreddit.html#clashcallerbotreddit.database.ClashCallerDatabase.describe_table">[docs]</a>    <span class="k">def</span> <span class="nf">describe_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tbl_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Gets description of table.</span>
 
 <span class="sd">        Method returns a list describing the structure of the given table.</span>
@@ -347,7 +349,7 @@
             <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;describe_table: </span><span class="si">{err}</span><span class="s1">&#39;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">description</span></div>
 
-<div class="viewcode-block" id="ClashCallerDatabase.get_rows"><a class="viewcode-back" href="../clashcallerbot_database.html#clashcallerbot_database.ClashCallerDatabase.get_rows">[docs]</a>    <span class="k">def</span> <span class="nf">get_rows</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tbl_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
+<div class="viewcode-block" id="ClashCallerDatabase.get_rows"><a class="viewcode-back" href="../../clashcallerbotreddit.html#clashcallerbotreddit.database.ClashCallerDatabase.get_rows">[docs]</a>    <span class="k">def</span> <span class="nf">get_rows</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tbl_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Fetch table rows.</span>
 
 <span class="sd">        Method gets rows of given table by order of id in a tuple.</span>
@@ -368,7 +370,7 @@
             <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;get_rows: </span><span class="si">{err}</span><span class="s1">&#39;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">rows</span></div>
 
-<div class="viewcode-block" id="ClashCallerDatabase.grant_permissions"><a class="viewcode-back" href="../clashcallerbot_database.html#clashcallerbot_database.ClashCallerDatabase.grant_permissions">[docs]</a>    <span class="k">def</span> <span class="nf">grant_permissions</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<div class="viewcode-block" id="ClashCallerDatabase.grant_permissions"><a class="viewcode-back" href="../../clashcallerbotreddit.html#clashcallerbotreddit.database.ClashCallerDatabase.grant_permissions">[docs]</a>    <span class="k">def</span> <span class="nf">grant_permissions</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Grants bot user permissions to database.</span>
 
 <span class="sd">        Method grants bot user permissions to database.</span>
@@ -393,7 +395,7 @@
             <span class="k">return</span> <span class="kc">False</span>
         <span class="k">return</span> <span class="kc">True</span></div>
 
-<div class="viewcode-block" id="ClashCallerDatabase.drop_table"><a class="viewcode-back" href="../clashcallerbot_database.html#clashcallerbot_database.ClashCallerDatabase.drop_table">[docs]</a>    <span class="k">def</span> <span class="nf">drop_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tbl_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<div class="viewcode-block" id="ClashCallerDatabase.drop_table"><a class="viewcode-back" href="../../clashcallerbotreddit.html#clashcallerbotreddit.database.ClashCallerDatabase.drop_table">[docs]</a>    <span class="k">def</span> <span class="nf">drop_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tbl_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Drop table from database.</span>
 
 <span class="sd">        Function drops given table from given database.</span>
@@ -416,7 +418,7 @@
             <span class="k">return</span> <span class="kc">False</span>
         <span class="k">return</span> <span class="kc">True</span></div>
 
-<div class="viewcode-block" id="ClashCallerDatabase.convert_datetime"><a class="viewcode-back" href="../clashcallerbot_database.html#clashcallerbot_database.ClashCallerDatabase.convert_datetime">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="ClashCallerDatabase.convert_datetime"><a class="viewcode-back" href="../../clashcallerbotreddit.html#clashcallerbotreddit.database.ClashCallerDatabase.convert_datetime">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">convert_datetime</span><span class="p">(</span><span class="n">dt</span><span class="p">:</span> <span class="n">datetime</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">datetime</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Converts python datetime to MySQL datetime.</span>
 
@@ -430,7 +432,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">dt</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S&#39;</span><span class="p">)</span>  <span class="c1"># Convert to MySQL datetime</span></div>
 
-<div class="viewcode-block" id="ClashCallerDatabase.save_message"><a class="viewcode-back" href="../clashcallerbot_database.html#clashcallerbot_database.ClashCallerDatabase.save_message">[docs]</a>    <span class="k">def</span> <span class="nf">save_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">link</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">exp</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">usr_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<div class="viewcode-block" id="ClashCallerDatabase.save_message"><a class="viewcode-back" href="../../clashcallerbotreddit.html#clashcallerbotreddit.database.ClashCallerDatabase.save_message">[docs]</a>    <span class="k">def</span> <span class="nf">save_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">link</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">exp</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">usr_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Saves given comment data into message_data table.</span>
 
 <span class="sd">        Method saves given inputs in message_date table as a row.</span>
@@ -457,7 +459,7 @@
             <span class="k">return</span> <span class="kc">False</span>
         <span class="k">return</span> <span class="kc">True</span></div>
 
-<div class="viewcode-block" id="ClashCallerDatabase.delete_message"><a class="viewcode-back" href="../clashcallerbot_database.html#clashcallerbot_database.ClashCallerDatabase.delete_message">[docs]</a>    <span class="k">def</span> <span class="nf">delete_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tid</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<div class="viewcode-block" id="ClashCallerDatabase.delete_message"><a class="viewcode-back" href="../../clashcallerbotreddit.html#clashcallerbotreddit.database.ClashCallerDatabase.delete_message">[docs]</a>    <span class="k">def</span> <span class="nf">delete_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tid</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Deletes message from message_data table.</span>
 
 <span class="sd">        Method deletes given table id (row) from message_data table.</span>
@@ -479,7 +481,7 @@
             <span class="k">return</span> <span class="kc">False</span>
         <span class="k">return</span> <span class="kc">True</span></div>
 
-<div class="viewcode-block" id="ClashCallerDatabase.save_comment_id"><a class="viewcode-back" href="../clashcallerbot_database.html#clashcallerbot_database.ClashCallerDatabase.save_comment_id">[docs]</a>    <span class="k">def</span> <span class="nf">save_comment_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cid</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<div class="viewcode-block" id="ClashCallerDatabase.save_comment_id"><a class="viewcode-back" href="../../clashcallerbotreddit.html#clashcallerbotreddit.database.ClashCallerDatabase.save_comment_id">[docs]</a>    <span class="k">def</span> <span class="nf">save_comment_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cid</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Saves comment id into comment_list table.</span>
 
 <span class="sd">        Method saves given comment id into the comment_list table.</span>
@@ -502,7 +504,7 @@
             <span class="k">return</span> <span class="kc">False</span>
         <span class="k">return</span> <span class="kc">True</span></div>
 
-<div class="viewcode-block" id="ClashCallerDatabase.find_comment_id"><a class="viewcode-back" href="../clashcallerbot_database.html#clashcallerbot_database.ClashCallerDatabase.find_comment_id">[docs]</a>    <span class="k">def</span> <span class="nf">find_comment_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cid</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<div class="viewcode-block" id="ClashCallerDatabase.find_comment_id"><a class="viewcode-back" href="../../clashcallerbotreddit.html#clashcallerbotreddit.database.ClashCallerDatabase.find_comment_id">[docs]</a>    <span class="k">def</span> <span class="nf">find_comment_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cid</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Check comment_list table for comment id.</span>
 
 <span class="sd">        Method checks comment_list table for given comment id.</span>
@@ -527,7 +529,7 @@
             <span class="k">return</span> <span class="kc">False</span>
         <span class="k">return</span> <span class="kc">True</span></div>
 
-<div class="viewcode-block" id="ClashCallerDatabase.get_messages"><a class="viewcode-back" href="../clashcallerbot_database.html#clashcallerbot_database.ClashCallerDatabase.get_messages">[docs]</a>    <span class="k">def</span> <span class="nf">get_messages</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_now</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<div class="viewcode-block" id="ClashCallerDatabase.get_messages"><a class="viewcode-back" href="../../clashcallerbotreddit.html#clashcallerbotreddit.database.ClashCallerDatabase.get_messages">[docs]</a>    <span class="k">def</span> <span class="nf">get_messages</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_now</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Retrieves list of messages that have expired.</span>
 
 <span class="sd">        Method returns list of messages whose expiration times are before current datetime.</span>
@@ -550,7 +552,7 @@
             <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;get_messages: </span><span class="si">{err}</span><span class="s1">&#39;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">messages</span></div>
 
-<div class="viewcode-block" id="ClashCallerDatabase.lock_read"><a class="viewcode-back" href="../clashcallerbot_database.html#clashcallerbot_database.ClashCallerDatabase.lock_read">[docs]</a>    <span class="k">def</span> <span class="nf">lock_read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tbl_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<div class="viewcode-block" id="ClashCallerDatabase.lock_read"><a class="viewcode-back" href="../../clashcallerbotreddit.html#clashcallerbotreddit.database.ClashCallerDatabase.lock_read">[docs]</a>    <span class="k">def</span> <span class="nf">lock_read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tbl_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Locks table for reading.</span>
 
 <span class="sd">        Method locks a given table for read access.</span>
@@ -577,7 +579,7 @@
             <span class="k">return</span> <span class="kc">False</span>
         <span class="k">return</span> <span class="kc">True</span></div>
 
-<div class="viewcode-block" id="ClashCallerDatabase.lock_write"><a class="viewcode-back" href="../clashcallerbot_database.html#clashcallerbot_database.ClashCallerDatabase.lock_write">[docs]</a>    <span class="k">def</span> <span class="nf">lock_write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tbl_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<div class="viewcode-block" id="ClashCallerDatabase.lock_write"><a class="viewcode-back" href="../../clashcallerbotreddit.html#clashcallerbotreddit.database.ClashCallerDatabase.lock_write">[docs]</a>    <span class="k">def</span> <span class="nf">lock_write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tbl_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Locks table for writing.</span>
 
 <span class="sd">        Method locks a given table for write access.</span>
@@ -604,7 +606,7 @@
             <span class="k">return</span> <span class="kc">False</span>
         <span class="k">return</span> <span class="kc">True</span></div>
 
-<div class="viewcode-block" id="ClashCallerDatabase.close_connections"><a class="viewcode-back" href="../clashcallerbot_database.html#clashcallerbot_database.ClashCallerDatabase.close_connections">[docs]</a>    <span class="k">def</span> <span class="nf">close_connections</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<div class="viewcode-block" id="ClashCallerDatabase.close_connections"><a class="viewcode-back" href="../../clashcallerbotreddit.html#clashcallerbotreddit.database.ClashCallerDatabase.close_connections">[docs]</a>    <span class="k">def</span> <span class="nf">close_connections</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Close database connections.</span>
 
 <span class="sd">        Method closes database cursor and connection.</span>
@@ -622,7 +624,7 @@
         <span class="k">return</span> <span class="kc">True</span></div></div>
 
 
-<div class="viewcode-block" id="main"><a class="viewcode-back" href="../clashcallerbot_database.html#clashcallerbot_database.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../clashcallerbotreddit.html#clashcallerbotreddit.database.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
     <span class="c1"># Create the clashcaller database</span>
     <span class="n">database</span> <span class="o">=</span> <span class="n">ClashCallerDatabase</span><span class="p">(</span><span class="n">config_file</span><span class="o">=</span><span class="n">config</span><span class="p">,</span> <span class="n">root_user</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
@@ -630,14 +632,16 @@
     <span class="n">database</span><span class="o">.</span><span class="n">select_database</span><span class="p">()</span>
 
     <span class="c1"># Show the tables</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">database</span><span class="o">.</span><span class="n">get_tables</span><span class="p">())</span>
+    <span class="n">tables</span> <span class="o">=</span> <span class="n">database</span><span class="o">.</span><span class="n">get_tables</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">tables</span><span class="p">)</span>
 
-    <span class="c1"># Create message table</span>
+    <span class="c1"># Create message table, if it doesn&#39;t exist</span>
     <span class="c1"># TODO: Store comment.id instead of permalink?</span>
-    <span class="n">col</span> <span class="o">=</span> <span class="s1">&#39;id INT UNSIGNED NOT NULL AUTO_INCREMENT, &#39;</span> \
-          <span class="s1">&#39;permalink VARCHAR(100), message VARCHAR(100), new_date DATETIME, &#39;</span> \
-          <span class="s1">&#39;userID VARCHAR(20), PRIMARY KEY(id)&#39;</span>
-    <span class="n">database</span><span class="o">.</span><span class="n">create_table</span><span class="p">(</span><span class="s1">&#39;message_data&#39;</span><span class="p">,</span> <span class="n">col</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">tables</span><span class="p">:</span>
+        <span class="n">col</span> <span class="o">=</span> <span class="s1">&#39;id INT UNSIGNED NOT NULL AUTO_INCREMENT, &#39;</span> \
+              <span class="s1">&#39;permalink VARCHAR(100), message VARCHAR(100), new_date DATETIME, &#39;</span> \
+              <span class="s1">&#39;userID VARCHAR(20), PRIMARY KEY(id)&#39;</span>
+        <span class="n">database</span><span class="o">.</span><span class="n">create_table</span><span class="p">(</span><span class="s1">&#39;message_data&#39;</span><span class="p">,</span> <span class="n">col</span><span class="p">)</span>
 
     <span class="c1"># Describe message table</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">database</span><span class="o">.</span><span class="n">describe_table</span><span class="p">(</span><span class="s1">&#39;message_data&#39;</span><span class="p">))</span>
@@ -645,11 +649,12 @@
     <span class="c1"># Fetch rows from message_data as tuple of tuples</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">database</span><span class="o">.</span><span class="n">get_rows</span><span class="p">(</span><span class="s1">&#39;message_data&#39;</span><span class="p">))</span>
 
-    <span class="c1"># Create comment_list table</span>
+    <span class="c1"># Create comment_list table, if it doesn&#39;t exist</span>
     <span class="c1"># TODO: Add last run datetime to table for trimming</span>
-    <span class="n">col</span> <span class="o">=</span> <span class="s1">&#39;id MEDIUMINT NOT NULL AUTO_INCREMENT, comment_ids VARCHAR(35), &#39;</span> \
-          <span class="s1">&#39;PRIMARY KEY(id)&#39;</span>
-    <span class="n">database</span><span class="o">.</span><span class="n">create_table</span><span class="p">(</span><span class="s1">&#39;comment_list&#39;</span><span class="p">,</span> <span class="n">col</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">tables</span><span class="p">:</span>
+        <span class="n">col</span> <span class="o">=</span> <span class="s1">&#39;id MEDIUMINT NOT NULL AUTO_INCREMENT, comment_ids VARCHAR(35), &#39;</span> \
+              <span class="s1">&#39;PRIMARY KEY(id)&#39;</span>
+        <span class="n">database</span><span class="o">.</span><span class="n">create_table</span><span class="p">(</span><span class="s1">&#39;comment_list&#39;</span><span class="p">,</span> <span class="n">col</span><span class="p">)</span>
 
     <span class="c1"># Describe comment list table</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">database</span><span class="o">.</span><span class="n">describe_table</span><span class="p">(</span><span class="s1">&#39;comment_list&#39;</span><span class="p">))</span>
@@ -657,8 +662,9 @@
     <span class="c1"># Fetch rows from comment_list as tuple of tuples</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">database</span><span class="o">.</span><span class="n">get_rows</span><span class="p">(</span><span class="s1">&#39;comment_list&#39;</span><span class="p">))</span>
 
-    <span class="c1"># Grant database bot permissions</span>
-    <span class="n">database</span><span class="o">.</span><span class="n">grant_permissions</span><span class="p">()</span>
+    <span class="c1"># Grant database bot permissions, if root</span>
+    <span class="k">if</span> <span class="n">database</span><span class="o">.</span><span class="n">_root_user</span><span class="p">:</span>  <span class="c1"># Direct access of protected member, but only to read. Should be okay...?</span>
+        <span class="n">database</span><span class="o">.</span><span class="n">grant_permissions</span><span class="p">()</span>
 
     <span class="c1"># Close database connections</span>
     <span class="n">database</span><span class="o">.</span><span class="n">close_connections</span><span class="p">()</span></div>
@@ -700,16 +706,16 @@
 
     
     
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
         <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
 
   
 
-  <script type="text/javascript" src="../_static/js/theme.js"></script>
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
   <script type="text/javascript">
       jQuery(function () {
