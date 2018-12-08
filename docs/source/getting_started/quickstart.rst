@@ -25,13 +25,13 @@ Prerequisites
 With these prerequisites met, **clashcallerbot-reddit** can be setup and run.
 
 Python Installation
-===================
+-------------------
 
 You're a brave one. This method is arguably faster; however, including a setup.py file is merely convention. This method
 will install the internal modules into the Python environment so that they can be called directly as programs.
 
 Setup
------
+^^^^^
 
 First, add the `bot's reddit metadata`_ to `praw-example.ini` and rename to `praw.ini`, then add the database's root and
 desired bot user credentials to `database-example.ini` and rename to `database.ini`.
@@ -47,7 +47,7 @@ Next, change the following line in :mod:`clashcallerbotreddit.database`
 to ``database = ClashCallerDatabase(config_file=config, root_user=True)``. This may get updated to be default later.
 
 Starting
---------
+^^^^^^^^
 
 Once the database script is setup, **clashcallerbot-reddit** can be installed by entering::
 
@@ -69,13 +69,13 @@ Now, the bot can be started by calling :mod:`clashcallerbotreddit.search` and :m
     Instances will appear with process names ``search`` and ``reply``.
 
 Running Scripts Directly
-========================
+------------------------
 
 Not gonna lie, I'm a run scripts directly kind of guy. :abbr:`IMO (In My Opinion)`, it's less hassle and more secure to
 do so, but :abbr:`YMMV (Your Mileage May Vary)`.
 
 Setup
------
+^^^^^
 
 First, add the `bot's reddit metadata`_ to `praw-example.ini` and rename to `praw.ini`, then add the database's root and
 desired bot user credentials to `database-example.ini` and rename to `database.ini`.
@@ -99,7 +99,7 @@ terminal::
     https://praw.readthedocs.io/en/latest/getting_started/configuration/prawini.html#defining-additional-sites
 
 Starting
---------
+^^^^^^^^
 
 Once the database is setup, the bot can be run by calling :mod:`clashcallerbotreddit.search` and
 :mod:`clashcallerbotreddit.reply` directly from within terminal::
@@ -122,7 +122,7 @@ Alternatively, by running the provided bash script from within terminal::
     * If you have access to ``pidof``, you can avoid killing all script instances.
 
 Updating
---------
+^^^^^^^^
 
 A bash script is also provided for updating and can be run directly from within terminal::
 
