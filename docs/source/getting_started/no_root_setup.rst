@@ -1,7 +1,9 @@
-:orphan:
-
 No Root Setup
 =============
+
+For my first attempt at a production version, I got a shared host running CloudLinux OS that does not provide
+root access, but has both Python and MySQL pre-installed.
+
 
 What system you install to is your choice, but this setup assumes a CloudLinux OS without root access and with both
 Python and MySQL installed. Everything is run from terminal (ssh compatible).

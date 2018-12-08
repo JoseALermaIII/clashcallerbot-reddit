@@ -1,7 +1,8 @@
-:orphan:
-
 Amazon Linux AMI Setup
 ======================
+
+For what I hope is the final production version, I set up an Amazon EC2 instance running Amazon Linux AMI.
+I particularly like that it has pip and python pre-installed.
 
 `Amazon Linux AMI <https://aws.amazon.com/amazon-linux-ami/>`_ is a fork of
 :abbr:`RHEL6 (Red Hat Enterprise Linux version 6)` made to run on the

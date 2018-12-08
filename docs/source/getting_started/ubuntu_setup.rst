@@ -1,7 +1,8 @@
-:orphan:
-
 Ubuntu 14.04 LTS Setup
 ======================
+
+For the open alpha, I went with an OS that is convenient (need something? There's a package for that) as a proof
+of concept and debugging environment.
 
 `Ubuntu Desktop <http://www.ubuntu.com/download>`_ is a good choice because most IDEs need a GUI, but other versions
 are available (like Server). The following instructions are a combination of setting up the Ubuntu OS to run the bot

@@ -12,36 +12,13 @@ Believe me, the list of where I have not deployed it is shorter. I mostly went w
 development, and tried putting the production version on a shared host. It has been migrated to an Amazon EC2
 instance in hopes of minimizing costs.
 
-Ubuntu
-^^^^^^
+.. toctree::
+    :maxdepth: 2
 
-For the open alpha, I went with an OS that is convenient (need something? There's a package for that) as a proof
-of concept and debugging environment.
-
-:doc:`ubuntu_setup`
-
-CentOS
-^^^^^^
-
-For the open beta, I went with an OS that is often available for production environments.
-
-:doc:`centos_setup`
-
-No Root
-^^^^^^^
-
-For my first attempt at a production version, I got a shared host running CloudLinux OS that does not provide
-root access, but has both Python and MySQL pre-installed.
-
-:doc:`no_root_setup`
-
-Amazon EC2
-^^^^^^^^^^
-
-For what I hope is the final production version, I set up an Amazon EC2 instance running Amazon Linux AMI.
-I particularly like that it has pip and python pre-installed.
-
-:doc:`amazon_setup`
+    ubuntu_setup
+    centos_setup
+    no_root_setup
+    amazon_setup
 
 
 Building Documentation

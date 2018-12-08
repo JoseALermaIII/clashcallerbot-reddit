@@ -1,7 +1,7 @@
-:orphan:
-
 CentOS 7.0 Setup
 ================
+
+For the open beta, I went with an OS that is often available for production environments.
 
 How you want CentOS installed is your choice. I went with the `xxx-Minimal.iso <https://wiki.centos.org/Download>`_ so
 that it would be as lean as possible (since I planned for it to be in the cloud) and would only be as large as necessary
