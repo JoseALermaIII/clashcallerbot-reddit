@@ -2,7 +2,7 @@
 # Archives, redownloads, and sets executable mode bit of main scripts.
 # Notes:
 # * Don't forget to set executable mode with `chmod +x ./redownload.sh`
-# * Script assumes files are all in same directory and that it is run in a no-root setup
+# * Script assumes files are all in the `clashcallerbotreddit` directory and that it is run in a no-root setup
 # * The `-f` and `-q` switch silence outputs to certain degrees
 #
 

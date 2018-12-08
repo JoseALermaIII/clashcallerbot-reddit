@@ -4,7 +4,7 @@
 #
 # Notes:
 # * Remember to set executable mode with `chmod +x ./clashcallerbot.sh`
-# * Script assumes files are in same directory and is run as crontab in no-root setup
+# * Script assumes files are in the `clashcallerbotreddit` directory and is run as crontab in no-root setup
 #   * How often to run as a crontab depends on how long you want the bot to be down/broken
 #   * If you have access to root, check the Docs for info on setting up systemd instead
 # * Logfile can be removed if not necessary (remove variable and `>> $logfile`)
