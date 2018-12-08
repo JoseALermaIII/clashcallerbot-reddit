@@ -4,6 +4,8 @@ Quickstart
 This is what you'll need to run **clashcallerbot-reddit** :abbr:`ASAP (As Soon As Possible)`. **clashcallerbot-reddit**
 is developed on various Linux distros, so :doc:`installation` is assumed to be on Linux.
 
+We'll cover running installing into Python and running the scripts directly.
+
 Prerequisites
 -------------
 
@@ -21,6 +23,56 @@ Prerequisites
 .. _MariaDB: https://mariadb.com/kb/en/library/where-to-download-mariadb/
 
 With these prerequisites met, **clashcallerbot-reddit** can be setup and run.
+
+Python Installation
+===================
+
+You're a brave one. This method is arguably faster; however, including a setup.py file is merely convention. This method
+will install the internal modules into the Python environment so that they can be called directly as programs.
+
+Setup
+-----
+
+First, add the `bot's reddit metadata`_ to `praw-example.ini` and rename to `praw.ini`, then add the database's root and
+desired bot user credentials to `database-example.ini` and rename to `database.ini`.
+
+Next, change the following line in :mod:`clashcallerbotreddit.database`
+
+.. literalinclude:: ../../../clashcallerbotreddit/database.py
+    :linenos:
+    :lineno-start: 467
+    :language: python
+    :lines: 467-468
+
+to ``database = ClashCallerDatabase(config_file=config, root_user=True)``. This may get updated to be default later.
+
+Starting
+--------
+
+Once the database script is setup, **clashcallerbot-reddit** can be installed by entering::
+
+    python3 setup.py install
+
+from within the source code directory. Now that **clashcallerbot-reddit** is installed, scripts can be run from
+terminal directly. First, we configure the the MySQL-compatible database by running :mod:`clashcallerbotreddit.database`
+in terminal::
+
+    database
+
+Now, the bot can be started by calling :mod:`clashcallerbotreddit.search` and :mod:`clashcallerbotreddit.reply`::
+
+    nohup reply > /dev/null 2>&1 &
+    nohup search > /dev/null 2>&1 &
+
+.. warning::
+    This will **not** check for already running instances! Any running instances would have to be terminated manually.
+    Instances will appear with process names ``search`` and ``reply``.
+
+Running Scripts Directly
+========================
+
+Not gonna lie, I'm a run scripts directly kind of guy. :abbr:`IMO (In My Opinion)`, it's less hassle and more secure to
+do so, but :abbr:`YMMV (Your Mileage May Vary)`.
 
 Setup
 -----
@@ -61,7 +113,7 @@ Alternatively, by running the provided bash script from within terminal::
 .. note::
 
     * Remember to set executable mode with ``chmod +x ./clashcallerbot.sh``.
-    * Script assumes files are in same directory and is run as crontab in :doc:`no_root_setup`.
+    * Script assumes files are in the `clashcallerbotreddit` directory and is run as crontab in :doc:`no_root_setup`.
     * How often to run as a crontab depends on how long you want the bot to be down/broken.
     * If you have access to root, check :doc:`installation` for info on setting up systemd instead.
     * Logfile can be removed if not necessary (remove variable and ``>> $logfile``).
@@ -79,5 +131,6 @@ A bash script is also provided for updating and can be run directly from within 
 .. note::
 
     * Don't forget to set executable mode with ``chmod +x ./redownload.sh``.
-    * Script assumes files are all in same directory and that it is run in a :doc:`no_root_setup`.
+    * Script assumes files are all in the `clashcallerbotreddit` directory and that it is run in a :doc:`no_root_setup`.
     * The ``-f`` and ``-q`` switch silence outputs to certain degrees.
+
