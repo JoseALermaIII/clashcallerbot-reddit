@@ -28,7 +28,7 @@ Setup
 First, add the `bot's reddit metadata`_ to `praw-example.ini` and rename to `praw.ini`, then add the database's root and
 desired bot user credentials to `database-example.ini` and rename to `database.ini`.
 
-Next, change the following line in the :mod:`clashcallerbotreddit.database`
+Next, change the following line in :mod:`clashcallerbotreddit.database`
 
 .. literalinclude:: ../../../clashcallerbotreddit/database.py
     :linenos:
@@ -38,7 +38,7 @@ Next, change the following line in the :mod:`clashcallerbotreddit.database`
 
 to ``database = ClashCallerDatabase(config_file=config, root_user=True)``. This may get updated to be default later.
 
-Now, the MySQL-compatible database can be setup by running the :mod:`clashcallerbotreddit.database` directly from within
+Now, the MySQL-compatible database can be setup by running :mod:`clashcallerbotreddit.database` directly from within
 terminal::
 
     python3 -m clashcallerbotreddit.database
@@ -49,8 +49,8 @@ terminal::
 Starting
 --------
 
-Once the database is setup, the bot can be run by calling the :mod:`clashcallerbotreddit.search` and
-the :mod:`clashcallerbotreddit.reply` directly from within terminal::
+Once the database is setup, the bot can be run by calling :mod:`clashcallerbotreddit.search` and
+:mod:`clashcallerbotreddit.reply` directly from within terminal::
 
     python3 -m clashcallerbotreddit.search && python3 -m clashcallerbotreddit.reply
 
