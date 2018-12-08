@@ -29,7 +29,7 @@ Check us out on `/r/ClashCallerBot <https://np.reddit.com/r/ClashCallerBot/>`_.
 Usage Information
 =================
 
-Usage can be inferred from the regular expressions used to process each comment in the :mod:`clashcallerbotreddit.search`:
+Usage can be inferred from the regular expressions used to process each comment in :mod:`clashcallerbotreddit.search`:
 
 .. literalinclude:: ../../clashcallerbotreddit/search.py
     :linenos:
