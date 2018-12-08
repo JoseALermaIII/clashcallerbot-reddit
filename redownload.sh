@@ -3,26 +3,26 @@
 # Notes:
 # * Don't forget to set executable mode with `chmod +x ./redownload.sh`
 # * Script assumes files are all in same directory and that it is run in a no-root setup
-# * The `-f` switch and `> /dev/null 2>&1` silence outputs to certain degrees
+# * The `-f` and `-q` switch silence outputs to certain degrees
 #
 
 # Archive
-mv -f ./clashcallerbot_reply.py ./clashcallerbot_reply.py.bak
-mv -f ./clashcallerbot_search.py ./clashcallerbot_search.py.bak
-chmod -f -x ./clashcallerbot_reply.py.bak
-chmod -f -x ./clashcallerbot_search.py.bak
+mv -f ./clashcallerbotreddit/reply.py ./clashcallerbotreddit/reply.py.bak
+mv -f ./clashcallerbotreddit/search.py ./clashcallerbotreddit/search.py.bak
+chmod -f -x ./clashcallerbotreddit/reply.py.bak
+chmod -f -x ./clashcallerbotreddit/search.py.bak
 echo "*****"
 sleep 2
 
 # Redownload
-wget https://github.com/JoseALermaIII/clashcallerbot-reddit/raw/master/clashcallerbot_reply.py > /dev/null 2>&1
+wget -q -Pclashcallerbotreddit https://github.com/JoseALermaIII/clashcallerbot-reddit/raw/master/clashcallerbotreddit/reply.py
 echo "*****"
 sleep 2
-wget https://github.com/JoseALermaIII/clashcallerbot-reddit/raw/master/clashcallerbot_search.py > /dev/null 2>&1
+wget -q -Pclashcallerbotreddit https://github.com/JoseALermaIII/clashcallerbot-reddit/raw/master/clashcallerbotreddit/search.py
 echo "*****"
 sleep 2
 
 # Set Executable
-chmod -f +x ./clashcallerbot_reply.py
-chmod -f +x ./clashcallerbot_search.py
+chmod -f +x ./clashcallerbotreddit/reply.py
+chmod -f +x ./clashcallerbotreddit/search.py
 echo "done"
