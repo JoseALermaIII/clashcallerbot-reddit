@@ -57,7 +57,7 @@ LOGGING = {
             'class': 'logging.handlers.RotatingFileHandler',
             'level': 'DEBUG',
             'filename': 'clashcaller.log',
-            'maxBytes': 104857600,
+            'maxBytes': 104857600,  # 100 MiB
             'backupCount': 3,
             'formatter': 'detailed'
         }
