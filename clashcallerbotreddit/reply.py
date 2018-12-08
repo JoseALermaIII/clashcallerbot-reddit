@@ -33,7 +33,7 @@ db = ClashCallerDatabase(config, False)
 def main():
     logger.info('Start reply.py...')
     while True:
-        time.sleep(30)
+        time.sleep(120)  # 2 minutes
         db.open_connections()
         # Get list of messages older than current datetime
         now = datetime.datetime.now(datetime.timezone.utc)
