@@ -105,7 +105,6 @@ def get_parent(link: str) -> str:
         parent = 'https://np.reddit.com' + comment.submission.permalink
     except praw.exceptions as err:
         logger.exception(f'get_parent: {err}')
-        return parent
     return parent
 
 
