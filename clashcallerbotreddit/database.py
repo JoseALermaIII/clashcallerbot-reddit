@@ -200,7 +200,7 @@ class ClashCallerDatabase(object):
         except (mysql.Error, mysql.ProgrammingError) as err:
             logger.exception(f'drop_table: {err}')
 
-    def find_comment_id(self, cid: str) -> bool:
+    def found_comment_id(self, cid: str) -> bool:
         """Check comment_list table for comment id.
 
         Method checks comment_list table for given comment id.

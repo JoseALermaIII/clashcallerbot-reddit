@@ -73,7 +73,7 @@ def main():
                 db.open_connections()
                 match = clashcaller_re.search(comment.body)
                 if match and comment.author.name != 'ClashCallerBot' \
-                        and not db.find_comment_id(comment.id) and not have_replied(comment.id, 'ClashCallerBot')\
+                        and not db.found_comment_id(comment.id) and not have_replied(comment.id, 'ClashCallerBot')\
                         and is_recent(comment):
                     logger.info(f'In from {comment.author.name}: {comment}')
 
