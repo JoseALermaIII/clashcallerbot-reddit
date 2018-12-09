@@ -124,7 +124,7 @@ class ClashCallerDatabase(object):
         Example:
             >>> from clashcallerbotreddit import config
             >>> from clashcallerbotreddit.database import ClashCallerDatabase
-            >>> db = ClashCallerDatabase(config, False)
+            >>> db = ClashCallerDatabase(config, root_user=False)
             >>> tbl_name = 'table'
             >>> cols = 'id INT UNSIGNED NOT NULL AUTO_INCREMENT, '
             ...        'permalink VARCHAR(100), message VARCHAR(100), new_date DATETIME, '
