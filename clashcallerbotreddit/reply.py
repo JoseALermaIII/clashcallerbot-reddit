@@ -27,7 +27,7 @@ reddit = praw.Reddit('clashcallerreply')  # Section name in praw.ini
 subreddit = reddit.subreddit('ClashCallerBot')  # Limit scope for testing purposes
 
 # Make database instance
-db = ClashCallerDatabase(config, False)
+db = ClashCallerDatabase(config, root_user=False)
 
 
 def main():
