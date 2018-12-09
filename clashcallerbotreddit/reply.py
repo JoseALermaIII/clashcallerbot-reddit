@@ -57,7 +57,7 @@ def main():
         db.close_connections()
 
 
-def send_reminder(link: str, msg: str, usr: str)-> bool:
+def send_reminder(link: str, msg: str, usr: str)-> None:
     """Sends reminder PM to username.
 
     Function sends given permalink and message to given username.
@@ -67,8 +67,6 @@ def send_reminder(link: str, msg: str, usr: str)-> bool:
          msg:   Message in comment that was saved.
          usr:   User to send reminder to.
 
-    Returns:
-        True if successful, False otherwise.
     """
     subject = 'ClashCallerBot Private Message Here!'
     permalink = 'https://np.reddit.com' + link  # Permalinks are missing prefix
@@ -87,8 +85,6 @@ def send_reminder(link: str, msg: str, usr: str)-> bool:
 
     except praw.exceptions.PRAWException as err:
         logger.exception(f'send_reminder: {err}')
-        return False
-    return True
 
 
 def get_parent(link: str) -> str:
