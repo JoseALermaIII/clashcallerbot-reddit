@@ -148,12 +148,15 @@ class ClashCallerDatabase(object):
             cols:       Columns to put in table.
 
         Example:
+            >>> from clashcallerbotreddit import config
+            >>> from clashcallerbotreddit.database import ClashCallerDatabase
+            >>> db = ClashCallerDatabase(config, False)
             >>> tbl_name = 'table'
             >>> cols = 'id INT UNSIGNED NOT NULL AUTO_INCREMENT, '
             ...        'permalink VARCHAR(100), message VARCHAR(100), new_date DATETIME, '
             ...        'userID VARCHAR(20), PRIMARY KEY(id)'
             ...
-            >>> create_table(tbl_name, cols)
+            >>> db.create_table(tbl_name, cols)
 
         Returns:
             True if successful, False otherwise.
