@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>clashcallerbotreddit.reply &mdash; clashcallerbot-reddit 2.3.0 documentation</title>
+  <title>clashcallerbotreddit.reply &mdash; clashcallerbot-reddit 2.3.1 documentation</title>
   
 
   
@@ -194,7 +194,7 @@
 <div class="viewcode-block" id="main"><a class="viewcode-back" href="../../clashcallerbotreddit.html#clashcallerbotreddit.reply.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Start reply.py...&#39;</span><span class="p">)</span>
     <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">120</span><span class="p">)</span>  <span class="c1"># 2 minutes</span>
         <span class="n">db</span><span class="o">.</span><span class="n">open_connections</span><span class="p">()</span>
         <span class="c1"># Get list of messages older than current datetime</span>
         <span class="n">now</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span>
