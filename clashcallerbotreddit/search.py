@@ -246,7 +246,7 @@ def send_error_message(u_name: str, link: str, error: str) -> None:
         logger.exception(f'send_error_message: {err}')
 
 
-def send_confirmation_reply(cid: str, link: str, exp: datetime.datetime) -> str:
+def send_confirmation_reply(cid: str, link: str, exp: datetime.datetime):
     """Replies to a comment.
 
     Function replies to a given comment ID with a given message.
