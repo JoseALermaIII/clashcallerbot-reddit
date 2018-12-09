@@ -197,7 +197,7 @@ def send_confirmation(u_name: str, link: str, exp: datetime.datetime) -> None:
               - ClashCallerBot
  
               [^(More info)](https://www.reddit.com/r/ClashCallerBot/comments/4e9vo7/clashcallerbot_info/)
-              """
+              """  # TODO: Include UTC to Local conversion via wolfram alpha
     try:
         reddit.redditor(u_name).message(subject, message.replace('              ', ''))
 
@@ -257,7 +257,7 @@ def send_confirmation_reply(cid: str, link: str, exp: datetime.datetime):
               Thank you for entrusting us with your warring needs!
  
               [^(More info)](https://www.reddit.com/r/ClashCallerBot/comments/4e9vo7/clashcallerbot_info/)
-              """
+              """  # TODO: Include UTC to Local conversion via wolfram alpha
     comment_id = None
     try:
         comment_obj = reddit.comment(id=cid)
