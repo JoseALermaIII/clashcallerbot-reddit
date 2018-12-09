@@ -228,8 +228,6 @@ class ClashCallerDatabase(object):
         Args:
             tbl_name:   Table to drop.
 
-        Returns:
-            True if successful, False otherwise.
         """
         try:
             self.select_database()
