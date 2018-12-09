@@ -191,7 +191,7 @@ def send_confirmation(u_name: str, link: str, exp: datetime.datetime) -> None:
     permalink = 'https://np.reddit.com' + link  # Permalinks are missing prefix
     exp = datetime.datetime.strftime(exp, '%b. %d, %Y at %I:%M:%S %p (%Z)')
     message = f"""ClashCallerBot here!  
-              I will be messaging you on {exp} to remind you of [**this link.**]({permalink})
+              I will be messaging you on {exp} to remind you of [**this call.**]({permalink})
  
               Thank you for entrusting us with your warring needs,  
               - ClashCallerBot
