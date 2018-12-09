@@ -291,7 +291,7 @@ class ClashCallerDatabase(object):
         exp = self.convert_datetime(exp)
         try:
             self.lock_write('message_data')
-            add_row = f'INSERT INTO message_data (permalink, message, new_date, userID) ' \
+            add_row = f'INSERT INTO message_data (permalink, message, new_date, username) ' \
                       f'VALUES (\'{link}\', \'{msg}\', \'{exp}\', \'{usr_name}\');'
             self.cursor.execute(add_row)
             self.mysql_connection.commit()
@@ -478,11 +478,10 @@ def main():
     print(tables)
 
     # Create message table, if it doesn't exist
-    # TODO: Store comment.id instead of permalink?
     if not tables:
         col = 'id INT UNSIGNED NOT NULL AUTO_INCREMENT, ' \
               'permalink VARCHAR(100), message VARCHAR(100), new_date DATETIME, ' \
-              'userID VARCHAR(20), PRIMARY KEY(id)'
+              'username VARCHAR(20), PRIMARY KEY(id)'
         database.create_table('message_data', col)
 
     # Describe message table
