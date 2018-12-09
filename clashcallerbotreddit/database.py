@@ -168,8 +168,10 @@ class ClashCallerDatabase(object):
         """
         description = []
         try:
+            self.lock_read(tbl_name)
             self.cursor.execute(f'DESCRIBE {tbl_name};')
             description = self.cursor.fetchall()
+            self.unlock_tables()
 
         except mysql.Error as err:
             logger.exception(f'describe_table: {err}')
@@ -191,6 +193,7 @@ class ClashCallerDatabase(object):
             self.lock_read(tbl_name)
             self.cursor.execute(f'SELECT * FROM {tbl_name} GROUP BY id;')
             rows = tuple(self.cursor.fetchall())
+            self.unlock_tables()
 
         except mysql.Error as err:
             logger.exception(f'get_rows: {err}')
@@ -235,6 +238,7 @@ class ClashCallerDatabase(object):
                 raise mysql.ProgrammingError('Table does not exist.')
             self.lock_write(tbl_name)
             self.cursor.execute(f'DROP TABLE IF EXISTS {tbl_name};')
+            self.unlock_tables()
 
         except (mysql.Error, mysql.ProgrammingError) as err:
             logger.exception(f'drop_table: {err}')
@@ -272,6 +276,7 @@ class ClashCallerDatabase(object):
                       f'VALUES (\'{link}\', \'{msg}\', \'{exp}\', \'{usr_name}\');'
             self.cursor.execute(add_row)
             self.mysql_connection.commit()
+            self.unlock_tables()
 
         except mysql.Error as err:
             logger.exception(f'save_message: {err}')
@@ -290,6 +295,7 @@ class ClashCallerDatabase(object):
             delete_row = f'DELETE FROM message_data WHERE id = \'{tid}\';'
             self.cursor.execute(delete_row)
             self.mysql_connection.commit()
+            self.unlock_tables()
 
         except mysql.Error as err:
             logger.exception(f'delete_message: {err}')
@@ -309,6 +315,7 @@ class ClashCallerDatabase(object):
 
             self.cursor.execute(add_comment_id)
             self.mysql_connection.commit()
+            self.unlock_tables()
 
         except mysql.Error as err:
             logger.exception(f'save_comment_id: {err}')
@@ -355,6 +362,7 @@ class ClashCallerDatabase(object):
             find_messages = f'SELECT * FROM message_data WHERE new_date < \'{time_now}\' GROUP BY id;'
             self.cursor.execute(find_messages)
             messages = self.cursor.fetchall()
+            self.unlock_tables()
 
         except mysql.Error as err:
             logger.exception(f'get_messages: {err}')
@@ -406,10 +414,21 @@ class ClashCallerDatabase(object):
 
         except mysql.Error as err:
             logger.exception(f'lock_write: {err}')
-            return False
-        return True
 
-    def close_connections(self) -> bool:
+    def unlock_tables(self) -> None:
+        """Unlocks tables to allow access.
+
+        Method unlocks tables to allow read/write access.
+
+        """
+        try:
+            unlock = 'UNLOCK TABLES;'
+            self.cursor.execute(unlock)
+
+        except mysql.Error as err:
+            logger.exception(f'unlock_tables: {err}')
+
+    def close_connections(self) -> None:
         """Close database connections.
 
         Method closes database cursor and connection.
