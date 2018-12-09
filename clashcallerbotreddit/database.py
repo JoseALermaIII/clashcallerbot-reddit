@@ -36,11 +36,12 @@ class ClashCallerDatabase(object):
 
     Attributes:
         config_file (configparser.ConfigParser()): A configparser object with database.ini file pre-read.
+        section (str): Section heading containing bot information. Defaults to 'bot'.
         root_user (bool): Specifies whether the database will be setup as root user.
         mysql_connection (mysql.connector.connect()): A mysql.connector.connect() object.
         cursor (mysql.connector.connect().cursor()): A mysql.connector.connect().cursor() object.
     """
-    def __init__(self, config_file=None, root_user=None):
+    def __init__(self, config_file=None, section='bot', root_user=None):
         if root_user is None:
             raise ValueError('root_user must be given.')
         if config_file is None:
@@ -50,15 +51,15 @@ class ClashCallerDatabase(object):
             self._db_user = config_file['root']['user']
             self._db_pass = config_file['root']['password']
 
-            self._bot_name = config_file['bot']['user']
-            self._bot_passwd = config_file['bot']['password']
+            self._bot_name = config_file[section]['user']
+            self._bot_passwd = config_file[section]['password']
         else:
-            self._db_user = config_file['bot']['user']
-            self._db_pass = config_file['bot']['password']
+            self._db_user = config_file[section]['user']
+            self._db_pass = config_file[section]['password']
 
-        self._db_name = config_file['bot']['database']
-        self._comment_table = config_file['bot']['comment_table']
-        self._message_table = config_file['bot']['message_table']
+        self._db_name = config_file[section]['database']
+        self._comment_table = config_file[section]['comment_table']
+        self._message_table = config_file[section]['message_table']
 
         # Initialize connections to None
         self.mysql_connection = None
