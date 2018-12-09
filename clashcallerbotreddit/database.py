@@ -58,7 +58,6 @@ class ClashCallerDatabase(object):
             self._db_pass = config_file[section]['password']
 
         self._db_name = config_file[section]['database']
-        self._comment_table = config_file[section]['comment_table']
         self._message_table = config_file[section]['message_table']
 
         # Initialize connections to None
@@ -202,30 +201,6 @@ class ClashCallerDatabase(object):
 
         except (mysql.Error, mysql.ProgrammingError) as err:
             logger.exception(f'drop_table: {err}')
-
-    def found_comment_id(self, cid: str) -> bool:
-        """Check comment_list table for comment id.
-
-        Method checks comment_list table for given comment id.
-
-        Args:
-            cid:    Comment id to search for.
-
-        Returns:
-            True for success, false otherwise.
-        """
-        try:
-            self.lock_read(self._comment_table)
-            query = f'SELECT * FROM {self._comment_table} WHERE commentIDs=\'{cid}\' GROUP BY id;'
-            self.cursor.execute(query)
-
-            rows = self.cursor.fetchall()
-            if not rows:
-                return False
-
-        except mysql.Error as err:
-            logger.exception(f'found_comment_id: {err}')
-        return True
 
     def get_messages(self, time_now: datetime.datetime) -> list:
         """Retrieves list of messages that have expired.
@@ -374,26 +349,6 @@ class ClashCallerDatabase(object):
         except mysql.Error as err:
             logger.exception(f'open_connections: {err}')
 
-    def save_comment_id(self, cid: str) -> None:
-        """Saves comment id into comment_list table.
-
-        Method saves given comment id into the comment_list table.
-
-        Args:
-            cid:    Comment id to save.
-
-        """
-        try:
-            self.lock_write(self._comment_table)
-            add_comment_id = f'INSERT INTO {self._comment_table} (comment_ids) VALUES (\'{cid}\');'
-
-            self.cursor.execute(add_comment_id)
-            self.mysql_connection.commit()
-            self.unlock_tables()
-
-        except mysql.Error as err:
-            logger.exception(f'save_comment_id: {err}')
-
     def save_message(self, link: str, msg: str, exp: datetime, usr_name: str) -> None:
         """Saves given comment data into message_data table.
 
@@ -467,19 +422,6 @@ def main():
 
     # Fetch rows from message_data as tuple of tuples
     print(database.get_rows(database._message_table))
-
-    # Create comment_list table, if it doesn't exist
-    # TODO: Add last run datetime to table for trimming
-    if database._comment_table not in tables:
-        col = 'id MEDIUMINT NOT NULL AUTO_INCREMENT, commentIDs VARCHAR(35), ' \
-              'PRIMARY KEY(id)'
-        database.create_table(database._comment_table, col)
-
-    # Describe comment list table
-    print(database.describe_table(database._comment_table))
-
-    # Fetch rows from comment_list as tuple of tuples
-    print(database.get_rows(database._comment_table))
 
     # Grant database bot permissions, if root
     if database._root_user:  # Direct access of protected member, but only to read. Should be okay...?

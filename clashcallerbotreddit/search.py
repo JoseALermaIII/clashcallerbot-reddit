@@ -73,8 +73,7 @@ def main():
                 db.open_connections()
                 match = clashcaller_re.search(comment.body)
                 if match and comment.author.name != 'ClashCallerBot' \
-                        and not db.found_comment_id(comment.id) and not have_replied(comment.id, 'ClashCallerBot')\
-                        and is_recent(comment):
+                        and not have_replied(comment.id, 'ClashCallerBot') and is_recent(comment):
                     logger.info(f'In from {comment.author.name}: {comment}')
 
                     # Strip everything before and including ClashCaller! string
@@ -92,7 +91,6 @@ def main():
                             # Send message and ignore comment
                             error = 'Expiration time is zero.'
                             # send_error_message(comment.author.name, comment.permalink, error)
-                            db.save_comment_id(comment.id)
                             logging.error(error)
                             continue
                         exp_unit = match.group('exp_unit').strip().lower()
@@ -103,7 +101,6 @@ def main():
                                 # Send message and ignore comment
                                 error = 'Expiration time is >= 1 day.'
                                 # send_error_message(comment.author.name, comment.permalink, error)
-                                db.save_comment_id(comment.id)
                                 logging.error(error)
                                 continue
                             timedelta = datetime.timedelta(hours=exp_digit)
@@ -120,7 +117,6 @@ def main():
                         # Send message and ignore comment
                         error = 'Expiration time has already passed.'
                         # send_error_message(comment.author.name, comment.permalink, error)
-                        db.save_comment_id(comment.id)
                         logging.error(error)
                         continue
 
@@ -132,7 +128,6 @@ def main():
                         # Send message and ignore comment
                         error = 'Message length > 100 characters.'
                         # send_error_message(comment.author.name, comment.permalink, error)
-                        db.save_comment_id(comment.id)
                         logger.error(error)
                         continue
 
@@ -141,7 +136,6 @@ def main():
                         # Send message and ignore comment
                         error = 'Message not properly formatted.'
                         # send_error_message(comment.author.name, comment.permalink, error)
-                        db.save_comment_id(comment.id)
                         logger.error(error)
                         continue
 
@@ -154,10 +148,6 @@ def main():
                     # Reply and send PM
                     send_confirmation(comment.author.name, comment.permalink, expiration_datetime)
                     send_confirmation_reply(comment.id, comment.permalink, expiration_datetime)
-
-                    # Save comment.id to database
-                    # TODO: Replaced by is_recent()? Wars take 48 hours, trim weekly based on start_time.
-                    db.save_comment_id(comment.id)
 
                     # TODO: Add more functionality via PM: delete calls, list calls, add users to call reminder
 
