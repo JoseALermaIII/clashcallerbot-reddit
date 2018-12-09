@@ -57,6 +57,8 @@ class ClashCallerDatabase(object):
             self._db_pass = config_file['bot']['password']
 
         self._db_name = config_file['bot']['database']
+        self._comment_table = config_file['bot']['comment_table']
+        self._message_table = config_file['bot']['message_table']
 
         # Initialize connections to None
         self.mysql_connection = None
@@ -148,8 +150,8 @@ class ClashCallerDatabase(object):
 
         """
         try:
-            self.lock_write('message_data')
-            delete_row = f'DELETE FROM message_data WHERE id = \'{tid}\';'
+            self.lock_write(self._message_table)
+            delete_row = f'DELETE FROM {self._message_table} WHERE id = \'{tid}\';'
             self.cursor.execute(delete_row)
             self.mysql_connection.commit()
             self.unlock_tables()
@@ -212,8 +214,8 @@ class ClashCallerDatabase(object):
             True for success, false otherwise.
         """
         try:
-            self.lock_read('comment_list')
-            query = f'SELECT * FROM comment_list WHERE commentIDs=\'{cid}\' GROUP BY id;'
+            self.lock_read(self._comment_table)
+            query = f'SELECT * FROM {self._comment_table} WHERE commentIDs=\'{cid}\' GROUP BY id;'
             self.cursor.execute(query)
 
             rows = self.cursor.fetchall()
@@ -221,7 +223,7 @@ class ClashCallerDatabase(object):
                 return False
 
         except mysql.Error as err:
-            logger.exception(f'find_comment_id: {err}')
+            logger.exception(f'found_comment_id: {err}')
         return True
 
     def get_messages(self, time_now: datetime.datetime) -> list:
@@ -238,8 +240,8 @@ class ClashCallerDatabase(object):
         messages = []
         time_now = self.convert_datetime(time_now)
         try:
-            self.lock_read('message_data')
-            find_messages = f'SELECT * FROM message_data WHERE new_date < \'{time_now}\' GROUP BY id;'
+            self.lock_read(self._message_table)
+            find_messages = f'SELECT * FROM {self._message_table} WHERE new_date < \'{time_now}\' GROUP BY id;'
             self.cursor.execute(find_messages)
             messages = self.cursor.fetchall()
             self.unlock_tables()
@@ -381,8 +383,8 @@ class ClashCallerDatabase(object):
 
         """
         try:
-            self.lock_write('comment_list')
-            add_comment_id = f'INSERT INTO comment_list (comment_ids) VALUES (\'{cid}\');'
+            self.lock_write(self._comment_table)
+            add_comment_id = f'INSERT INTO {self._comment_table} (comment_ids) VALUES (\'{cid}\');'
 
             self.cursor.execute(add_comment_id)
             self.mysql_connection.commit()
@@ -405,8 +407,8 @@ class ClashCallerDatabase(object):
         """
         exp = self.convert_datetime(exp)
         try:
-            self.lock_write('message_data')
-            add_row = f'INSERT INTO message_data (permalink, message, new_date, username) ' \
+            self.lock_write(self._message_table)
+            add_row = f'INSERT INTO {self._message_table} (permalink, message, new_date, username) ' \
                       f'VALUES (\'{link}\', \'{msg}\', \'{exp}\', \'{usr_name}\');'
             self.cursor.execute(add_row)
             self.mysql_connection.commit()
@@ -452,31 +454,31 @@ def main():
     print(tables)
 
     # Create message table, if it doesn't exist
-    if 'message_data' not in tables:
+    if database._message_table not in tables:
         col = 'id INT UNSIGNED NOT NULL AUTO_INCREMENT, ' \
               'permalink VARCHAR(100), message VARCHAR(100), new_date DATETIME, ' \
               'username VARCHAR(20), PRIMARY KEY(id)'
-        database.create_table('message_data', col)
+        database.create_table(database._message_table, col)
         tables = database.get_tables()
 
     # Describe message table
-    print(database.describe_table('message_data'))
+    print(database.describe_table(database._message_table))
 
     # Fetch rows from message_data as tuple of tuples
-    print(database.get_rows('message_data'))
+    print(database.get_rows(database._message_table))
 
     # Create comment_list table, if it doesn't exist
     # TODO: Add last run datetime to table for trimming
-    if 'comment_list' not in tables:
+    if database._comment_table not in tables:
         col = 'id MEDIUMINT NOT NULL AUTO_INCREMENT, commentIDs VARCHAR(35), ' \
               'PRIMARY KEY(id)'
-        database.create_table('comment_list', col)
+        database.create_table(database._comment_table, col)
 
     # Describe comment list table
-    print(database.describe_table('comment_list'))
+    print(database.describe_table(database._comment_table))
 
     # Fetch rows from comment_list as tuple of tuples
-    print(database.get_rows('comment_list'))
+    print(database.get_rows(database._comment_table))
 
     # Grant database bot permissions, if root
     if database._root_user:  # Direct access of protected member, but only to read. Should be okay...?
