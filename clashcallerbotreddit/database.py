@@ -71,18 +71,32 @@ class ClashCallerDatabase(object):
     def __str__(self):
         return f'Logged into database: {self._db_name} as: {self._db_user}'
 
-    def open_connections(self) -> None:
-        """Open database connections.
+    def close_connections(self) -> None:
+        """Close database connections.
 
-        Method makes database connection and cursor.
+        Method closes database cursor and connection.
 
         """
         try:
-            self.mysql_connection = mysql.connect(user=self._db_user, password=self._db_pass, database=self._db_name)
-            self.cursor = self.mysql_connection.cursor()
+            self.cursor.close()
+            self.mysql_connection.close()
 
         except mysql.Error as err:
-            logger.exception(f'open_connections: {err}')
+            logger.exception(f'close_connections: {err}')
+
+    @staticmethod
+    def convert_datetime(dt: datetime) -> datetime:
+        """Converts python datetime to MySQL datetime.
+
+        Method converts given python datetime object to MySQL datetime format.
+
+        Args:
+            dt: Datetime object in default format.
+
+        Returns:
+            Datetime object in MySQL format.
+        """
+        return dt.strftime('%Y-%m-%d %H:%M:%S')  # Convert to MySQL datetime
 
     def create_database(self) -> None:
         """Create database.
@@ -94,37 +108,6 @@ class ClashCallerDatabase(object):
             self.cursor.execute(f'CREATE DATABASE {self._db_name};')
         except mysql.Error as err:
             logger.exception(f'create_database: {err}')
-
-    def select_database(self) -> None:
-        """Select database for command execution.
-
-        Method selects database within MySQL for command execution.
-
-        """
-        try:
-            self.cursor.execute(f'USE {self._db_name};')
-        except mysql.Error as err:
-            logger.exception(f'select_database: {err}')
-
-    def get_tables(self) -> list:
-        """Return table list of database.
-
-        Method returns a list with the names of the tables.
-
-        Returns:
-            List of table names.
-        """
-        table_names = []
-        try:
-            self.select_database()
-            self.cursor.execute('SHOW TABLES;')
-            tables = self.cursor.fetchall()
-
-            for table in tables:
-                table_names.append(str(table[0]))
-        except mysql.Error as err:
-            logger.exception(f'get_tables: {err}')
-        return table_names
 
     def create_table(self, tbl_name: str, cols: str) -> None:
         """Create table in database.
@@ -155,6 +138,25 @@ class ClashCallerDatabase(object):
         except mysql.Error as err:
             logger.exception(f'create_table: {err}')
 
+    def delete_message(self, tid: str) -> None:
+        """Deletes message from message_data table.
+
+        Method deletes given table id (row) from message_data table.
+
+        Args:
+            tid:    Table id from id column of message_data table.
+
+        """
+        try:
+            self.lock_write('message_data')
+            delete_row = f'DELETE FROM message_data WHERE id = \'{tid}\';'
+            self.cursor.execute(delete_row)
+            self.mysql_connection.commit()
+            self.unlock_tables()
+
+        except mysql.Error as err:
+            logger.exception(f'delete_message: {err}')
+
     def describe_table(self, tbl_name: str) -> list:
         """Gets description of table.
 
@@ -177,49 +179,6 @@ class ClashCallerDatabase(object):
             logger.exception(f'describe_table: {err}')
         return description
 
-    def get_rows(self, tbl_name: str) -> tuple:
-        """Fetch table rows.
-
-        Method gets rows of given table by order of id in a tuple.
-
-        Args:
-            tbl_name:   Name of table to get rows from.
-
-        Returns:
-            Tuple containing each row's data, empty tuple otherwise.
-        """
-        rows = ()
-        try:
-            self.lock_read(tbl_name)
-            self.cursor.execute(f'SELECT * FROM {tbl_name} GROUP BY id;')
-            rows = tuple(self.cursor.fetchall())
-            self.unlock_tables()
-
-        except mysql.Error as err:
-            logger.exception(f'get_rows: {err}')
-        return rows
-
-    def grant_permissions(self) -> None:
-        """Grants bot user permissions to database.
-
-        Method grants bot user permissions to database.
-
-        Notes:
-            Only database root user can grant database permissions.
-        """
-        if not self._root_user:
-            msg = 'Only root user can grant database permissions.'
-            logger.error(msg)
-            raise RuntimeError(msg)
-
-        try:
-            cmd = f'GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX, ALTER, ' \
-                  f'CREATE TEMPORARY TABLES, LOCK TABLES ON {self._db_name}.* TO \'{self._bot_name}\'@localhost ' \
-                  f'IDENTIFIED BY \'{self._bot_passwd}\';'
-            self.cursor.execute(cmd)
-        except (mysql.Error, RuntimeError) as err:
-            logger.exception(f'grant_permissions: {err}')
-
     def drop_table(self, tbl_name: str) -> None:
         """Drop table from database.
 
@@ -240,83 +199,6 @@ class ClashCallerDatabase(object):
 
         except (mysql.Error, mysql.ProgrammingError) as err:
             logger.exception(f'drop_table: {err}')
-
-    @staticmethod
-    def convert_datetime(dt: datetime) -> datetime:
-        """Converts python datetime to MySQL datetime.
-
-        Method converts given python datetime object to MySQL datetime format.
-
-        Args:
-            dt: Datetime object in default format.
-
-        Returns:
-            Datetime object in MySQL format.
-        """
-        return dt.strftime('%Y-%m-%d %H:%M:%S')  # Convert to MySQL datetime
-
-    def save_message(self, link: str, msg: str, exp: datetime, usr_name: str) -> None:
-        """Saves given comment data into message_data table.
-
-        Method saves given inputs in message_date table as a row.
-
-        Args:
-            link:     Comment permalink.
-            msg:      Comment message.
-            exp:      Expiration datetime object.
-            usr_name: Comment author username.
-
-        """
-        exp = self.convert_datetime(exp)
-        try:
-            self.lock_write('message_data')
-            add_row = f'INSERT INTO message_data (permalink, message, new_date, username) ' \
-                      f'VALUES (\'{link}\', \'{msg}\', \'{exp}\', \'{usr_name}\');'
-            self.cursor.execute(add_row)
-            self.mysql_connection.commit()
-            self.unlock_tables()
-
-        except mysql.Error as err:
-            logger.exception(f'save_message: {err}')
-
-    def delete_message(self, tid: str) -> None:
-        """Deletes message from message_data table.
-
-        Method deletes given table id (row) from message_data table.
-
-        Args:
-            tid:    Table id from id column of message_data table.
-
-        """
-        try:
-            self.lock_write('message_data')
-            delete_row = f'DELETE FROM message_data WHERE id = \'{tid}\';'
-            self.cursor.execute(delete_row)
-            self.mysql_connection.commit()
-            self.unlock_tables()
-
-        except mysql.Error as err:
-            logger.exception(f'delete_message: {err}')
-
-    def save_comment_id(self, cid: str) -> None:
-        """Saves comment id into comment_list table.
-
-        Method saves given comment id into the comment_list table.
-
-        Args:
-            cid:    Comment id to save.
-
-        """
-        try:
-            self.lock_write('comment_list')
-            add_comment_id = f'INSERT INTO comment_list (comment_ids) VALUES (\'{cid}\');'
-
-            self.cursor.execute(add_comment_id)
-            self.mysql_connection.commit()
-            self.unlock_tables()
-
-        except mysql.Error as err:
-            logger.exception(f'save_comment_id: {err}')
 
     def find_comment_id(self, cid: str) -> bool:
         """Check comment_list table for comment id.
@@ -366,6 +248,69 @@ class ClashCallerDatabase(object):
             logger.exception(f'get_messages: {err}')
         return messages
 
+    def get_tables(self) -> list:
+        """Return table list of database.
+
+        Method returns a list with the names of the tables.
+
+        Returns:
+            List of table names.
+        """
+        table_names = []
+        try:
+            self.select_database()
+            self.cursor.execute('SHOW TABLES;')
+            tables = self.cursor.fetchall()
+
+            for table in tables:
+                table_names.append(str(table[0]))
+        except mysql.Error as err:
+            logger.exception(f'get_tables: {err}')
+        return table_names
+
+    def get_rows(self, tbl_name: str) -> tuple:
+        """Fetch table rows.
+
+        Method gets rows of given table by order of id in a tuple.
+
+        Args:
+            tbl_name:   Name of table to get rows from.
+
+        Returns:
+            Tuple containing each row's data, empty tuple otherwise.
+        """
+        rows = ()
+        try:
+            self.lock_read(tbl_name)
+            self.cursor.execute(f'SELECT * FROM {tbl_name} GROUP BY id;')
+            rows = tuple(self.cursor.fetchall())
+            self.unlock_tables()
+
+        except mysql.Error as err:
+            logger.exception(f'get_rows: {err}')
+        return rows
+
+    def grant_permissions(self) -> None:
+        """Grants bot user permissions to database.
+
+        Method grants bot user permissions to database.
+
+        Notes:
+            Only database root user can grant database permissions.
+        """
+        if not self._root_user:
+            msg = 'Only root user can grant database permissions.'
+            logger.error(msg)
+            raise RuntimeError(msg)
+
+        try:
+            cmd = f'GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX, ALTER, ' \
+                  f'CREATE TEMPORARY TABLES, LOCK TABLES ON {self._db_name}.* TO \'{self._bot_name}\'@localhost ' \
+                  f'IDENTIFIED BY \'{self._bot_passwd}\';'
+            self.cursor.execute(cmd)
+        except (mysql.Error, RuntimeError) as err:
+            logger.exception(f'grant_permissions: {err}')
+
     def lock_read(self, tbl_name: str) -> None:
         """Locks table for reading.
 
@@ -413,6 +358,74 @@ class ClashCallerDatabase(object):
         except mysql.Error as err:
             logger.exception(f'lock_write: {err}')
 
+    def open_connections(self) -> None:
+        """Open database connections.
+
+        Method makes database connection and cursor.
+
+        """
+        try:
+            self.mysql_connection = mysql.connect(user=self._db_user, password=self._db_pass, database=self._db_name)
+            self.cursor = self.mysql_connection.cursor()
+
+        except mysql.Error as err:
+            logger.exception(f'open_connections: {err}')
+
+    def save_comment_id(self, cid: str) -> None:
+        """Saves comment id into comment_list table.
+
+        Method saves given comment id into the comment_list table.
+
+        Args:
+            cid:    Comment id to save.
+
+        """
+        try:
+            self.lock_write('comment_list')
+            add_comment_id = f'INSERT INTO comment_list (comment_ids) VALUES (\'{cid}\');'
+
+            self.cursor.execute(add_comment_id)
+            self.mysql_connection.commit()
+            self.unlock_tables()
+
+        except mysql.Error as err:
+            logger.exception(f'save_comment_id: {err}')
+
+    def save_message(self, link: str, msg: str, exp: datetime, usr_name: str) -> None:
+        """Saves given comment data into message_data table.
+
+        Method saves given inputs in message_date table as a row.
+
+        Args:
+            link:     Comment permalink.
+            msg:      Comment message.
+            exp:      Expiration datetime object.
+            usr_name: Comment author username.
+
+        """
+        exp = self.convert_datetime(exp)
+        try:
+            self.lock_write('message_data')
+            add_row = f'INSERT INTO message_data (permalink, message, new_date, username) ' \
+                      f'VALUES (\'{link}\', \'{msg}\', \'{exp}\', \'{usr_name}\');'
+            self.cursor.execute(add_row)
+            self.mysql_connection.commit()
+            self.unlock_tables()
+
+        except mysql.Error as err:
+            logger.exception(f'save_message: {err}')
+
+    def select_database(self) -> None:
+        """Select database for command execution.
+
+        Method selects database within MySQL for command execution.
+
+        """
+        try:
+            self.cursor.execute(f'USE {self._db_name};')
+        except mysql.Error as err:
+            logger.exception(f'select_database: {err}')
+
     def unlock_tables(self) -> None:
         """Unlocks tables to allow access.
 
@@ -425,19 +438,6 @@ class ClashCallerDatabase(object):
 
         except mysql.Error as err:
             logger.exception(f'unlock_tables: {err}')
-
-    def close_connections(self) -> None:
-        """Close database connections.
-
-        Method closes database cursor and connection.
-
-        """
-        try:
-            self.cursor.close()
-            self.mysql_connection.close()
-
-        except mysql.Error as err:
-            logger.exception(f'close_connections: {err}')
 
 
 def main():
