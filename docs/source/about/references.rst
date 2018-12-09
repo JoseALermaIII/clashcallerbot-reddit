@@ -17,6 +17,7 @@ Python
 * `Python Packages and You`_
 * `Building and Distributing Packages with Setuptools`_
 * `os.path - Common pathname manipulations`_
+* `Robust exception handling`_
 
 .. _logging.config - Logging configuration: https://docs.python.org/3.6/library/logging.config.html
 .. _datetime - Basic date and time types: https://docs.python.org/3/library/datetime.html
@@ -27,6 +28,7 @@ Python
 .. _Building and Distributing Packages with Setuptools:
     https://setuptools.readthedocs.io/en/latest/setuptools.html#basic-use
 .. _os.path - Common pathname manipulations: https://docs.python.org/3/library/os.path.html
+.. _Robust exception handling: https://eli.thegreenplace.net/2008/08/21/robust-exception-handling/
 
 PRAW
 ----
