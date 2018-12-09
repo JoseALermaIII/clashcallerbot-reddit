@@ -71,13 +71,11 @@ class ClashCallerDatabase(object):
     def __str__(self):
         return f'Logged into database: {self._db_name} as: {self._db_user}'
 
-    def open_connections(self) -> bool:
+    def open_connections(self) -> None:
         """Open database connections.
 
         Method makes database connection and cursor.
 
-        Returns:
-             True if successful, False otherwise.
         """
         try:
             self.mysql_connection = mysql.connect(user=self._db_user, password=self._db_pass, database=self._db_name)
@@ -85,38 +83,28 @@ class ClashCallerDatabase(object):
 
         except mysql.Error as err:
             logger.exception(f'open_connections: {err}')
-            return False
-        return True
 
-    def create_database(self) -> bool:
+    def create_database(self) -> None:
         """Create database.
 
         Method creates database with database name.
 
-        Returns:
-            True if successful, False otherwise.
         """
         try:
             self.cursor.execute(f'CREATE DATABASE {self._db_name};')
         except mysql.Error as err:
             logger.exception(f'create_database: {err}')
-            return False
-        return True
 
-    def select_database(self) -> bool:
+    def select_database(self) -> None:
         """Select database for command execution.
 
         Method selects database within MySQL for command execution.
 
-        Returns:
-            True if successful, False otherwise.
         """
         try:
             self.cursor.execute(f'USE {self._db_name};')
         except mysql.Error as err:
             logger.exception(f'select_database: {err}')
-            return False
-        return True
 
     def get_tables(self) -> list:
         """Return table list of database.
@@ -138,7 +126,7 @@ class ClashCallerDatabase(object):
             logger.exception(f'get_tables: {err}')
         return table_names
 
-    def create_table(self, tbl_name: str, cols: str) -> bool:
+    def create_table(self, tbl_name: str, cols: str) -> None:
         """Create table in database.
 
         Method creates table in database with given name and specifications.
@@ -158,8 +146,6 @@ class ClashCallerDatabase(object):
             ...
             >>> db.create_table(tbl_name, cols)
 
-        Returns:
-            True if successful, False otherwise.
         """
         try:
             cmd = f'CREATE TABLE {tbl_name} ({cols})  ENGINE=InnoDB;'
@@ -168,8 +154,6 @@ class ClashCallerDatabase(object):
 
         except mysql.Error as err:
             logger.exception(f'create_table: {err}')
-            return False
-        return True
 
     def describe_table(self, tbl_name: str) -> list:
         """Gets description of table.
@@ -212,32 +196,28 @@ class ClashCallerDatabase(object):
             logger.exception(f'get_rows: {err}')
         return rows
 
-    def grant_permissions(self) -> bool:
+    def grant_permissions(self) -> None:
         """Grants bot user permissions to database.
 
         Method grants bot user permissions to database.
-
-        Returns:
-            True if successful, False otherwise.
 
         Notes:
             Only database root user can grant database permissions.
         """
         if not self._root_user:
-            logger.error('Only root user can grant database permissions.')
-            return False
+            msg = 'Only root user can grant database permissions.'
+            logger.error(msg)
+            raise RuntimeError(msg)
 
         try:
             cmd = f'GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX, ALTER, ' \
                   f'CREATE TEMPORARY TABLES, LOCK TABLES ON {self._db_name}.* TO \'{self._bot_name}\'@localhost ' \
                   f'IDENTIFIED BY \'{self._bot_passwd}\';'
             self.cursor.execute(cmd)
-        except mysql.Error as err:
+        except (mysql.Error, RuntimeError) as err:
             logger.exception(f'grant_permissions: {err}')
-            return False
-        return True
 
-    def drop_table(self, tbl_name: str) -> bool:
+    def drop_table(self, tbl_name: str) -> None:
         """Drop table from database.
 
         Function drops given table from given database.
@@ -250,15 +230,14 @@ class ClashCallerDatabase(object):
         """
         try:
             self.select_database()
+            tables = self.get_tables()
+            if tbl_name not in tables:
+                raise mysql.ProgrammingError('Table does not exist.')
             self.lock_write(tbl_name)
             self.cursor.execute(f'DROP TABLE IF EXISTS {tbl_name};')
 
-            if tbl_name in self.get_tables():
-                return False
-        except mysql.Error as err:
+        except (mysql.Error, mysql.ProgrammingError) as err:
             logger.exception(f'drop_table: {err}')
-            return False
-        return True
 
     @staticmethod
     def convert_datetime(dt: datetime) -> datetime:
@@ -274,7 +253,7 @@ class ClashCallerDatabase(object):
         """
         return dt.strftime('%Y-%m-%d %H:%M:%S')  # Convert to MySQL datetime
 
-    def save_message(self, link: str, msg: str, exp: datetime, usr_name: str) -> bool:
+    def save_message(self, link: str, msg: str, exp: datetime, usr_name: str) -> None:
         """Saves given comment data into message_data table.
 
         Method saves given inputs in message_date table as a row.
@@ -285,8 +264,6 @@ class ClashCallerDatabase(object):
             exp:      Expiration datetime object.
             usr_name: Comment author username.
 
-        Returns:
-            True for success, false otherwise.
         """
         exp = self.convert_datetime(exp)
         try:
@@ -298,10 +275,8 @@ class ClashCallerDatabase(object):
 
         except mysql.Error as err:
             logger.exception(f'save_message: {err}')
-            return False
-        return True
 
-    def delete_message(self, tid: str) -> bool:
+    def delete_message(self, tid: str) -> None:
         """Deletes message from message_data table.
 
         Method deletes given table id (row) from message_data table.
@@ -309,8 +284,6 @@ class ClashCallerDatabase(object):
         Args:
             tid:    Table id from id column of message_data table.
 
-        Returns:
-            True for success, False otherwise.
         """
         try:
             self.lock_write('message_data')
@@ -320,10 +293,8 @@ class ClashCallerDatabase(object):
 
         except mysql.Error as err:
             logger.exception(f'delete_message: {err}')
-            return False
-        return True
 
-    def save_comment_id(self, cid: str) -> bool:
+    def save_comment_id(self, cid: str) -> None:
         """Saves comment id into comment_list table.
 
         Method saves given comment id into the comment_list table.
@@ -331,8 +302,6 @@ class ClashCallerDatabase(object):
         Args:
             cid:    Comment id to save.
 
-        Returns:
-            True for success, false otherwise.
         """
         try:
             self.lock_write('comment_list')
@@ -343,8 +312,6 @@ class ClashCallerDatabase(object):
 
         except mysql.Error as err:
             logger.exception(f'save_comment_id: {err}')
-            return False
-        return True
 
     def find_comment_id(self, cid: str) -> bool:
         """Check comment_list table for comment id.
@@ -368,7 +335,6 @@ class ClashCallerDatabase(object):
 
         except mysql.Error as err:
             logger.exception(f'find_comment_id: {err}')
-            return False
         return True
 
     def get_messages(self, time_now: datetime.datetime) -> list:
@@ -394,7 +360,7 @@ class ClashCallerDatabase(object):
             logger.exception(f'get_messages: {err}')
         return messages
 
-    def lock_read(self, tbl_name: str) -> bool:
+    def lock_read(self, tbl_name: str) -> None:
         """Locks table for reading.
 
         Method locks a given table for read access.
@@ -418,19 +384,14 @@ class ClashCallerDatabase(object):
 
         except mysql.Error as err:
             logger.exception(f'lock_read: {err}')
-            return False
-        return True
 
-    def lock_write(self, tbl_name: str) -> bool:
+    def lock_write(self, tbl_name: str) -> None:
         """Locks table for writing.
 
         Method locks a given table for write access.
 
         Args:
             tbl_name:   Name of table to lock.
-
-        Returns:
-            True if successful, False otherwise.
 
         Notes:
             * Any previous locks are `implicitly released`_.
@@ -453,8 +414,6 @@ class ClashCallerDatabase(object):
 
         Method closes database cursor and connection.
 
-        Returns:
-             True if successful, False otherwise.
         """
         try:
             self.cursor.close()
@@ -462,8 +421,6 @@ class ClashCallerDatabase(object):
 
         except mysql.Error as err:
             logger.exception(f'close_connections: {err}')
-            return False
-        return True
 
 
 def main():
