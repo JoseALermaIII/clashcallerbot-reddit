@@ -48,12 +48,12 @@ def main():
         for message in messages:
             tid, link, msg, _exp, usr = message
             logger.debug(f'Found message: {message}')
-            if send_reminder(link, msg, usr):
-                logger.info(f'Reminder sent to {usr}.')
+            send_reminder(link, msg, usr)
+            logger.info(f'Reminder sent to {usr}.')
 
             # Delete message from database
-            if db.delete_message(tid):
-                logger.info(f'Message deleted.')
+            db.delete_message(tid)
+            logger.info(f'Message deleted.')
         db.close_connections()
 
 
