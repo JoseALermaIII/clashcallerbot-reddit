@@ -74,7 +74,7 @@ def main():
                 match = clashcaller_re.search(comment.body)
                 if match and comment.author.name != 'ClashCallerBot' \
                         and not have_replied(comment.id, 'ClashCallerBot') and is_recent(comment):
-                    logger.info(f'In from {comment.author.name}: {comment}')
+                    logger.info(f'In from {comment.author.name}: {comment}')  # TODO: remove user info from logs
 
                     # Strip everything before and including ClashCaller! string
                     comment.body = comment.body[match.end():].strip()
