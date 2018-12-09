@@ -59,7 +59,7 @@ message_re = re.compile(r'''
                         ''', re.VERBOSE | re.IGNORECASE)  # case-insensitive
 
 # Make database instance
-db = ClashCallerDatabase(config, False)
+db = ClashCallerDatabase(config, root_user=False)
 
 start_time = datetime.datetime.now(datetime.timezone.utc)
 
