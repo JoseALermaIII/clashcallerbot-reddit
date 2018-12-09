@@ -454,11 +454,12 @@ def main():
     print(tables)
 
     # Create message table, if it doesn't exist
-    if not tables:
+    if 'message_data' not in tables:
         col = 'id INT UNSIGNED NOT NULL AUTO_INCREMENT, ' \
               'permalink VARCHAR(100), message VARCHAR(100), new_date DATETIME, ' \
               'username VARCHAR(20), PRIMARY KEY(id)'
         database.create_table('message_data', col)
+        tables = database.get_tables()
 
     # Describe message table
     print(database.describe_table('message_data'))
@@ -468,7 +469,7 @@ def main():
 
     # Create comment_list table, if it doesn't exist
     # TODO: Add last run datetime to table for trimming
-    if not tables:
+    if 'comment_list' not in tables:
         col = 'id MEDIUMINT NOT NULL AUTO_INCREMENT, commentIDs VARCHAR(35), ' \
               'PRIMARY KEY(id)'
         database.create_table('comment_list', col)
