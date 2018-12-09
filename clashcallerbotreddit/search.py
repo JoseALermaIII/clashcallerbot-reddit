@@ -186,7 +186,7 @@ def main():
             pass
 
 
-def send_confirmation(u_name: str, link: str, exp: datetime.datetime) -> bool:
+def send_confirmation(u_name: str, link: str, exp: datetime.datetime) -> None:
     """Send confirmation to reddit user.
 
     Function sends given user confirmation of given expiration time with given link.
@@ -196,8 +196,6 @@ def send_confirmation(u_name: str, link: str, exp: datetime.datetime) -> bool:
         link:   Permalink of comment.
         exp:    Expiration datetime of call.
 
-    Returns:
-        True if successful, False otherwise.
     """
     subject = 'ClashCallerBot Confirmation Sent'
     permalink = 'https://np.reddit.com' + link  # Permalinks are missing prefix
@@ -215,11 +213,9 @@ def send_confirmation(u_name: str, link: str, exp: datetime.datetime) -> bool:
 
     except praw.exceptions.PRAWException as err:
         logger.exception(f'send_confirmation: {err}')
-        return False
-    return True
 
 
-def send_error_message(u_name: str, link: str, error: str) -> bool:
+def send_error_message(u_name: str, link: str, error: str) -> None:
     """Send error message to reddit user.
 
     Function sends given error to given user.
@@ -229,8 +225,6 @@ def send_error_message(u_name: str, link: str, error: str) -> bool:
         link:     Permalink of comment.
         error:    Error to send to user.
 
-    Returns:
-        True if successful, False otherwise.
     """
     subject = 'Unable to save call due to error'
     permalink = 'https://np.reddit.com' + link  # Permalinks are missing prefix
@@ -250,8 +244,6 @@ def send_error_message(u_name: str, link: str, error: str) -> bool:
 
     except praw.exceptions.PRAWException as err:
         logger.exception(f'send_error_message: {err}')
-        return False
-    return True
 
 
 def send_confirmation_reply(cid: str, link: str, exp: datetime.datetime) -> str:
@@ -320,7 +312,6 @@ def have_replied(cid: str, bot_name: str) -> bool:
 
     except praw.exceptions.PRAWException as err:
         logger.exception(f'have_replied: {err}')
-        return False
     return False
 
 
