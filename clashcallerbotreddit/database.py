@@ -359,7 +359,7 @@ class ClashCallerDatabase(object):
         """
         try:
             self.lock_read('comment_list')
-            query = f'SELECT * FROM comment_list WHERE comment_ids=\'{cid}\' GROUP BY id;'
+            query = f'SELECT * FROM comment_list WHERE commentIDs=\'{cid}\' GROUP BY id;'
             self.cursor.execute(query)
 
             rows = self.cursor.fetchall()
@@ -493,7 +493,7 @@ def main():
     # Create comment_list table, if it doesn't exist
     # TODO: Add last run datetime to table for trimming
     if not tables:
-        col = 'id MEDIUMINT NOT NULL AUTO_INCREMENT, comment_ids VARCHAR(35), ' \
+        col = 'id MEDIUMINT NOT NULL AUTO_INCREMENT, commentIDs VARCHAR(35), ' \
               'PRIMARY KEY(id)'
         database.create_table('comment_list', col)
 
