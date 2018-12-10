@@ -47,7 +47,7 @@ def main():
         # Send reminder PM
         for message in messages:
             tid, link, msg, _exp, usr = message
-            logger.debug(f'Found message: {message}')
+            logger.debug(f'Found message: {tid}, {msg}')
             send_reminder(link, msg, usr)
             logger.info(f'Reminder sent: {link}.')
 
