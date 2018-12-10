@@ -40,9 +40,9 @@ Next, change the following line in :mod:`clashcallerbotreddit.database`
 
 .. literalinclude:: ../../../clashcallerbotreddit/database.py
     :linenos:
-    :lineno-start: 467
+    :lineno-start: 402
     :language: python
-    :lines: 467-468
+    :lines: 402-403
 
 to ``database = ClashCallerDatabase(config_file=config, root_user=True)``. This may get updated to be default later.
 
@@ -77,18 +77,9 @@ do so, but :abbr:`YMMV (Your Mileage May Vary)`.
 Setup
 ^^^^^
 
-First, add the `bot's reddit metadata`_ to `praw-example.ini` and rename to `praw.ini`, then add the database's root and
-desired bot user credentials to `database-example.ini` and rename to `database.ini`.
-
-Next, change the following line in :mod:`clashcallerbotreddit.database`
-
-.. literalinclude:: ../../../clashcallerbotreddit/database.py
-    :linenos:
-    :lineno-start: 467
-    :language: python
-    :lines: 467-468
-
-to ``database = ClashCallerDatabase(config_file=config, root_user=True)``. This may get updated to be default later.
+.. include:: ./quickstart.rst
+    :start-after: ^^^^^
+    :end-before: Starting
 
 Now, the MySQL-compatible database can be setup by running :mod:`clashcallerbotreddit.database` directly from within
 terminal::

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>clashcallerbotreddit.reply &mdash; clashcallerbot-reddit 2.3.1 documentation</title>
+  <title>clashcallerbotreddit.reply &mdash; clashcallerbot-reddit 2.4.0 documentation</title>
   
 
   
@@ -56,7 +56,7 @@
             
             
               <div class="version">
-                2.3
+                2.4
               </div>
             
           
@@ -188,7 +188,7 @@
 <span class="n">subreddit</span> <span class="o">=</span> <span class="n">reddit</span><span class="o">.</span><span class="n">subreddit</span><span class="p">(</span><span class="s1">&#39;ClashCallerBot&#39;</span><span class="p">)</span>  <span class="c1"># Limit scope for testing purposes</span>
 
 <span class="c1"># Make database instance</span>
-<span class="n">db</span> <span class="o">=</span> <span class="n">ClashCallerDatabase</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+<span class="n">db</span> <span class="o">=</span> <span class="n">ClashCallerDatabase</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">root_user</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="main"><a class="viewcode-back" href="../../clashcallerbotreddit.html#clashcallerbotreddit.reply.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
@@ -208,17 +208,17 @@
         <span class="c1"># Send reminder PM</span>
         <span class="k">for</span> <span class="n">message</span> <span class="ow">in</span> <span class="n">messages</span><span class="p">:</span>
             <span class="n">tid</span><span class="p">,</span> <span class="n">link</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">_exp</span><span class="p">,</span> <span class="n">usr</span> <span class="o">=</span> <span class="n">message</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Found message: </span><span class="si">{message}</span><span class="s1">&#39;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">send_reminder</span><span class="p">(</span><span class="n">link</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">usr</span><span class="p">):</span>
-                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Reminder sent to </span><span class="si">{usr}</span><span class="s1">.&#39;</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Found message: </span><span class="si">{tid}</span><span class="s1">, </span><span class="si">{msg}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">send_reminder</span><span class="p">(</span><span class="n">link</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">usr</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Reminder sent: </span><span class="si">{link}</span><span class="s1">.&#39;</span><span class="p">)</span>
 
             <span class="c1"># Delete message from database</span>
-            <span class="k">if</span> <span class="n">db</span><span class="o">.</span><span class="n">delete_message</span><span class="p">(</span><span class="n">tid</span><span class="p">):</span>
-                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Message deleted.&#39;</span><span class="p">)</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">delete_message</span><span class="p">(</span><span class="n">tid</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Message deleted.&#39;</span><span class="p">)</span>
         <span class="n">db</span><span class="o">.</span><span class="n">close_connections</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="send_reminder"><a class="viewcode-back" href="../../clashcallerbotreddit.html#clashcallerbotreddit.reply.send_reminder">[docs]</a><span class="k">def</span> <span class="nf">send_reminder</span><span class="p">(</span><span class="n">link</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">usr</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span><span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<div class="viewcode-block" id="send_reminder"><a class="viewcode-back" href="../../clashcallerbotreddit.html#clashcallerbotreddit.reply.send_reminder">[docs]</a><span class="k">def</span> <span class="nf">send_reminder</span><span class="p">(</span><span class="n">link</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">usr</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span><span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Sends reminder PM to username.</span>
 
 <span class="sd">    Function sends given permalink and message to given username.</span>
@@ -228,8 +228,6 @@
 <span class="sd">         msg:   Message in comment that was saved.</span>
 <span class="sd">         usr:   User to send reminder to.</span>
 
-<span class="sd">    Returns:</span>
-<span class="sd">        True if successful, False otherwise.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">subject</span> <span class="o">=</span> <span class="s1">&#39;ClashCallerBot Private Message Here!&#39;</span>
     <span class="n">permalink</span> <span class="o">=</span> <span class="s1">&#39;https://np.reddit.com&#39;</span> <span class="o">+</span> <span class="n">link</span>  <span class="c1"># Permalinks are missing prefix</span>
@@ -247,9 +245,7 @@
         <span class="n">reddit</span><span class="o">.</span><span class="n">redditor</span><span class="p">(</span><span class="n">usr</span><span class="p">)</span><span class="o">.</span><span class="n">message</span><span class="p">(</span><span class="n">subject</span><span class="p">,</span> <span class="n">message</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;              &#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">))</span>
 
     <span class="k">except</span> <span class="n">praw</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">PRAWException</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;send_reminder: </span><span class="si">{err}</span><span class="s1">&#39;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="kc">False</span>
-    <span class="k">return</span> <span class="kc">True</span></div>
+        <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;send_reminder: </span><span class="si">{err}</span><span class="s1">&#39;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="get_parent"><a class="viewcode-back" href="../../clashcallerbotreddit.html#clashcallerbotreddit.reply.get_parent">[docs]</a><span class="k">def</span> <span class="nf">get_parent</span><span class="p">(</span><span class="n">link</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
@@ -270,7 +266,6 @@
         <span class="n">parent</span> <span class="o">=</span> <span class="s1">&#39;https://np.reddit.com&#39;</span> <span class="o">+</span> <span class="n">comment</span><span class="o">.</span><span class="n">submission</span><span class="o">.</span><span class="n">permalink</span>
     <span class="k">except</span> <span class="n">praw</span><span class="o">.</span><span class="n">exceptions</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;get_parent: </span><span class="si">{err}</span><span class="s1">&#39;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">parent</span>
     <span class="k">return</span> <span class="n">parent</span></div>
 
 

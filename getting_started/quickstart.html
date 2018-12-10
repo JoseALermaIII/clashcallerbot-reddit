@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Quickstart &mdash; clashcallerbot-reddit 2.3.1 documentation</title>
+  <title>Quickstart &mdash; clashcallerbot-reddit 2.4.0 documentation</title>
   
 
   
@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                2.3
+                2.4
               </div>
             
           
@@ -208,8 +208,8 @@ will install the internal modules into the Python environment so that they can b
 <p>First, add the <a class="reference external" href="https://praw.readthedocs.io/en/latest/getting_started/configuration/prawini.html#defining-additional-sites">bot’s reddit metadata</a> to <cite>praw-example.ini</cite> and rename to <cite>praw.ini</cite>, then add the database’s root and
 desired bot user credentials to <cite>database-example.ini</cite> and rename to <cite>database.ini</cite>.</p>
 <p>Next, change the following line in <a class="reference internal" href="../clashcallerbotreddit.html#module-clashcallerbotreddit.database" title="clashcallerbotreddit.database"><code class="xref py py-mod docutils literal notranslate"><span class="pre">clashcallerbotreddit.database</span></code></a></p>
-<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>467
-468</pre></div></td><td class="code"><div class="highlight"><pre><span></span>    <span class="c1"># Create the clashcaller database</span>
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>402
+403</pre></div></td><td class="code"><div class="highlight"><pre><span></span>    <span class="c1"># Create the clashcaller database</span>
     <span class="n">database</span> <span class="o">=</span> <span class="n">ClashCallerDatabase</span><span class="p">(</span><span class="n">config_file</span><span class="o">=</span><span class="n">config</span><span class="p">,</span> <span class="n">root_user</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 </pre></div>
 </td></tr></table></div>
@@ -248,8 +248,8 @@ do so, but <abbr title="Your Mileage May Vary">YMMV</abbr>.</p>
 <p>First, add the <a class="reference external" href="https://praw.readthedocs.io/en/latest/getting_started/configuration/prawini.html#defining-additional-sites">bot’s reddit metadata</a> to <cite>praw-example.ini</cite> and rename to <cite>praw.ini</cite>, then add the database’s root and
 desired bot user credentials to <cite>database-example.ini</cite> and rename to <cite>database.ini</cite>.</p>
 <p>Next, change the following line in <a class="reference internal" href="../clashcallerbotreddit.html#module-clashcallerbotreddit.database" title="clashcallerbotreddit.database"><code class="xref py py-mod docutils literal notranslate"><span class="pre">clashcallerbotreddit.database</span></code></a></p>
-<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>467
-468</pre></div></td><td class="code"><div class="highlight"><pre><span></span>    <span class="c1"># Create the clashcaller database</span>
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>402
+403</pre></div></td><td class="code"><div class="highlight"><pre><span></span>    <span class="c1"># Create the clashcaller database</span>
     <span class="n">database</span> <span class="o">=</span> <span class="n">ClashCallerDatabase</span><span class="p">(</span><span class="n">config_file</span><span class="o">=</span><span class="n">config</span><span class="p">,</span> <span class="n">root_user</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 </pre></div>
 </td></tr></table></div>

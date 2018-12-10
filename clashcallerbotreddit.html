@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>clashcallerbotreddit package &mdash; clashcallerbot-reddit 2.3.1 documentation</title>
+  <title>clashcallerbotreddit package &mdash; clashcallerbot-reddit 2.4.0 documentation</title>
   
 
   
@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                2.3
+                2.4
               </div>
             
           
@@ -197,7 +197,7 @@ MySQL-compatible database:</p>
 </ul>
 <dl class="class">
 <dt id="clashcallerbotreddit.database.ClashCallerDatabase">
-<em class="property">class </em><code class="descclassname">clashcallerbotreddit.database.</code><code class="descname">ClashCallerDatabase</code><span class="sig-paren">(</span><em>config_file=None</em>, <em>root_user=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clashcallerbotreddit/database.html#ClashCallerDatabase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clashcallerbotreddit.database.ClashCallerDatabase" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">clashcallerbotreddit.database.</code><code class="descname">ClashCallerDatabase</code><span class="sig-paren">(</span><em>config_file=None</em>, <em>section='bot'</em>, <em>root_user=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clashcallerbotreddit/database.html#ClashCallerDatabase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clashcallerbotreddit.database.ClashCallerDatabase" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Implements a class for a ClashCaller Database.</p>
 <p>Acts as an object-relational mapper for mysql.connector specific to ClashCallerBot.</p>
@@ -210,6 +210,20 @@ MySQL-compatible database:</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/configparser.html#configparser.ConfigParser" title="(in Python v3.7)">configparser.ConfigParser</a>()</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clashcallerbotreddit.database.ClashCallerDatabase.section">
+<code class="descname">section</code><a class="headerlink" href="#clashcallerbotreddit.database.ClashCallerDatabase.section" title="Permalink to this definition">¶</a></dt>
+<dd><p>Section heading containing bot information. Defaults to ‘bot’.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)">str</a></td>
 </tr>
 </tbody>
 </table>
@@ -259,17 +273,9 @@ MySQL-compatible database:</p>
 
 <dl class="method">
 <dt id="clashcallerbotreddit.database.ClashCallerDatabase.close_connections">
-<code class="descname">close_connections</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="_modules/clashcallerbotreddit/database.html#ClashCallerDatabase.close_connections"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clashcallerbotreddit.database.ClashCallerDatabase.close_connections" title="Permalink to this definition">¶</a></dt>
+<code class="descname">close_connections</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/clashcallerbotreddit/database.html#ClashCallerDatabase.close_connections"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clashcallerbotreddit.database.ClashCallerDatabase.close_connections" title="Permalink to this definition">¶</a></dt>
 <dd><p>Close database connections.</p>
 <p>Method closes database cursor and connection.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if successful, False otherwise.</td>
-</tr>
-</tbody>
-</table>
 </dd></dl>
 
 <dl class="staticmethod">
@@ -291,22 +297,14 @@ MySQL-compatible database:</p>
 
 <dl class="method">
 <dt id="clashcallerbotreddit.database.ClashCallerDatabase.create_database">
-<code class="descname">create_database</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="_modules/clashcallerbotreddit/database.html#ClashCallerDatabase.create_database"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clashcallerbotreddit.database.ClashCallerDatabase.create_database" title="Permalink to this definition">¶</a></dt>
+<code class="descname">create_database</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/clashcallerbotreddit/database.html#ClashCallerDatabase.create_database"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clashcallerbotreddit.database.ClashCallerDatabase.create_database" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create database.</p>
 <p>Method creates database with database name.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if successful, False otherwise.</td>
-</tr>
-</tbody>
-</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="clashcallerbotreddit.database.ClashCallerDatabase.create_table">
-<code class="descname">create_table</code><span class="sig-paren">(</span><em>tbl_name: str</em>, <em>cols: str</em><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="_modules/clashcallerbotreddit/database.html#ClashCallerDatabase.create_table"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clashcallerbotreddit.database.ClashCallerDatabase.create_table" title="Permalink to this definition">¶</a></dt>
+<code class="descname">create_table</code><span class="sig-paren">(</span><em>tbl_name: str</em>, <em>cols: str</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/clashcallerbotreddit/database.html#ClashCallerDatabase.create_table"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clashcallerbotreddit.database.ClashCallerDatabase.create_table" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create table in database.</p>
 <p>Method creates table in database with given name and specifications.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -322,27 +320,22 @@ MySQL-compatible database:</p>
 </tbody>
 </table>
 <p class="rubric">Example</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tbl_name</span> <span class="o">=</span> <span class="s1">&#39;table&#39;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">clashcallerbotreddit</span> <span class="k">import</span> <span class="n">config</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">clashcallerbotreddit.database</span> <span class="k">import</span> <span class="n">ClashCallerDatabase</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">db</span> <span class="o">=</span> <span class="n">ClashCallerDatabase</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">root_user</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tbl_name</span> <span class="o">=</span> <span class="s1">&#39;table&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cols</span> <span class="o">=</span> <span class="s1">&#39;id INT UNSIGNED NOT NULL AUTO_INCREMENT, &#39;</span>
 <span class="gp">... </span>       <span class="s1">&#39;permalink VARCHAR(100), message VARCHAR(100), new_date DATETIME, &#39;</span>
 <span class="gp">... </span>       <span class="s1">&#39;userID VARCHAR(20), PRIMARY KEY(id)&#39;</span>
 <span class="gp">...</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">create_table</span><span class="p">(</span><span class="n">tbl_name</span><span class="p">,</span> <span class="n">cols</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">create_table</span><span class="p">(</span><span class="n">tbl_name</span><span class="p">,</span> <span class="n">cols</span><span class="p">)</span>
 </pre></div>
 </div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if successful, False otherwise.</td>
-</tr>
-</tbody>
-</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="clashcallerbotreddit.database.ClashCallerDatabase.delete_message">
-<code class="descname">delete_message</code><span class="sig-paren">(</span><em>tid: str</em><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="_modules/clashcallerbotreddit/database.html#ClashCallerDatabase.delete_message"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clashcallerbotreddit.database.ClashCallerDatabase.delete_message" title="Permalink to this definition">¶</a></dt>
+<code class="descname">delete_message</code><span class="sig-paren">(</span><em>tid: str</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/clashcallerbotreddit/database.html#ClashCallerDatabase.delete_message"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clashcallerbotreddit.database.ClashCallerDatabase.delete_message" title="Permalink to this definition">¶</a></dt>
 <dd><p>Deletes message from message_data table.</p>
 <p>Method deletes given table id (row) from message_data table.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -350,8 +343,6 @@ MySQL-compatible database:</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>tid</strong> – Table id from id column of message_data table.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True for success, False otherwise.</td>
 </tr>
 </tbody>
 </table>
@@ -376,7 +367,7 @@ MySQL-compatible database:</p>
 
 <dl class="method">
 <dt id="clashcallerbotreddit.database.ClashCallerDatabase.drop_table">
-<code class="descname">drop_table</code><span class="sig-paren">(</span><em>tbl_name: str</em><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="_modules/clashcallerbotreddit/database.html#ClashCallerDatabase.drop_table"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clashcallerbotreddit.database.ClashCallerDatabase.drop_table" title="Permalink to this definition">¶</a></dt>
+<code class="descname">drop_table</code><span class="sig-paren">(</span><em>tbl_name: str</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/clashcallerbotreddit/database.html#ClashCallerDatabase.drop_table"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clashcallerbotreddit.database.ClashCallerDatabase.drop_table" title="Permalink to this definition">¶</a></dt>
 <dd><p>Drop table from database.</p>
 <p>Function drops given table from given database.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -384,25 +375,6 @@ MySQL-compatible database:</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>tbl_name</strong> – Table to drop.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if successful, False otherwise.</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="clashcallerbotreddit.database.ClashCallerDatabase.find_comment_id">
-<code class="descname">find_comment_id</code><span class="sig-paren">(</span><em>cid: str</em><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="_modules/clashcallerbotreddit/database.html#ClashCallerDatabase.find_comment_id"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clashcallerbotreddit.database.ClashCallerDatabase.find_comment_id" title="Permalink to this definition">¶</a></dt>
-<dd><p>Check comment_list table for comment id.</p>
-<p>Method checks comment_list table for given comment id.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cid</strong> – Comment id to search for.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True for success, false otherwise.</td>
 </tr>
 </tbody>
 </table>
@@ -459,24 +431,16 @@ MySQL-compatible database:</p>
 
 <dl class="method">
 <dt id="clashcallerbotreddit.database.ClashCallerDatabase.grant_permissions">
-<code class="descname">grant_permissions</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="_modules/clashcallerbotreddit/database.html#ClashCallerDatabase.grant_permissions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clashcallerbotreddit.database.ClashCallerDatabase.grant_permissions" title="Permalink to this definition">¶</a></dt>
+<code class="descname">grant_permissions</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/clashcallerbotreddit/database.html#ClashCallerDatabase.grant_permissions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clashcallerbotreddit.database.ClashCallerDatabase.grant_permissions" title="Permalink to this definition">¶</a></dt>
 <dd><p>Grants bot user permissions to database.</p>
 <p>Method grants bot user permissions to database.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if successful, False otherwise.</td>
-</tr>
-</tbody>
-</table>
 <p class="rubric">Notes</p>
 <p>Only database root user can grant database permissions.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="clashcallerbotreddit.database.ClashCallerDatabase.lock_read">
-<code class="descname">lock_read</code><span class="sig-paren">(</span><em>tbl_name: str</em><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="_modules/clashcallerbotreddit/database.html#ClashCallerDatabase.lock_read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clashcallerbotreddit.database.ClashCallerDatabase.lock_read" title="Permalink to this definition">¶</a></dt>
+<code class="descname">lock_read</code><span class="sig-paren">(</span><em>tbl_name: str</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/clashcallerbotreddit/database.html#ClashCallerDatabase.lock_read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clashcallerbotreddit.database.ClashCallerDatabase.lock_read" title="Permalink to this definition">¶</a></dt>
 <dd><p>Locks table for reading.</p>
 <p>Method locks a given table for read access.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -498,7 +462,7 @@ MySQL-compatible database:</p>
 
 <dl class="method">
 <dt id="clashcallerbotreddit.database.ClashCallerDatabase.lock_write">
-<code class="descname">lock_write</code><span class="sig-paren">(</span><em>tbl_name: str</em><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="_modules/clashcallerbotreddit/database.html#ClashCallerDatabase.lock_write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clashcallerbotreddit.database.ClashCallerDatabase.lock_write" title="Permalink to this definition">¶</a></dt>
+<code class="descname">lock_write</code><span class="sig-paren">(</span><em>tbl_name: str</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/clashcallerbotreddit/database.html#ClashCallerDatabase.lock_write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clashcallerbotreddit.database.ClashCallerDatabase.lock_write" title="Permalink to this definition">¶</a></dt>
 <dd><p>Locks table for writing.</p>
 <p>Method locks a given table for write access.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -506,8 +470,6 @@ MySQL-compatible database:</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>tbl_name</strong> – Name of table to lock.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if successful, False otherwise.</td>
 </tr>
 </tbody>
 </table>
@@ -520,54 +482,26 @@ MySQL-compatible database:</p>
 
 <dl class="method">
 <dt id="clashcallerbotreddit.database.ClashCallerDatabase.open_connections">
-<code class="descname">open_connections</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="_modules/clashcallerbotreddit/database.html#ClashCallerDatabase.open_connections"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clashcallerbotreddit.database.ClashCallerDatabase.open_connections" title="Permalink to this definition">¶</a></dt>
+<code class="descname">open_connections</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/clashcallerbotreddit/database.html#ClashCallerDatabase.open_connections"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clashcallerbotreddit.database.ClashCallerDatabase.open_connections" title="Permalink to this definition">¶</a></dt>
 <dd><p>Open database connections.</p>
 <p>Method makes database connection and cursor.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if successful, False otherwise.</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="clashcallerbotreddit.database.ClashCallerDatabase.save_comment_id">
-<code class="descname">save_comment_id</code><span class="sig-paren">(</span><em>cid: str</em><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="_modules/clashcallerbotreddit/database.html#ClashCallerDatabase.save_comment_id"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clashcallerbotreddit.database.ClashCallerDatabase.save_comment_id" title="Permalink to this definition">¶</a></dt>
-<dd><p>Saves comment id into comment_list table.</p>
-<p>Method saves given comment id into the comment_list table.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cid</strong> – Comment id to save.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True for success, false otherwise.</td>
-</tr>
-</tbody>
-</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="clashcallerbotreddit.database.ClashCallerDatabase.save_message">
-<code class="descname">save_message</code><span class="sig-paren">(</span><em>link: str</em>, <em>msg: str</em>, <em>exp: &lt;module 'datetime' from '/usr/lib/python3.6/datetime.py'&gt;</em>, <em>usr_name: str</em><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="_modules/clashcallerbotreddit/database.html#ClashCallerDatabase.save_message"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clashcallerbotreddit.database.ClashCallerDatabase.save_message" title="Permalink to this definition">¶</a></dt>
+<code class="descname">save_message</code><span class="sig-paren">(</span><em>link: str</em>, <em>msg: str</em>, <em>exp: &lt;module 'datetime' from '/usr/lib/python3.6/datetime.py'&gt;</em>, <em>usr_name: str</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/clashcallerbotreddit/database.html#ClashCallerDatabase.save_message"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clashcallerbotreddit.database.ClashCallerDatabase.save_message" title="Permalink to this definition">¶</a></dt>
 <dd><p>Saves given comment data into message_data table.</p>
 <p>Method saves given inputs in message_date table as a row.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>link</strong> – Comment permalink.</li>
 <li><strong>msg</strong> – Comment message.</li>
 <li><strong>exp</strong> – Expiration datetime object.</li>
 <li><strong>usr_name</strong> – Comment author username.</li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">True for success, false otherwise.</p>
 </td>
 </tr>
 </tbody>
@@ -576,17 +510,16 @@ MySQL-compatible database:</p>
 
 <dl class="method">
 <dt id="clashcallerbotreddit.database.ClashCallerDatabase.select_database">
-<code class="descname">select_database</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="_modules/clashcallerbotreddit/database.html#ClashCallerDatabase.select_database"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clashcallerbotreddit.database.ClashCallerDatabase.select_database" title="Permalink to this definition">¶</a></dt>
+<code class="descname">select_database</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/clashcallerbotreddit/database.html#ClashCallerDatabase.select_database"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clashcallerbotreddit.database.ClashCallerDatabase.select_database" title="Permalink to this definition">¶</a></dt>
 <dd><p>Select database for command execution.</p>
 <p>Method selects database within MySQL for command execution.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if successful, False otherwise.</td>
-</tr>
-</tbody>
-</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="clashcallerbotreddit.database.ClashCallerDatabase.unlock_tables">
+<code class="descname">unlock_tables</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/clashcallerbotreddit/database.html#ClashCallerDatabase.unlock_tables"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clashcallerbotreddit.database.ClashCallerDatabase.unlock_tables" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unlocks tables to allow access.</p>
+<p>Method unlocks tables to allow read/write access.</p>
 </dd></dl>
 
 </dd></dl>
@@ -627,21 +560,18 @@ database.</p>
 
 <dl class="function">
 <dt id="clashcallerbotreddit.reply.send_reminder">
-<code class="descclassname">clashcallerbotreddit.reply.</code><code class="descname">send_reminder</code><span class="sig-paren">(</span><em>link: str</em>, <em>msg: str</em>, <em>usr: str</em><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="_modules/clashcallerbotreddit/reply.html#send_reminder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clashcallerbotreddit.reply.send_reminder" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">clashcallerbotreddit.reply.</code><code class="descname">send_reminder</code><span class="sig-paren">(</span><em>link: str</em>, <em>msg: str</em>, <em>usr: str</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/clashcallerbotreddit/reply.html#send_reminder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clashcallerbotreddit.reply.send_reminder" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sends reminder PM to username.</p>
 <p>Function sends given permalink and message to given username.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>link</strong> – Permalink to comment.</li>
 <li><strong>msg</strong> – Message in comment that was saved.</li>
 <li><strong>usr</strong> – User to send reminder to.</li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">True if successful, False otherwise.</p>
 </td>
 </tr>
 </tbody>
@@ -704,21 +634,18 @@ applied, then all the comment data is saved to a MySQL-compatible database.</p>
 
 <dl class="function">
 <dt id="clashcallerbotreddit.search.send_confirmation">
-<code class="descclassname">clashcallerbotreddit.search.</code><code class="descname">send_confirmation</code><span class="sig-paren">(</span><em>u_name: str</em>, <em>link: str</em>, <em>exp: datetime.datetime</em><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="_modules/clashcallerbotreddit/search.html#send_confirmation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clashcallerbotreddit.search.send_confirmation" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">clashcallerbotreddit.search.</code><code class="descname">send_confirmation</code><span class="sig-paren">(</span><em>u_name: str</em>, <em>link: str</em>, <em>exp: datetime.datetime</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/clashcallerbotreddit/search.html#send_confirmation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clashcallerbotreddit.search.send_confirmation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Send confirmation to reddit user.</p>
 <p>Function sends given user confirmation of given expiration time with given link.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>u_name</strong> – username of user.</li>
 <li><strong>link</strong> – Permalink of comment.</li>
 <li><strong>exp</strong> – Expiration datetime of call.</li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">True if successful, False otherwise.</p>
 </td>
 </tr>
 </tbody>
@@ -727,7 +654,7 @@ applied, then all the comment data is saved to a MySQL-compatible database.</p>
 
 <dl class="function">
 <dt id="clashcallerbotreddit.search.send_confirmation_reply">
-<code class="descclassname">clashcallerbotreddit.search.</code><code class="descname">send_confirmation_reply</code><span class="sig-paren">(</span><em>cid: str</em>, <em>link: str</em>, <em>exp: datetime.datetime</em><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="_modules/clashcallerbotreddit/search.html#send_confirmation_reply"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clashcallerbotreddit.search.send_confirmation_reply" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">clashcallerbotreddit.search.</code><code class="descname">send_confirmation_reply</code><span class="sig-paren">(</span><em>cid: str</em>, <em>link: str</em>, <em>exp: datetime.datetime</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clashcallerbotreddit/search.html#send_confirmation_reply"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clashcallerbotreddit.search.send_confirmation_reply" title="Permalink to this definition">¶</a></dt>
 <dd><p>Replies to a comment.</p>
 <p>Function replies to a given comment ID with a given message.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -750,21 +677,18 @@ applied, then all the comment data is saved to a MySQL-compatible database.</p>
 
 <dl class="function">
 <dt id="clashcallerbotreddit.search.send_error_message">
-<code class="descclassname">clashcallerbotreddit.search.</code><code class="descname">send_error_message</code><span class="sig-paren">(</span><em>u_name: str</em>, <em>link: str</em>, <em>error: str</em><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="_modules/clashcallerbotreddit/search.html#send_error_message"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clashcallerbotreddit.search.send_error_message" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">clashcallerbotreddit.search.</code><code class="descname">send_error_message</code><span class="sig-paren">(</span><em>u_name: str</em>, <em>link: str</em>, <em>error: str</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/clashcallerbotreddit/search.html#send_error_message"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clashcallerbotreddit.search.send_error_message" title="Permalink to this definition">¶</a></dt>
 <dd><p>Send error message to reddit user.</p>
 <p>Function sends given error to given user.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>u_name</strong> – username of user.</li>
 <li><strong>link</strong> – Permalink of comment.</li>
 <li><strong>error</strong> – Error to send to user.</li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">True if successful, False otherwise.</p>
 </td>
 </tr>
 </tbody>
