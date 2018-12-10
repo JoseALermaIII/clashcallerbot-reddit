@@ -49,7 +49,7 @@ def main():
             tid, link, msg, _exp, usr = message
             logger.debug(f'Found message: {message}')
             send_reminder(link, msg, usr)
-            logger.info(f'Reminder sent to {usr}.')
+            logger.info(f'Reminder sent: {link}.')
 
             # Delete message from database
             db.delete_message(tid)
