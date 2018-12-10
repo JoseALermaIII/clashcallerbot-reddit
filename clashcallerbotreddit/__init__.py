@@ -23,7 +23,7 @@ import os
 import sys
 import configparser
 
-__version__ = '2.4.0'
+__version__ = '2.4.1'
 __all__ = ['__version__', 'config', 'LOGGING']
 
 # Loads database.ini for use in database.py, search.py, and reply.py.
