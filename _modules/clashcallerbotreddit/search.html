@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>clashcallerbotreddit.search &mdash; clashcallerbot-reddit 2.4.0 documentation</title>
+  <title>clashcallerbotreddit.search &mdash; clashcallerbot-reddit 2.4.1 documentation</title>
   
 
   
@@ -350,7 +350,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">subject</span> <span class="o">=</span> <span class="s1">&#39;ClashCallerBot Confirmation Sent&#39;</span>
     <span class="n">permalink</span> <span class="o">=</span> <span class="s1">&#39;https://np.reddit.com&#39;</span> <span class="o">+</span> <span class="n">link</span>  <span class="c1"># Permalinks are missing prefix</span>
-    <span class="n">exp</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">exp</span><span class="p">,</span> <span class="s1">&#39;%b. </span><span class="si">%d</span><span class="s1">, %Y at %I:%M:%S %p (%Z)&#39;</span><span class="p">)</span>
+    <span class="n">exp</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">exp</span><span class="p">,</span> <span class="s1">&#39;%b. </span><span class="si">%d</span><span class="s1">, %Y at %I:%M:%S %p %Z&#39;</span><span class="p">)</span>
     <span class="n">message</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;&quot;&quot;ClashCallerBot here!  </span>
 <span class="s2">              I will be messaging you on [**</span><span class="si">{exp}</span><span class="s2">**](http://www.wolframalpha.com/input/?i=</span><span class="si">{exp}</span><span class="s2"> To Local Time) to remind</span>
 <span class="s2">               you of [**this call.**](</span><span class="si">{permalink}</span><span class="s2">)</span>
@@ -412,7 +412,7 @@
 <span class="sd">        id of new comment if successful, None otherwise</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">permalink</span> <span class="o">=</span> <span class="s1">&#39;https://np.reddit.com&#39;</span> <span class="o">+</span> <span class="n">link</span>  <span class="c1"># Permalinks are missing prefix</span>
-    <span class="n">exp</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">exp</span><span class="p">,</span> <span class="s1">&#39;%b. </span><span class="si">%d</span><span class="s1">, %Y at %I:%M:%S %p (%Z)&#39;</span><span class="p">)</span>
+    <span class="n">exp</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">exp</span><span class="p">,</span> <span class="s1">&#39;%b. </span><span class="si">%d</span><span class="s1">, %Y at %I:%M:%S %p %Z&#39;</span><span class="p">)</span>
     <span class="n">message</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;&quot;&quot;ClashCallerBot here!  </span>
 <span class="s2">              I will be messaging you on [**</span><span class="si">{exp}</span><span class="s2">**](http://www.wolframalpha.com/input/?i=</span><span class="si">{exp}</span><span class="s2"> To Local Time) to remind </span>
 <span class="s2">              you of [**this call.**](</span><span class="si">{permalink}</span><span class="s2">)</span>
