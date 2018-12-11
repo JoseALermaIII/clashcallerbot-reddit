@@ -43,7 +43,7 @@ If that wasn't bad enough, a symbolic link to *praw.ini* must be made from withi
     ln -s absolute_path_here/clashcallerbot-reddit/praw.ini praw.ini
 
 This has to do with how `praw` finds the *praw.ini* file. This may get fixed later much like the *database.ini* fix in
-`config.py`.
+`__init__.py`.
 
 Now, we can build the docs in HTML format::
 
