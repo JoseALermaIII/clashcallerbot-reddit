@@ -112,10 +112,27 @@ Alternatively, by running the provided bash script from within terminal::
     * The function in ``kill`` returns all script PIDs, so it must be restarted.
     * If you have access to ``pidof``, you can avoid killing all script instances.
 
+Restarting
+^^^^^^^^^^
+
+A bash script is provided to restart both scripts and can be run from within terminal::
+
+    ./restart.sh
+
+.. note::
+
+    * Remember to set executable mode with `chmod +x ./restart.sh`
+    * Script assumes files are in the `clashcallerbotreddit` directory.
+    * If you have access to root, check :doc:`installation` for info on setting up systemd instead.
+    * Logfile can be removed if not necessary (remove variable and `>> $logfile`).
+    * `python` can be replaced with relevant python version.
+    * The function in `kill` returns all script PIDs, so it must be restarted.
+    * If you have access to `pidof`, you can avoid killing all script instances.
+
 Updating
 ^^^^^^^^
 
-A bash script is also provided for updating and can be run directly from within terminal::
+A bash script is also provided for updating both scripts and can be run directly from within terminal::
 
     ./redownload.sh
 
