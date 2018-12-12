@@ -12,7 +12,7 @@
 #   * If you have access to `pidof`, you can avoid killing all script instances
 #
 
-logfile="./clashcallerbotlog.txt"
+logfile="./logs/clashcallerbotlog.txt"
 
 echo "Restarting reply.py: $(date)" >> $logfile
 kill $(ps aux | grep '[p]ython -m clashcallerbotreddit.reply' | awk '{print $2}')
