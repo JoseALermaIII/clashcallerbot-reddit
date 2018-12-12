@@ -57,7 +57,7 @@ LOGGING = {
         'searchfile': {
             'class': 'logging.handlers.RotatingFileHandler',
             'level': 'DEBUG',
-            'filename': './logs/search.log',
+            'filename': package_dir + 'logs/search.log',
             'maxBytes': 26214400,  # 25 MiB
             'backupCount': 3,
             'formatter': 'detailed'
@@ -65,7 +65,7 @@ LOGGING = {
         'replyfile': {
             'class': 'logging.handlers.RotatingFileHandler',
             'level': 'DEBUG',
-            'filename': './logs/reply.log',
+            'filename': package_dir + 'logs/reply.log',
             'maxBytes': 26214400,  # 25 MiB
             'backupCount': 3,
             'formatter': 'detailed'
@@ -73,7 +73,7 @@ LOGGING = {
         'databasefile': {
             'class': 'logging.handlers.RotatingFileHandler',
             'level': 'DEBUG',
-            'filename': './logs/database.log',
+            'filename': package_dir + 'logs/database.log',
             'maxBytes': 26214400,  # 25 MiB
             'backupCount': 3,
             'formatter': 'detailed'
