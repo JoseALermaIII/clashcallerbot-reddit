@@ -54,35 +54,51 @@ LOGGING = {
             'stream': 'ext://sys.stdout',
             'formatter': 'brief'
         },
-        'file': {
+        'searchfile': {
             'class': 'logging.handlers.RotatingFileHandler',
             'level': 'DEBUG',
-            'filename': 'clashcaller.log',
-            'maxBytes': 104857600,  # 100 MiB
+            'filename': './logs/search.log',
+            'maxBytes': 26214400,  # 25 MiB
             'backupCount': 3,
             'formatter': 'detailed'
-        }
+        },
+        'replyfile': {
+            'class': 'logging.handlers.RotatingFileHandler',
+            'level': 'DEBUG',
+            'filename': './logs/reply.log',
+            'maxBytes': 26214400,  # 25 MiB
+            'backupCount': 3,
+            'formatter': 'detailed'
+        },
+        'databasefile': {
+            'class': 'logging.handlers.RotatingFileHandler',
+            'level': 'DEBUG',
+            'filename': './logs/database.log',
+            'maxBytes': 26214400,  # 25 MiB
+            'backupCount': 3,
+            'formatter': 'detailed'
+        },
     },
     'loggers': {
         'root': {
             'level': 'NOTSET',
-            'handlers': ['console', 'file']
+            'handlers': ['console', 'searchfile']
         },
         'reply': {
             'level': 'DEBUG',
-            'handlers': ['console', 'file'],
+            'handlers': ['console', 'replyfile'],
             'propagate': 0,
             'qualname': 'reply'
         },
         'search': {
             'level': 'DEBUG',
-            'handlers': ['console', 'file'],
+            'handlers': ['console', 'searchfile'],
             'propagate': 0,
             'qualname': 'search'
         },
         'database': {
             'level': 'DEBUG',
-            'handlers': ['console', 'file'],
+            'handlers': ['console', 'databasefile'],
             'propagate': 0,
             'qualname': 'database'
         }
