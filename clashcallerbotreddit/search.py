@@ -153,8 +153,6 @@ def main():
 
                     db.close_connections()
 
-            time.sleep(2)
-
         except urllib3.exceptions.ConnectionError as err:
             logger.exception(f'urllib3: {err}')
             time.sleep(20)
@@ -167,7 +165,7 @@ def main():
 
         except prawcore.exceptions.PrawcoreException as err:
             logger.exception(f'prawcore: {err}')
-            time.sleep(20)
+            time.sleep(60)
             pass
 
         except praw.exceptions.PRAWException as err:
