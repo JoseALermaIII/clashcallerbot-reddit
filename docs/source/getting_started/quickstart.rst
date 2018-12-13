@@ -134,11 +134,9 @@ Updating
 
 A bash script is also provided for updating both scripts and can be run directly from within terminal::
 
-    ./redownload.sh
+    ./update.sh
 
 .. note::
 
-    * Don't forget to set executable mode with ``chmod +x ./redownload.sh``.
-    * Script assumes files are all in the `clashcallerbotreddit` directory and that it is run in a :doc:`no_root_setup`.
+    * Don't forget to set executable mode with ``chmod +x ./update.sh``.
     * The ``-f`` and ``-q`` switch silence outputs to certain degrees.
-
