@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Quickstart &mdash; clashcallerbot-reddit 2.4.3 documentation</title>
+  <title>Quickstart &mdash; clashcallerbot-reddit 2.4.4 documentation</title>
   
 
   
@@ -208,7 +208,7 @@ will install the internal modules into the Python environment so that they can b
 <h3>Setup<a class="headerlink" href="#setup" title="Permalink to this headline">¶</a></h3>
 <p>First, add the <a class="reference external" href="https://praw.readthedocs.io/en/latest/getting_started/configuration/prawini.html#defining-additional-sites">bot’s reddit metadata</a> to <cite>praw-example.ini</cite> and rename to <cite>praw.ini</cite>, then add the database’s root and
 desired bot user credentials to <cite>database-example.ini</cite> and rename to <cite>database.ini</cite>.</p>
-<p>Next, change the following line in <code class="xref py py-mod docutils literal notranslate"><span class="pre">clashcallerbotreddit.database</span></code></p>
+<p>Next, change the following line in <a class="reference internal" href="../clashcallerbotreddit.html#module-clashcallerbotreddit.database" title="clashcallerbotreddit.database"><code class="xref py py-mod docutils literal notranslate"><span class="pre">clashcallerbotreddit.database</span></code></a></p>
 <div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>402
 403</pre></div></td><td class="code"><div class="highlight"><pre><span></span>    <span class="c1"># Create the clashcaller database</span>
     <span class="n">database</span> <span class="o">=</span> <span class="n">ClashCallerDatabase</span><span class="p">(</span><span class="n">config_file</span><span class="o">=</span><span class="n">config</span><span class="p">,</span> <span class="n">root_user</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
@@ -223,12 +223,12 @@ desired bot user credentials to <cite>database-example.ini</cite> and rename to 
 </pre></div>
 </div>
 <p>from within the source code directory. Now that <strong>clashcallerbot-reddit</strong> is installed, scripts can be run from
-terminal directly. First, we configure the the MySQL-compatible database by running <code class="xref py py-mod docutils literal notranslate"><span class="pre">clashcallerbotreddit.database</span></code>
+terminal directly. First, we configure the the MySQL-compatible database by running <a class="reference internal" href="../clashcallerbotreddit.html#module-clashcallerbotreddit.database" title="clashcallerbotreddit.database"><code class="xref py py-mod docutils literal notranslate"><span class="pre">clashcallerbotreddit.database</span></code></a>
 in terminal:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">database</span>
 </pre></div>
 </div>
-<p>Now, the bot can be started by calling <code class="xref py py-mod docutils literal notranslate"><span class="pre">clashcallerbotreddit.search</span></code> and <code class="xref py py-mod docutils literal notranslate"><span class="pre">clashcallerbotreddit.reply</span></code>:</p>
+<p>Now, the bot can be started by calling <a class="reference internal" href="../clashcallerbotreddit.html#module-clashcallerbotreddit.search" title="clashcallerbotreddit.search"><code class="xref py py-mod docutils literal notranslate"><span class="pre">clashcallerbotreddit.search</span></code></a> and <a class="reference internal" href="../clashcallerbotreddit.html#module-clashcallerbotreddit.reply" title="clashcallerbotreddit.reply"><code class="xref py py-mod docutils literal notranslate"><span class="pre">clashcallerbotreddit.reply</span></code></a>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">nohup</span> <span class="n">reply</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">null</span> <span class="mi">2</span><span class="o">&gt;&amp;</span><span class="mi">1</span> <span class="o">&amp;</span>
 <span class="n">nohup</span> <span class="n">search</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">null</span> <span class="mi">2</span><span class="o">&gt;&amp;</span><span class="mi">1</span> <span class="o">&amp;</span>
 </pre></div>
@@ -248,14 +248,14 @@ do so, but <abbr title="Your Mileage May Vary">YMMV</abbr>.</p>
 <h3>Setup<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
 <p>First, add the <a class="reference external" href="https://praw.readthedocs.io/en/latest/getting_started/configuration/prawini.html#defining-additional-sites">bot’s reddit metadata</a> to <cite>praw-example.ini</cite> and rename to <cite>praw.ini</cite>, then add the database’s root and
 desired bot user credentials to <cite>database-example.ini</cite> and rename to <cite>database.ini</cite>.</p>
-<p>Next, change the following line in <code class="xref py py-mod docutils literal notranslate"><span class="pre">clashcallerbotreddit.database</span></code></p>
+<p>Next, change the following line in <a class="reference internal" href="../clashcallerbotreddit.html#module-clashcallerbotreddit.database" title="clashcallerbotreddit.database"><code class="xref py py-mod docutils literal notranslate"><span class="pre">clashcallerbotreddit.database</span></code></a></p>
 <div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>402
 403</pre></div></td><td class="code"><div class="highlight"><pre><span></span>    <span class="c1"># Create the clashcaller database</span>
     <span class="n">database</span> <span class="o">=</span> <span class="n">ClashCallerDatabase</span><span class="p">(</span><span class="n">config_file</span><span class="o">=</span><span class="n">config</span><span class="p">,</span> <span class="n">root_user</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 </pre></div>
 </td></tr></table></div>
 <p>to <code class="docutils literal notranslate"><span class="pre">database</span> <span class="pre">=</span> <span class="pre">ClashCallerDatabase(config_file=config,</span> <span class="pre">root_user=True)</span></code>. This may get updated to be default later.</p>
-<p>Now, the MySQL-compatible database can be setup by running <code class="xref py py-mod docutils literal notranslate"><span class="pre">clashcallerbotreddit.database</span></code> directly from within
+<p>Now, the MySQL-compatible database can be setup by running <a class="reference internal" href="../clashcallerbotreddit.html#module-clashcallerbotreddit.database" title="clashcallerbotreddit.database"><code class="xref py py-mod docutils literal notranslate"><span class="pre">clashcallerbotreddit.database</span></code></a> directly from within
 terminal:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="o">-</span><span class="n">m</span> <span class="n">clashcallerbotreddit</span><span class="o">.</span><span class="n">database</span>
 </pre></div>
@@ -263,8 +263,8 @@ terminal:</p>
 </div>
 <div class="section" id="id2">
 <h3>Starting<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
-<p>Once the database is setup, the bot can be run by calling <code class="xref py py-mod docutils literal notranslate"><span class="pre">clashcallerbotreddit.search</span></code> and
-<code class="xref py py-mod docutils literal notranslate"><span class="pre">clashcallerbotreddit.reply</span></code> directly from within terminal:</p>
+<p>Once the database is setup, the bot can be run by calling <a class="reference internal" href="../clashcallerbotreddit.html#module-clashcallerbotreddit.search" title="clashcallerbotreddit.search"><code class="xref py py-mod docutils literal notranslate"><span class="pre">clashcallerbotreddit.search</span></code></a> and
+<a class="reference internal" href="../clashcallerbotreddit.html#module-clashcallerbotreddit.reply" title="clashcallerbotreddit.reply"><code class="xref py py-mod docutils literal notranslate"><span class="pre">clashcallerbotreddit.reply</span></code></a> directly from within terminal:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="o">-</span><span class="n">m</span> <span class="n">clashcallerbotreddit</span><span class="o">.</span><span class="n">search</span> <span class="o">&amp;&amp;</span> <span class="n">python3</span> <span class="o">-</span><span class="n">m</span> <span class="n">clashcallerbotreddit</span><span class="o">.</span><span class="n">reply</span>
 </pre></div>
 </div>
@@ -308,14 +308,13 @@ terminal:</p>
 <div class="section" id="updating">
 <h3>Updating<a class="headerlink" href="#updating" title="Permalink to this headline">¶</a></h3>
 <p>A bash script is also provided for updating both scripts and can be run directly from within terminal:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">redownload</span><span class="o">.</span><span class="n">sh</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">update</span><span class="o">.</span><span class="n">sh</span>
 </pre></div>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <ul class="last simple">
-<li>Don’t forget to set executable mode with <code class="docutils literal notranslate"><span class="pre">chmod</span> <span class="pre">+x</span> <span class="pre">./redownload.sh</span></code>.</li>
-<li>Script assumes files are all in the <cite>clashcallerbotreddit</cite> directory and that it is run in a <a class="reference internal" href="no_root_setup.html"><span class="doc">No Root Setup</span></a>.</li>
+<li>Don’t forget to set executable mode with <code class="docutils literal notranslate"><span class="pre">chmod</span> <span class="pre">+x</span> <span class="pre">./update.sh</span></code>.</li>
 <li>The <code class="docutils literal notranslate"><span class="pre">-f</span></code> and <code class="docutils literal notranslate"><span class="pre">-q</span></code> switch silence outputs to certain degrees.</li>
 </ul>
 </div>
