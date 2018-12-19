@@ -134,6 +134,7 @@ the EBS volume. ::
     sudo mount /var/lib/mysql
 
     sudo service mysqld start && sudo service mysqld status
+    sudo chkconfig --level 3 mysqld on  # set to start at boot
 
 Setup ClashCallerBot
 --------------------
