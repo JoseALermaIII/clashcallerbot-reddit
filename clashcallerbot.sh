@@ -3,14 +3,14 @@
 # Script to check for and start clashcallerbot scripts as background processes.
 #
 # Notes:
-# * Remember to set executable mode with `chmod +x ./clashcallerbot.sh`
+# * Remember to set executable mode with ``chmod +x ./clashcallerbot.sh``
 # * Script assumes files are in the `clashcallerbotreddit` directory and is run as crontab in amazon linux setup
 #   * How often to run as a crontab depends on how long you want the bot to be down/broken
 #   * If you have access to root, check the Docs for info on setting up systemd instead
-# * Logfile can be removed if not necessary (remove variable and `>> $logfile`)
-# * `python` can be replaced with relevant python version
-# * The function in `kill` returns all script PIDs, so it must be restarted.
-#   * If you have access to `pidof`, you can avoid killing all script instances
+# * Logfile can be removed if not necessary (remove variable and ``>> $logfile``)
+# * ``python3`` can be replaced with relevant python version
+# * The function in ``kill`` returns all script PIDs, so it must be restarted.
+#   * If you have access to ``pidof``, you can avoid killing all script instances
 #
 
 source ./env/bin/activate  # set virtual environment
