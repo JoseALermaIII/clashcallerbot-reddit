@@ -15,6 +15,13 @@
 
 source ./env/bin/activate  # set virtual environment
 
+# Make logs directory
+if [ ! -d logs ]; then
+    echo 'Creating logs directory...'
+    mkdir ./logs
+    echo '*****'
+fi
+
 logfile="./logs/clashcallerbotlog.txt"
 
 case "$(ps -ef | grep '[p]ython3 -m clashcallerbotreddit.reply' | wc -l)" in
