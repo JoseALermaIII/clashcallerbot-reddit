@@ -57,7 +57,7 @@ progress, if persistence was not enabled previously.
 Install some dependencies as the **default user**, not the new one. ::
 
     sudo yum install gcc python-devel openssl-devel libffi-devel
-    pip install --upgrade pip
+    sudo pip install --upgrade pip
 
 As the **new user**, `set up the needed environment
 <http://python-guide-pt-br.readthedocs.io/en/latest/dev/virtualenvs/>`_. From within the virtual environment, run::
