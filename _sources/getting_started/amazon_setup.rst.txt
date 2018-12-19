@@ -4,6 +4,9 @@ Amazon Linux AMI Setup
 For what I hope is the final production version, I set up an Amazon EC2 instance running Amazon Linux AMI.
 I particularly like that it has pip and python pre-installed.
 
+Setup Amazon Linux
+------------------
+
 `Amazon Linux AMI <https://aws.amazon.com/amazon-linux-ami/>`_ is a fork of
 :abbr:`RHEL6 (Red Hat Enterprise Linux version 6)` made to run on the
 :abbr:`EC2 (Amazon Elastic Compute Cloud)` of :abbr:`AWS (Amazon Web Services)`. It is a good choice for having an
@@ -54,19 +57,34 @@ progress, if persistence was not enabled previously.
 .. _Install and enable yum-cron:
     https://community.centminmod.com/threads/automatic-nightly-yum-updates-with-yum-cron.1507/?PageSpeed=noscript
 
+Setup pip and python
+--------------------
+
 Install some dependencies as the **default user**, not the new one. ::
 
-    sudo yum install gcc python-devel openssl-devel libffi-devel
-    pip install --upgrade pip
+    sudo yum install gcc python36-devel.x86_64 openssl-devel libffi-devel
+    sudo pip install --upgrade pip
 
 As the **new user**, `set up the needed environment
-<http://python-guide-pt-br.readthedocs.io/en/latest/dev/virtualenvs/>`_. From within the virtual environment, run::
+<https://docs.python.org/3.6/library/venv.html#module-venv>`_ and select it from within the
+package directory::
+
+    python3 -m venv clashcallerbot-reddit/env
+    source clashcallerbot-reddit/env/bin/activate  # selects venv
+
+From within the virtual environment, run::
 
     pip install -U wheel
+    pip install --upgrade pip
     pip install praw
+    pip install mysql-connector
+
+Setup MySQL
+-----------
 
 `Set up a MySQL database within an EBS volume <https://aws.amazon.com/articles/1663>`_ as the **default user**. The
-guide is for Ubuntu, but setup for Amazon Linux is very similar. Once the EBS volume is created and attached, the
+guide is for Ubuntu, but setup for Amazon Linux is very similar (replace ``apt-get`` with ``yum`` and use
+``sudo service mysqld [start|stop]`` to start or stop MySQL). Once the EBS volume is created and attached, the
 **default user** needs to run the following from within the Amazon Linux EC2 instance to create an XFS filesystem at
 ``/vol``::
 
@@ -116,21 +134,30 @@ the EBS volume. ::
     sudo mount /var/lib/mysql
 
     sudo service mysqld start && sudo service mysqld status
+    sudo chkconfig --level 3 mysqld on  # set to start at boot
 
-Now that the database has been set up, more dependencies need to be installed in the virtual environment as the
-**new user**. ::
+Setup ClashCallerBot
+--------------------
 
-    source clashcallerbot-reddit/bin/activate    # set virtual environment, if needed
-    pip install mysql-connector
+Now that python, pip, and MySQL have been set up, the **new user** can download and setup the bot::
 
-Once all relevant files have been added, the bot can be started, output redirected to a null terminal,
-and process put in the background. ::
+    source clashcallerbot-reddit/env/bin/activate    # set virtual environment, if needed
+    wget https://github.com/JoseALermaIII/clashcallerbot-reddit/raw/master/update.sh
+    chmod +x ./update.sh
+    ./update.sh
 
-    source clashcallerbot-reddit/bin/activate    # set virtual environment, if needed
-    nohup python3 -m clashcallerbotreddit.reply > /dev/null 2>&1 &
-    nohup python3 -m clashcallerbotreddit.search > /dev/null 2>&1 &
+Next, add the `bot's reddit metadata`_ to `praw-example.ini` and rename to `praw.ini`, then add the database's root and
+desired bot user credentials to `database-example.ini` and rename to `database.ini`.
+
+Once all relevant files have been downloaded and configured, the bot can be started::
+
+    chmod +x ./clashcallerbot.sh
+    ./clashcallerbot.sh
 
 .. tip::
 
     * The bot has to login to reddit at least once to refresh the oauth token. Amazon Linux does not have a web browser
       installed by default, so run ``sudo yum install lynx`` as the **default user** before running the script.
+
+.. _bot's reddit metadata:
+    https://praw.readthedocs.io/en/latest/getting_started/configuration/prawini.html#defining-additional-sites

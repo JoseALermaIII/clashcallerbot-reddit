@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Quickstart &mdash; clashcallerbot-reddit 2.4.5 documentation</title>
+  <title>Quickstart &mdash; clashcallerbot-reddit 2.4.6 documentation</title>
   
 
   
@@ -207,7 +207,8 @@ will install the internal modules into the Python environment so that they can b
 <div class="section" id="setup">
 <h3>Setup<a class="headerlink" href="#setup" title="Permalink to this headline">¶</a></h3>
 <p>First, add the <a class="reference external" href="https://praw.readthedocs.io/en/latest/getting_started/configuration/prawini.html#defining-additional-sites">bot’s reddit metadata</a> to <cite>praw-example.ini</cite> and rename to <cite>praw.ini</cite>, then add the database’s root and
-desired bot user credentials to <cite>database-example.ini</cite> and rename to <cite>database.ini</cite>.</p>
+desired bot user credentials to <cite>database-example.ini</cite> and rename to <cite>database.ini</cite>. Then, create a <code class="docutils literal notranslate"><span class="pre">logs</span></code> directory
+by entering <code class="docutils literal notranslate"><span class="pre">mkdir</span> <span class="pre">./logs</span></code> in a terminal window.</p>
 <p>Next, change the following line in <a class="reference internal" href="../clashcallerbotreddit.html#module-clashcallerbotreddit.database" title="clashcallerbotreddit.database"><code class="xref py py-mod docutils literal notranslate"><span class="pre">clashcallerbotreddit.database</span></code></a></p>
 <div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>402
 403</pre></div></td><td class="code"><div class="highlight"><pre><span></span>    <span class="c1"># Create the clashcaller database</span>
@@ -247,7 +248,8 @@ do so, but <abbr title="Your Mileage May Vary">YMMV</abbr>.</p>
 <div class="section" id="id1">
 <h3>Setup<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
 <p>First, add the <a class="reference external" href="https://praw.readthedocs.io/en/latest/getting_started/configuration/prawini.html#defining-additional-sites">bot’s reddit metadata</a> to <cite>praw-example.ini</cite> and rename to <cite>praw.ini</cite>, then add the database’s root and
-desired bot user credentials to <cite>database-example.ini</cite> and rename to <cite>database.ini</cite>.</p>
+desired bot user credentials to <cite>database-example.ini</cite> and rename to <cite>database.ini</cite>. Then, create a <code class="docutils literal notranslate"><span class="pre">logs</span></code> directory
+by entering <code class="docutils literal notranslate"><span class="pre">mkdir</span> <span class="pre">./logs</span></code> in a terminal window.</p>
 <p>Next, change the following line in <a class="reference internal" href="../clashcallerbotreddit.html#module-clashcallerbotreddit.database" title="clashcallerbotreddit.database"><code class="xref py py-mod docutils literal notranslate"><span class="pre">clashcallerbotreddit.database</span></code></a></p>
 <div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>402
 403</pre></div></td><td class="code"><div class="highlight"><pre><span></span>    <span class="c1"># Create the clashcaller database</span>
@@ -276,11 +278,11 @@ terminal:</p>
 <p class="first admonition-title">Note</p>
 <ul class="last simple">
 <li>Remember to set executable mode with <code class="docutils literal notranslate"><span class="pre">chmod</span> <span class="pre">+x</span> <span class="pre">./clashcallerbot.sh</span></code>.</li>
-<li>Script assumes files are in the <cite>clashcallerbotreddit</cite> directory and is run as crontab in <a class="reference internal" href="no_root_setup.html"><span class="doc">No Root Setup</span></a>.</li>
+<li>Script assumes files are in the <cite>clashcallerbotreddit</cite> directory and is run as crontab in <a class="reference internal" href="amazon_setup.html"><span class="doc">Amazon Linux AMI Setup</span></a>.</li>
 <li>How often to run as a crontab depends on how long you want the bot to be down/broken.</li>
 <li>If you have access to root, check <a class="reference internal" href="installation.html"><span class="doc">Installation</span></a> for info on setting up systemd instead.</li>
 <li>Logfile can be removed if not necessary (remove variable and <code class="docutils literal notranslate"><span class="pre">&gt;&gt;</span> <span class="pre">$logfile</span></code>).</li>
-<li><code class="docutils literal notranslate"><span class="pre">python</span></code> can be replaced with relevant python version.</li>
+<li><code class="docutils literal notranslate"><span class="pre">python3</span></code> can be replaced with relevant python version.</li>
 <li>The function in <code class="docutils literal notranslate"><span class="pre">kill</span></code> returns all script PIDs, so it must be restarted.</li>
 <li>If you have access to <code class="docutils literal notranslate"><span class="pre">pidof</span></code>, you can avoid killing all script instances.</li>
 </ul>
@@ -295,13 +297,13 @@ terminal:</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <ul class="last simple">
-<li>Remember to set executable mode with <cite>chmod +x ./restart.sh</cite></li>
+<li>Remember to set executable mode with <code class="docutils literal notranslate"><span class="pre">chmod</span> <span class="pre">+x</span> <span class="pre">./restart.sh</span></code></li>
 <li>Script assumes files are in the <cite>clashcallerbotreddit</cite> directory.</li>
 <li>If you have access to root, check <a class="reference internal" href="installation.html"><span class="doc">Installation</span></a> for info on setting up systemd instead.</li>
-<li>Logfile can be removed if not necessary (remove variable and <cite>&gt;&gt; $logfile</cite>).</li>
-<li><cite>python</cite> can be replaced with relevant python version.</li>
-<li>The function in <cite>kill</cite> returns all script PIDs, so it must be restarted.</li>
-<li>If you have access to <cite>pidof</cite>, you can avoid killing all script instances.</li>
+<li>Logfile can be removed if not necessary (remove variable and <code class="docutils literal notranslate"><span class="pre">&gt;&gt;</span> <span class="pre">$logfile</span></code>).</li>
+<li><code class="docutils literal notranslate"><span class="pre">python3</span></code> can be replaced with relevant python version.</li>
+<li>The function in <code class="docutils literal notranslate"><span class="pre">kill</span></code> returns all script PIDs, so it must be restarted.</li>
+<li>If you have access to <code class="docutils literal notranslate"><span class="pre">pidof</span></code>, you can avoid killing all script instances.</li>
 </ul>
 </div>
 </div>
