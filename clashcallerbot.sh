@@ -13,6 +13,8 @@
 #   * If you have access to `pidof`, you can avoid killing all script instances
 #
 
+source ./env/bin/activate  # set virtual environment
+
 logfile="./logs/clashcallerbotlog.txt"
 
 case "$(ps -ef | grep '[p]ython -m clashcallerbotreddit.reply' | wc -l)" in
