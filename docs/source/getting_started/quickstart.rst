@@ -109,7 +109,7 @@ Alternatively, by running the provided bash script from within terminal::
     * How often to run as a crontab depends on how long you want the bot to be down/broken.
     * If you have access to root, check :doc:`installation` for info on setting up systemd instead.
     * Logfile can be removed if not necessary (remove variable and ``>> $logfile``).
-    * ``python`` can be replaced with relevant python version.
+    * ``python3`` can be replaced with relevant python version.
     * The function in ``kill`` returns all script PIDs, so it must be restarted.
     * If you have access to ``pidof``, you can avoid killing all script instances.
 
@@ -122,13 +122,13 @@ A bash script is provided to restart both scripts and can be run from within ter
 
 .. note::
 
-    * Remember to set executable mode with `chmod +x ./restart.sh`
+    * Remember to set executable mode with ``chmod +x ./restart.sh``
     * Script assumes files are in the `clashcallerbotreddit` directory.
     * If you have access to root, check :doc:`installation` for info on setting up systemd instead.
-    * Logfile can be removed if not necessary (remove variable and `>> $logfile`).
-    * `python` can be replaced with relevant python version.
-    * The function in `kill` returns all script PIDs, so it must be restarted.
-    * If you have access to `pidof`, you can avoid killing all script instances.
+    * Logfile can be removed if not necessary (remove variable and ``>> $logfile``).
+    * ``python3`` can be replaced with relevant python version.
+    * The function in ``kill`` returns all script PIDs, so it must be restarted.
+    * If you have access to ``pidof``, you can avoid killing all script instances.
 
 Updating
 ^^^^^^^^
