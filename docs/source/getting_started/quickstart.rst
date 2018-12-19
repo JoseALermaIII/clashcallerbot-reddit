@@ -105,7 +105,7 @@ Alternatively, by running the provided bash script from within terminal::
 .. note::
 
     * Remember to set executable mode with ``chmod +x ./clashcallerbot.sh``.
-    * Script assumes files are in the `clashcallerbotreddit` directory and is run as crontab in :doc:`no_root_setup`.
+    * Script assumes files are in the `clashcallerbotreddit` directory and is run as crontab in :doc:`amazon_setup`.
     * How often to run as a crontab depends on how long you want the bot to be down/broken.
     * If you have access to root, check :doc:`installation` for info on setting up systemd instead.
     * Logfile can be removed if not necessary (remove variable and ``>> $logfile``).
