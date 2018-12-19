@@ -145,13 +145,18 @@ Now that python, pip, and MySQL have been set up, the **new user** can download 
     chmod +x ./update.sh
     ./update.sh
 
-Once all relevant files have been added, the bot can be started, output redirected to a null terminal,
-and process put in the background. ::
+Next, add the `bot's reddit metadata`_ to `praw-example.ini` and rename to `praw.ini`, then add the database's root and
+desired bot user credentials to `database-example.ini` and rename to `database.ini`.
 
-    nohup python3 -m clashcallerbotreddit.reply > /dev/null 2>&1 &
-    nohup python3 -m clashcallerbotreddit.search > /dev/null 2>&1 &
+Once all relevant files have been downloaded and configured, the bot can be started::
+
+    chmod +x ./clashcallerbot.sh
+    ./clashcallerbot.sh
 
 .. tip::
 
     * The bot has to login to reddit at least once to refresh the oauth token. Amazon Linux does not have a web browser
       installed by default, so run ``sudo yum install lynx`` as the **default user** before running the script.
+
+.. _bot's reddit metadata:
+    https://praw.readthedocs.io/en/latest/getting_started/configuration/prawini.html#defining-additional-sites
