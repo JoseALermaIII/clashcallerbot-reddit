@@ -34,7 +34,8 @@ Setup
 ^^^^^
 
 First, add the `bot's reddit metadata`_ to `praw-example.ini` and rename to `praw.ini`, then add the database's root and
-desired bot user credentials to `database-example.ini` and rename to `database.ini`.
+desired bot user credentials to `database-example.ini` and rename to `database.ini`. Then, create a ``logs`` directory
+by entering ``mkdir ./logs`` in a terminal window.
 
 Next, change the following line in :mod:`clashcallerbotreddit.database`
 
