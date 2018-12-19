@@ -60,7 +60,13 @@ Install some dependencies as the **default user**, not the new one. ::
     sudo pip install --upgrade pip
 
 As the **new user**, `set up the needed environment
-<http://python-guide-pt-br.readthedocs.io/en/latest/dev/virtualenvs/>`_. From within the virtual environment, run::
+<https://docs.python.org/3.6/library/venv.html#module-venv>`_ and select it from within the
+package directory::
+
+    python3 -m venv clashcallerbot-reddit/env
+    source clashcallerbot-reddit/env/bin/activate  # selects venv
+
+From within the virtual environment, run::
 
     pip install -U wheel
     pip install praw
@@ -120,7 +126,7 @@ the EBS volume. ::
 Now that the database has been set up, more dependencies need to be installed in the virtual environment as the
 **new user**. ::
 
-    source clashcallerbot-reddit/bin/activate    # set virtual environment, if needed
+    source clashcallerbot-reddit/env/bin/activate    # set virtual environment, if needed
     pip install mysql-connector
 
 Once all relevant files have been added, the bot can be started, output redirected to a null terminal,
