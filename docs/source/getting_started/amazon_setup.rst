@@ -56,7 +56,7 @@ progress, if persistence was not enabled previously.
 
 Install some dependencies as the **default user**, not the new one. ::
 
-    sudo yum install gcc python-devel openssl-devel libffi-devel
+    sudo yum install gcc python36-devel.x86_64 openssl-devel libffi-devel
     sudo pip install --upgrade pip
 
 As the **new user**, `set up the needed environment
