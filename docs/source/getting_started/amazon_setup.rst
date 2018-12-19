@@ -73,7 +73,8 @@ From within the virtual environment, run::
     pip install praw
 
 `Set up a MySQL database within an EBS volume <https://aws.amazon.com/articles/1663>`_ as the **default user**. The
-guide is for Ubuntu, but setup for Amazon Linux is very similar. Once the EBS volume is created and attached, the
+guide is for Ubuntu, but setup for Amazon Linux is very similar (replace ``apt-get`` with ``yum`` and use
+``sudo service mysqld [start|stop]`` to start or stop MySQL). Once the EBS volume is created and attached, the
 **default user** needs to run the following from within the Amazon Linux EC2 instance to create an XFS filesystem at
 ``/vol``::
 
