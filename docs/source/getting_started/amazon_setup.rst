@@ -4,6 +4,9 @@ Amazon Linux AMI Setup
 For what I hope is the final production version, I set up an Amazon EC2 instance running Amazon Linux AMI.
 I particularly like that it has pip and python pre-installed.
 
+Setup Amazon Linux
+------------------
+
 `Amazon Linux AMI <https://aws.amazon.com/amazon-linux-ami/>`_ is a fork of
 :abbr:`RHEL6 (Red Hat Enterprise Linux version 6)` made to run on the
 :abbr:`EC2 (Amazon Elastic Compute Cloud)` of :abbr:`AWS (Amazon Web Services)`. It is a good choice for having an
@@ -54,6 +57,9 @@ progress, if persistence was not enabled previously.
 .. _Install and enable yum-cron:
     https://community.centminmod.com/threads/automatic-nightly-yum-updates-with-yum-cron.1507/?PageSpeed=noscript
 
+Setup pip and python
+--------------------
+
 Install some dependencies as the **default user**, not the new one. ::
 
     sudo yum install gcc python36-devel.x86_64 openssl-devel libffi-devel
@@ -71,6 +77,10 @@ From within the virtual environment, run::
     pip install -U wheel
     pip install --upgrade pip
     pip install praw
+    pip install mysql-connector
+
+Setup MySQL
+-----------
 
 `Set up a MySQL database within an EBS volume <https://aws.amazon.com/articles/1663>`_ as the **default user**. The
 guide is for Ubuntu, but setup for Amazon Linux is very similar (replace ``apt-get`` with ``yum`` and use
@@ -125,16 +135,19 @@ the EBS volume. ::
 
     sudo service mysqld start && sudo service mysqld status
 
-Now that the database has been set up, more dependencies need to be installed in the virtual environment as the
-**new user**. ::
+Setup ClashCallerBot
+--------------------
+
+Now that python, pip, and MySQL have been set up, the **new user** can download and setup the bot::
 
     source clashcallerbot-reddit/env/bin/activate    # set virtual environment, if needed
-    pip install mysql-connector
+    wget https://github.com/JoseALermaIII/clashcallerbot-reddit/raw/master/update.sh
+    chmod +x ./update.sh
+    ./update.sh
 
 Once all relevant files have been added, the bot can be started, output redirected to a null terminal,
 and process put in the background. ::
 
-    source clashcallerbot-reddit/bin/activate    # set virtual environment, if needed
     nohup python3 -m clashcallerbotreddit.reply > /dev/null 2>&1 &
     nohup python3 -m clashcallerbotreddit.search > /dev/null 2>&1 &
 
