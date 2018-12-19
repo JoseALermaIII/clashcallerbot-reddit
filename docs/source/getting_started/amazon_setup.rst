@@ -69,6 +69,7 @@ package directory::
 From within the virtual environment, run::
 
     pip install -U wheel
+    pip install --upgrade pip
     pip install praw
 
 `Set up a MySQL database within an EBS volume <https://aws.amazon.com/articles/1663>`_ as the **default user**. The
