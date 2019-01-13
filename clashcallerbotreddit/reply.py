@@ -34,27 +34,42 @@ def main():
     logger.info('Start reply.py...')
     while True:
         time.sleep(120)  # 2 minutes
-        db.open_connections()
-        # Get list of messages older than current datetime
-        now = datetime.datetime.now(datetime.timezone.utc)
-        messages = db.get_messages(now)
 
-        if not messages:
-            logger.debug(f'No messages before: {now}.')
-            db.close_connections()
-            continue
+        # Check saved messages
+        check_database()
 
-        # Send reminder PM
-        for message in messages:
-            tid, link, msg, _exp, usr = message
-            logger.debug(f'Found message: {tid}, {msg}')
-            send_reminder(link, msg, usr)
-            logger.info(f'Reminder sent: {link}.')
 
-            # Delete message from database
-            db.delete_message(tid)
-            logger.info(f'Message deleted.')
+def check_database()-> None:
+    """Checks messages in database and sends PM if expiration time passed.
+
+    Checks messages saved in a MySQL-compatible database and sends a reminder
+    via PM if the expiration time has passed. If so, the message is removed from the
+    database.
+
+    Returns:
+         None. Message is removed from database if expiration time has passed.
+    """
+    db.open_connections()
+    # Get list of messages older than current datetime
+    now = datetime.datetime.now(datetime.timezone.utc)
+    messages = db.get_messages(now)
+
+    if not messages:
+        logger.debug(f'No messages before: {now}.')
         db.close_connections()
+        return None
+
+    # Send reminder PM
+    for message in messages:
+        tid, link, msg, _exp, usr = message
+        logger.debug(f'Found message: {tid}, {msg}')
+        send_reminder(link, msg, usr)
+        logger.info(f'Reminder sent: {link}.')
+
+        # Delete message from database
+        db.delete_message(tid)
+        logger.info(f'Message deleted.')
+    db.close_connections()
 
 
 def send_reminder(link: str, msg: str, usr: str)-> None:
