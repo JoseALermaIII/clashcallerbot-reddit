@@ -73,7 +73,8 @@ def main():
                 db.open_connections()
                 match = clashcaller_re.search(comment.body)
                 if match and comment.author.name != 'ClashCallerBot' \
-                        and not have_replied(comment.id, 'ClashCallerBot') and is_recent(comment):
+                        and not have_replied(comment.id, 'ClashCallerBot') \
+                        and is_recent(comment.created_utc, start_time):
                     logger.info(f'In: {comment}')
 
                     # Strip everything before and including ClashCaller! string
@@ -303,19 +304,20 @@ def have_replied(cid: str, bot_name: str) -> bool:
     return False
 
 
-def is_recent(cmnt: praw.reddit.models.Comment) -> bool:
+def is_recent(cmnt_time: float, time_arg: datetime.datetime.now) -> bool:
     """Checks if comment is a recent comment.
 
-    Function compares comment time with program start time.
+    Function compares given comment Unix timestamp with given time.
 
     Args:
-        cmnt:  praw comment object.
+        cmnt_time:  Comment's created Unix timestamp in UTC.
+        time_arg: Time to compare with comment timestamp.
 
     Returns:
-        True if comment time is after start time, False otherwise.
+        True if comment's created time is after given time, False otherwise.
     """
-    cmnt_time = datetime.datetime.fromtimestamp(cmnt.created_utc, datetime.timezone.utc)
-    if cmnt_time > start_time:
+    cmnt_datetime = datetime.datetime.fromtimestamp(cmnt_time, datetime.timezone.utc)
+    if cmnt_datetime > time_arg:
         return True
     return False
 
