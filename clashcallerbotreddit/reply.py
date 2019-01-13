@@ -1,10 +1,17 @@
 #! python3
 # -*- coding: utf-8 -*-
-"""Checks messages in database and sends PM if expiration time passed.
+"""Performs cleanup operations.
 
-This module checks messages saved in a MySQL-compatible database and sends a reminder
-via PM if the expiration time has passed. If so, the message is removed from the
-database.
+This module implements functions designed to clean up various data sets:
+
+* Sends and deletes stored messages in the MySQL-compatible database.
+* Checks bot's comments and removes comments below a certain threshold.
+* TODO: Checks bot's messages for keywords and deletes them after:
+
+    * Adding message author to call reminder.
+    * PMing list of message author's calls.
+    * Deleting message author from call.
+
 """
 
 import praw
