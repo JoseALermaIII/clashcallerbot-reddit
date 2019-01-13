@@ -149,8 +149,6 @@ def main():
                     send_confirmation(comment.author.name, comment.permalink, expiration_datetime)
                     send_confirmation_reply(comment.id, comment.permalink, expiration_datetime)
 
-                    # TODO: Add more functionality via PM: delete calls, list calls, add users to call reminder
-
                     db.close_connections()
 
         except urllib3.exceptions.ConnectionError as err:
