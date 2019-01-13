@@ -38,6 +38,32 @@ def main():
         # Check saved messages
         check_database()
 
+        # Check for comments below threshold
+        check_comments('ClashCallerBot')
+
+
+def check_comments(usr: str, limit: int = -4)-> None:
+    """Checks comments and deletes if below threshold.
+
+    Checks given user's last 100 comments and deletes each one below the given threshold.
+
+    Args:
+        usr: User to check comments of.
+        limit: Threshold below which comment will be deleted. Defaults to ``-4``.
+
+    Returns:
+         None. Comments below threshold are deleted.
+    """
+    try:
+        comments = reddit.redditor(usr).comments.new()
+        for comment in comments:
+            if comment.score < limit:
+                logger.debug(f'Deleting comment below threshold of {limit}: {comment.id}.')
+                comment.delete()
+            continue
+    except praw.exceptions.PRAWException as err:
+        logger.exception(f'check_comments: {err}')
+
 
 def check_database()-> None:
     """Checks messages in database and sends PM if expiration time passed.
