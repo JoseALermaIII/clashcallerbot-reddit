@@ -304,7 +304,7 @@ def have_replied(cid: str, bot_name: str) -> bool:
     return False
 
 
-def is_recent(cmnt_time: float, time_arg: datetime.datetime.now) -> bool:
+def is_recent(cmnt_time: float, time_arg: datetime.datetime) -> bool:
     """Checks if comment is a recent comment.
 
     Function compares given comment Unix timestamp with given time.
