@@ -22,6 +22,7 @@ import datetime
 import time
 
 from clashcallerbotreddit.database import ClashCallerDatabase
+from clashcallerbotreddit.search import is_recent
 from clashcallerbotreddit import LOGGING, config
 
 # Logger
@@ -35,6 +36,10 @@ subreddit = reddit.subreddit('ClashCallerBot')  # Limit scope for testing purpos
 
 # Make database instance
 db = ClashCallerDatabase(config, root_user=False)
+
+# Time constants
+start_time = datetime.datetime.now(datetime.timezone.utc)
+archive_time = start_time - datetime.timedelta(weeks=12)  # 6 months archival time
 
 
 def main():
@@ -60,10 +65,18 @@ def check_comments(usr: str, limit: int = -4)-> None:
 
     Returns:
          None. Comments below threshold are deleted.
+
+    Note:
+        Skips archived comments (> 6 months from start time).
+
     """
     try:
         comments = reddit.redditor(usr).comments.new()
         for comment in comments:
+            if not is_recent(comment.created_utc, archive_time):
+                logger.debug(f'Skipping comments after {archive_time}.')
+                return None
+
             if comment.score < limit:
                 logger.debug(f'Deleting comment below threshold of {limit}: {comment.id}.')
                 comment.delete()
