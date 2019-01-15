@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>clashcallerbotreddit.search &mdash; clashcallerbot-reddit 2.4.6 documentation</title>
+  <title>clashcallerbotreddit.search &mdash; clashcallerbot-reddit 2.5.0 documentation</title>
   
 
   
@@ -56,7 +56,7 @@
             
             
               <div class="version">
-                2.4
+                2.5
               </div>
             
           
@@ -234,7 +234,8 @@
                 <span class="n">db</span><span class="o">.</span><span class="n">open_connections</span><span class="p">()</span>
                 <span class="n">match</span> <span class="o">=</span> <span class="n">clashcaller_re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">comment</span><span class="o">.</span><span class="n">body</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">match</span> <span class="ow">and</span> <span class="n">comment</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">name</span> <span class="o">!=</span> <span class="s1">&#39;ClashCallerBot&#39;</span> \
-                        <span class="ow">and</span> <span class="ow">not</span> <span class="n">have_replied</span><span class="p">(</span><span class="n">comment</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="s1">&#39;ClashCallerBot&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">is_recent</span><span class="p">(</span><span class="n">comment</span><span class="p">):</span>
+                        <span class="ow">and</span> <span class="ow">not</span> <span class="n">have_replied</span><span class="p">(</span><span class="n">comment</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="s1">&#39;ClashCallerBot&#39;</span><span class="p">)</span> \
+                        <span class="ow">and</span> <span class="n">is_recent</span><span class="p">(</span><span class="n">comment</span><span class="o">.</span><span class="n">created_utc</span><span class="p">,</span> <span class="n">start_time</span><span class="p">):</span>
                     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;In: </span><span class="si">{comment}</span><span class="s1">&#39;</span><span class="p">)</span>
 
                     <span class="c1"># Strip everything before and including ClashCaller! string</span>
@@ -309,8 +310,6 @@
                     <span class="c1"># Reply and send PM</span>
                     <span class="n">send_confirmation</span><span class="p">(</span><span class="n">comment</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">comment</span><span class="o">.</span><span class="n">permalink</span><span class="p">,</span> <span class="n">expiration_datetime</span><span class="p">)</span>
                     <span class="n">send_confirmation_reply</span><span class="p">(</span><span class="n">comment</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">comment</span><span class="o">.</span><span class="n">permalink</span><span class="p">,</span> <span class="n">expiration_datetime</span><span class="p">)</span>
-
-                    <span class="c1"># TODO: Add more functionality via PM: delete calls, list calls, add users to call reminder</span>
 
                     <span class="n">db</span><span class="o">.</span><span class="n">close_connections</span><span class="p">()</span>
 
@@ -466,19 +465,20 @@
     <span class="k">return</span> <span class="kc">False</span></div>
 
 
-<div class="viewcode-block" id="is_recent"><a class="viewcode-back" href="../../clashcallerbotreddit.html#clashcallerbotreddit.search.is_recent">[docs]</a><span class="k">def</span> <span class="nf">is_recent</span><span class="p">(</span><span class="n">cmnt</span><span class="p">:</span> <span class="n">praw</span><span class="o">.</span><span class="n">reddit</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">Comment</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<div class="viewcode-block" id="is_recent"><a class="viewcode-back" href="../../clashcallerbotreddit.html#clashcallerbotreddit.search.is_recent">[docs]</a><span class="k">def</span> <span class="nf">is_recent</span><span class="p">(</span><span class="n">cmnt_time</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">time_arg</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Checks if comment is a recent comment.</span>
 
-<span class="sd">    Function compares comment time with program start time.</span>
+<span class="sd">    Function compares given comment Unix timestamp with given time.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        cmnt:  praw comment object.</span>
+<span class="sd">        cmnt_time:  Comment&#39;s created Unix timestamp in UTC.</span>
+<span class="sd">        time_arg: Time to compare with comment timestamp.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        True if comment time is after start time, False otherwise.</span>
+<span class="sd">        True if comment&#39;s created time is after given time, False otherwise.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">cmnt_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="n">cmnt</span><span class="o">.</span><span class="n">created_utc</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">cmnt_time</span> <span class="o">&gt;</span> <span class="n">start_time</span><span class="p">:</span>
+    <span class="n">cmnt_datetime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="n">cmnt_time</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">cmnt_datetime</span> <span class="o">&gt;</span> <span class="n">time_arg</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">True</span>
     <span class="k">return</span> <span class="kc">False</span></div>
 

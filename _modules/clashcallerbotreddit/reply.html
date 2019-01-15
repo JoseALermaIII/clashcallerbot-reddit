@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>clashcallerbotreddit.reply &mdash; clashcallerbot-reddit 2.4.6 documentation</title>
+  <title>clashcallerbotreddit.reply &mdash; clashcallerbot-reddit 2.5.0 documentation</title>
   
 
   
@@ -56,7 +56,7 @@
             
             
               <div class="version">
-                2.4
+                2.5
               </div>
             
           
@@ -161,11 +161,18 @@
   <h1>Source code for clashcallerbotreddit.reply</h1><div class="highlight"><pre>
 <span></span><span class="ch">#! python3</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="sd">&quot;&quot;&quot;Checks messages in database and sends PM if expiration time passed.</span>
+<span class="sd">&quot;&quot;&quot;Performs cleanup operations.</span>
 
-<span class="sd">This module checks messages saved in a MySQL-compatible database and sends a reminder</span>
-<span class="sd">via PM if the expiration time has passed. If so, the message is removed from the</span>
-<span class="sd">database.</span>
+<span class="sd">This module implements functions designed to clean up various data sets:</span>
+
+<span class="sd">* Sends and deletes stored messages in the MySQL-compatible database.</span>
+<span class="sd">* Checks bot&#39;s comments and removes comments below a certain threshold.</span>
+<span class="sd">* TODO: Checks bot&#39;s messages for keywords and deletes them after:</span>
+
+<span class="sd">    * Adding message author to call reminder.</span>
+<span class="sd">    * PMing list of message author&#39;s calls.</span>
+<span class="sd">    * Deleting message author from call.</span>
+
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">praw</span>
@@ -176,6 +183,7 @@
 <span class="kn">import</span> <span class="nn">time</span>
 
 <span class="kn">from</span> <span class="nn">clashcallerbotreddit.database</span> <span class="k">import</span> <span class="n">ClashCallerDatabase</span>
+<span class="kn">from</span> <span class="nn">clashcallerbotreddit.search</span> <span class="k">import</span> <span class="n">is_recent</span>
 <span class="kn">from</span> <span class="nn">clashcallerbotreddit</span> <span class="k">import</span> <span class="n">LOGGING</span><span class="p">,</span> <span class="n">config</span>
 
 <span class="c1"># Logger</span>
@@ -190,32 +198,86 @@
 <span class="c1"># Make database instance</span>
 <span class="n">db</span> <span class="o">=</span> <span class="n">ClashCallerDatabase</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">root_user</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
+<span class="c1"># Time constants</span>
+<span class="n">start_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span>
+<span class="n">archive_time</span> <span class="o">=</span> <span class="n">start_time</span> <span class="o">-</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">weeks</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>  <span class="c1"># 6 months archival time</span>
+
 
 <div class="viewcode-block" id="main"><a class="viewcode-back" href="../../clashcallerbotreddit.html#clashcallerbotreddit.reply.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Start reply.py...&#39;</span><span class="p">)</span>
     <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">120</span><span class="p">)</span>  <span class="c1"># 2 minutes</span>
-        <span class="n">db</span><span class="o">.</span><span class="n">open_connections</span><span class="p">()</span>
-        <span class="c1"># Get list of messages older than current datetime</span>
-        <span class="n">now</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span>
-        <span class="n">messages</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get_messages</span><span class="p">(</span><span class="n">now</span><span class="p">)</span>
+        <span class="c1"># Check saved messages</span>
+        <span class="n">check_database</span><span class="p">()</span>
 
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">messages</span><span class="p">:</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;No messages before: </span><span class="si">{now}</span><span class="s1">.&#39;</span><span class="p">)</span>
-            <span class="n">db</span><span class="o">.</span><span class="n">close_connections</span><span class="p">()</span>
+        <span class="c1"># Check for comments below threshold</span>
+        <span class="n">check_comments</span><span class="p">(</span><span class="s1">&#39;ClashCallerBot&#39;</span><span class="p">)</span>
+
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">120</span><span class="p">)</span>  <span class="c1"># 2 minutes</span></div>
+
+
+<div class="viewcode-block" id="check_comments"><a class="viewcode-back" href="../../clashcallerbotreddit.html#clashcallerbotreddit.reply.check_comments">[docs]</a><span class="k">def</span> <span class="nf">check_comments</span><span class="p">(</span><span class="n">usr</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">4</span><span class="p">)</span><span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Checks comments and deletes if below threshold.</span>
+
+<span class="sd">    Checks given user&#39;s last 100 comments and deletes each one below the given threshold.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        usr: User to check comments of.</span>
+<span class="sd">        limit: Threshold below which comment will be deleted. Defaults to ``-4``.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">         None. Comments below threshold are deleted.</span>
+
+<span class="sd">    Note:</span>
+<span class="sd">        Skips archived comments (&gt; 6 months from start time).</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">comments</span> <span class="o">=</span> <span class="n">reddit</span><span class="o">.</span><span class="n">redditor</span><span class="p">(</span><span class="n">usr</span><span class="p">)</span><span class="o">.</span><span class="n">comments</span><span class="o">.</span><span class="n">new</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">comment</span> <span class="ow">in</span> <span class="n">comments</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">is_recent</span><span class="p">(</span><span class="n">comment</span><span class="o">.</span><span class="n">created_utc</span><span class="p">,</span> <span class="n">archive_time</span><span class="p">):</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Skipping comments after </span><span class="si">{archive_time}</span><span class="s1">.&#39;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">None</span>
+
+            <span class="k">if</span> <span class="n">comment</span><span class="o">.</span><span class="n">score</span> <span class="o">&lt;</span> <span class="n">limit</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Deleting comment below threshold of </span><span class="si">{limit}</span><span class="s1">: </span><span class="si">{comment.id}</span><span class="s1">.&#39;</span><span class="p">)</span>
+                <span class="n">comment</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Comment# </span><span class="si">{comment.id}</span><span class="s1">, karma:</span><span class="si">{comment.score}</span><span class="s1"> is above threshold of </span><span class="si">{limit}</span><span class="s1">.&#39;</span><span class="p">)</span>
             <span class="k">continue</span>
+    <span class="k">except</span> <span class="n">praw</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">PRAWException</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;check_comments: </span><span class="si">{err}</span><span class="s1">&#39;</span><span class="p">)</span></div>
 
-        <span class="c1"># Send reminder PM</span>
-        <span class="k">for</span> <span class="n">message</span> <span class="ow">in</span> <span class="n">messages</span><span class="p">:</span>
-            <span class="n">tid</span><span class="p">,</span> <span class="n">link</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">_exp</span><span class="p">,</span> <span class="n">usr</span> <span class="o">=</span> <span class="n">message</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Found message: </span><span class="si">{tid}</span><span class="s1">, </span><span class="si">{msg}</span><span class="s1">&#39;</span><span class="p">)</span>
-            <span class="n">send_reminder</span><span class="p">(</span><span class="n">link</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">usr</span><span class="p">)</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Reminder sent: </span><span class="si">{link}</span><span class="s1">.&#39;</span><span class="p">)</span>
 
-            <span class="c1"># Delete message from database</span>
-            <span class="n">db</span><span class="o">.</span><span class="n">delete_message</span><span class="p">(</span><span class="n">tid</span><span class="p">)</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Message deleted.&#39;</span><span class="p">)</span>
-        <span class="n">db</span><span class="o">.</span><span class="n">close_connections</span><span class="p">()</span></div>
+<div class="viewcode-block" id="check_database"><a class="viewcode-back" href="../../clashcallerbotreddit.html#clashcallerbotreddit.reply.check_database">[docs]</a><span class="k">def</span> <span class="nf">check_database</span><span class="p">()</span><span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Checks messages in database and sends PM if expiration time passed.</span>
+
+<span class="sd">    Checks messages saved in a MySQL-compatible database and sends a reminder</span>
+<span class="sd">    via PM if the expiration time has passed. If so, the message is removed from the</span>
+<span class="sd">    database.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">         None. Message is removed from database if expiration time has passed.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">open_connections</span><span class="p">()</span>
+    <span class="c1"># Get list of messages older than current datetime</span>
+    <span class="n">now</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span>
+    <span class="n">messages</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get_messages</span><span class="p">(</span><span class="n">now</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">messages</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;No messages before: </span><span class="si">{now}</span><span class="s1">.&#39;</span><span class="p">)</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">close_connections</span><span class="p">()</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="c1"># Send reminder PM</span>
+    <span class="k">for</span> <span class="n">message</span> <span class="ow">in</span> <span class="n">messages</span><span class="p">:</span>
+        <span class="n">tid</span><span class="p">,</span> <span class="n">link</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">_exp</span><span class="p">,</span> <span class="n">usr</span> <span class="o">=</span> <span class="n">message</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Found message: </span><span class="si">{tid}</span><span class="s1">, </span><span class="si">{msg}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">send_reminder</span><span class="p">(</span><span class="n">link</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">usr</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Reminder sent: </span><span class="si">{link}</span><span class="s1">.&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Delete message from database</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">delete_message</span><span class="p">(</span><span class="n">tid</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Message deleted.&#39;</span><span class="p">)</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">close_connections</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="send_reminder"><a class="viewcode-back" href="../../clashcallerbotreddit.html#clashcallerbotreddit.reply.send_reminder">[docs]</a><span class="k">def</span> <span class="nf">send_reminder</span><span class="p">(</span><span class="n">link</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">usr</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span><span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>

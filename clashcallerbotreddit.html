@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>clashcallerbotreddit package &mdash; clashcallerbot-reddit 2.4.6 documentation</title>
+  <title>clashcallerbotreddit package &mdash; clashcallerbot-reddit 2.5.0 documentation</title>
   
 
   
@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                2.4
+                2.5
               </div>
             
           
@@ -532,10 +532,66 @@ MySQL-compatible database:</p>
 </div>
 <div class="section" id="module-clashcallerbotreddit.reply">
 <span id="clashcallerbotreddit-reply-module"></span><h2>clashcallerbotreddit.reply module<a class="headerlink" href="#module-clashcallerbotreddit.reply" title="Permalink to this headline">¶</a></h2>
-<p>Checks messages in database and sends PM if expiration time passed.</p>
-<p>This module checks messages saved in a MySQL-compatible database and sends a reminder
+<p>Performs cleanup operations.</p>
+<p>This module implements functions designed to clean up various data sets:</p>
+<ul>
+<li><p class="first">Sends and deletes stored messages in the MySQL-compatible database.</p>
+</li>
+<li><p class="first">Checks bot’s comments and removes comments below a certain threshold.</p>
+</li>
+<li><p class="first">TODO: Checks bot’s messages for keywords and deletes them after:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Adding message author to call reminder.</li>
+<li>PMing list of message author’s calls.</li>
+<li>Deleting message author from call.</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+<dl class="function">
+<dt id="clashcallerbotreddit.reply.check_comments">
+<code class="descclassname">clashcallerbotreddit.reply.</code><code class="descname">check_comments</code><span class="sig-paren">(</span><em>usr: str</em>, <em>limit: int = -4</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/clashcallerbotreddit/reply.html#check_comments"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clashcallerbotreddit.reply.check_comments" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks comments and deletes if below threshold.</p>
+<p>Checks given user’s last 100 comments and deletes each one below the given threshold.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>usr</strong> – User to check comments of.</li>
+<li><strong>limit</strong> – Threshold below which comment will be deleted. Defaults to <code class="docutils literal notranslate"><span class="pre">-4</span></code>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">None. Comments below threshold are deleted.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Skips archived comments (&gt; 6 months from start time).</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="clashcallerbotreddit.reply.check_database">
+<code class="descclassname">clashcallerbotreddit.reply.</code><code class="descname">check_database</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/clashcallerbotreddit/reply.html#check_database"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clashcallerbotreddit.reply.check_database" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks messages in database and sends PM if expiration time passed.</p>
+<p>Checks messages saved in a MySQL-compatible database and sends a reminder
 via PM if the expiration time has passed. If so, the message is removed from the
 database.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">None. Message is removed from database if expiration time has passed.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 <dl class="function">
 <dt id="clashcallerbotreddit.reply.get_parent">
 <code class="descclassname">clashcallerbotreddit.reply.</code><code class="descname">get_parent</code><span class="sig-paren">(</span><em>link: str</em><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="_modules/clashcallerbotreddit/reply.html#get_parent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clashcallerbotreddit.reply.get_parent" title="Permalink to this definition">¶</a></dt>
@@ -612,16 +668,21 @@ applied, then all the comment data is saved to a MySQL-compatible database.</p>
 
 <dl class="function">
 <dt id="clashcallerbotreddit.search.is_recent">
-<code class="descclassname">clashcallerbotreddit.search.</code><code class="descname">is_recent</code><span class="sig-paren">(</span><em>cmnt: praw.models.reddit.comment.Comment</em><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="_modules/clashcallerbotreddit/search.html#is_recent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clashcallerbotreddit.search.is_recent" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">clashcallerbotreddit.search.</code><code class="descname">is_recent</code><span class="sig-paren">(</span><em>cmnt_time: float</em>, <em>time_arg: datetime.datetime</em><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="_modules/clashcallerbotreddit/search.html#is_recent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clashcallerbotreddit.search.is_recent" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if comment is a recent comment.</p>
-<p>Function compares comment time with program start time.</p>
+<p>Function compares given comment Unix timestamp with given time.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cmnt</strong> – praw comment object.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>cmnt_time</strong> – Comment’s created Unix timestamp in UTC.</li>
+<li><strong>time_arg</strong> – Time to compare with comment timestamp.</li>
+</ul>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if comment time is after start time, False otherwise.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">True if comment’s created time is after given time, False otherwise.</p>
+</td>
 </tr>
 </tbody>
 </table>
