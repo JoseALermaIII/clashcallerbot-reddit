@@ -74,11 +74,11 @@ def check_comments(usr: str, limit: int = -4)-> None:
         comments = reddit.redditor(usr).comments.new()
         for comment in comments:
             if not is_recent(comment.created_utc, archive_time):
-                logger.debug(f'Skipping comments after {archive_time}.')
+                logger.info(f'Skipping comments after {archive_time}.')
                 return None
 
             if comment.score < limit:
-                logger.debug(f'Deleting comment below threshold of {limit}: {comment.id}.')
+                logger.info(f'Deleting comment below threshold of {limit}: {comment.id}.')
                 comment.delete()
             continue
     except praw.exceptions.PRAWException as err:
