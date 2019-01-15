@@ -7,7 +7,7 @@ SPHINXBUILD   = sphinx-build
 SOURCEDIR     = source
 BUILDDIR      = ../../clashcallerbot-reddit-docs
 PDFBUILDDIR   = /tmp
-PDF           = ../manual.pdf
+PDF           = ../clashcallerbot-reddit.pdf
 
 # Put it first so that "make" without argument is like "make help".
 help:
