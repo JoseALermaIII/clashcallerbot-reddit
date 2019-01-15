@@ -80,6 +80,7 @@ def check_comments(usr: str, limit: int = -4)-> None:
             if comment.score < limit:
                 logger.info(f'Deleting comment below threshold of {limit}: {comment.id}.')
                 comment.delete()
+            logger.debug(f'Comment#{comment.id}, karma:{comment.score} is above threshold of {limit}.')
             continue
     except praw.exceptions.PRAWException as err:
         logger.exception(f'check_comments: {err}')
