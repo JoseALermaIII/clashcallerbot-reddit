@@ -45,13 +45,13 @@ archive_time = start_time - datetime.timedelta(weeks=12)  # 6 months archival ti
 def main():
     logger.info('Start reply.py...')
     while True:
-        time.sleep(120)  # 2 minutes
-
         # Check saved messages
         check_database()
 
         # Check for comments below threshold
         check_comments('ClashCallerBot')
+
+        time.sleep(120)  # 2 minutes
 
 
 def check_comments(usr: str, limit: int = -4)-> None:
