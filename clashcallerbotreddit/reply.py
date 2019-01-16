@@ -54,17 +54,17 @@ def main():
         time.sleep(120)  # 2 minutes
 
 
-def check_comments(usr: str, limit: int = -4)-> None:
-    """Checks comments and deletes if below threshold.
+def check_comments(usr: str, limit: int = -5)-> None:
+    """Checks comments and deletes if at or below threshold.
 
-    Checks given user's last 100 comments and deletes each one below the given threshold.
+    Checks given user's last 100 comments and deletes each one at or below the given threshold.
 
     Args:
         usr: User to check comments of.
-        limit: Threshold below which comment will be deleted. Defaults to ``-4``.
+        limit: Threshold at or below which comment will be deleted. Defaults to ``-5``.
 
     Returns:
-         None. Comments below threshold are deleted.
+         None. Comments at or below threshold are deleted.
 
     Note:
         Skips archived comments (> 6 months from start time).
@@ -77,8 +77,8 @@ def check_comments(usr: str, limit: int = -4)-> None:
                 logger.info(f'Skipping comments after {archive_time}.')
                 return None
 
-            if comment.score < limit:
-                logger.info(f'Deleting comment below threshold of {limit}: {comment.id}.')
+            if comment.score <= limit:
+                logger.info(f'Deleting comment at or below threshold of {limit}: {comment.id}.')
                 comment.delete()
             logger.debug(f'Comment# {comment.id}, karma:{comment.score} is above threshold of {limit}.')
             continue
