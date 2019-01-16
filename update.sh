@@ -25,7 +25,7 @@ fi
 
 if [ -e ./archives/master.zip.1 ]; then
 	echo '  Deleting old source downloads...'
-	rm ./archives/master.zip.*
+	rm ./archives/master.zip*
 	echo '  *****'
 	sleep 2
 fi
