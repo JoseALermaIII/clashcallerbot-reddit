@@ -8,7 +8,7 @@ Contains constant variables used in source files.
 
 Attributes:
     __version__ (str): String with version number using the `Semantic Versioning Scheme`_
-    config (configparser.ConfigParser()): A configparser object containing the sections inside database.ini
+    config (configparser.ConfigParser): A configparser object containing the sections inside database.ini
     module_dir (str): String with the absolute path of the module's directory.
     locations (list): List containing all possible paths of database.ini
     LOGGING (dict): Dictionary containing definitions for the loggers, handlers,
