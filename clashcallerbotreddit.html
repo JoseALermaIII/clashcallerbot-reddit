@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>clashcallerbotreddit package &mdash; clashcallerbot-reddit 2.5.0 documentation</title>
+  <title>clashcallerbotreddit package &mdash; clashcallerbot-reddit 2.5.1 documentation</title>
   
 
   
@@ -551,20 +551,20 @@ MySQL-compatible database:</p>
 </ul>
 <dl class="function">
 <dt id="clashcallerbotreddit.reply.check_comments">
-<code class="descclassname">clashcallerbotreddit.reply.</code><code class="descname">check_comments</code><span class="sig-paren">(</span><em>usr: str</em>, <em>limit: int = -4</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/clashcallerbotreddit/reply.html#check_comments"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clashcallerbotreddit.reply.check_comments" title="Permalink to this definition">¶</a></dt>
-<dd><p>Checks comments and deletes if below threshold.</p>
-<p>Checks given user’s last 100 comments and deletes each one below the given threshold.</p>
+<code class="descclassname">clashcallerbotreddit.reply.</code><code class="descname">check_comments</code><span class="sig-paren">(</span><em>usr: str</em>, <em>limit: int = -5</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/clashcallerbotreddit/reply.html#check_comments"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clashcallerbotreddit.reply.check_comments" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks comments and deletes if at or below threshold.</p>
+<p>Checks given user’s last 100 comments and deletes each one at or below the given threshold.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>usr</strong> – User to check comments of.</li>
-<li><strong>limit</strong> – Threshold below which comment will be deleted. Defaults to <code class="docutils literal notranslate"><span class="pre">-4</span></code>.</li>
+<li><strong>limit</strong> – Threshold at or below which comment will be deleted. Defaults to <code class="docutils literal notranslate"><span class="pre">-5</span></code>.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">None. Comments below threshold are deleted.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">None. Comments at or below threshold are deleted.</p>
 </td>
 </tr>
 </tbody>
