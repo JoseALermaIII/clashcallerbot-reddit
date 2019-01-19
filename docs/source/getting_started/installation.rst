@@ -63,7 +63,7 @@ Now, we can build the docs in PDF format::
     cd absolute_path_here/clashcallerbot-reddit/docs
     make latexpdf
 
-This will save the doc's PDF in ``../manual.pdf``.
+This will save the doc's PDF in ``../clashcallerbot-reddit.pdf``.
 
 Disclaimer
 ----------
