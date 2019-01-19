@@ -51,7 +51,14 @@ def main():
         # Check for comments below threshold
         check_comments('ClashCallerBot')
 
+        # Check messages for tasks
+        check_messages()
+
         time.sleep(120)  # 2 minutes
+
+
+def check_messages():
+    pass
 
 
 def check_comments(usr: str, limit: int = -5)-> None:
