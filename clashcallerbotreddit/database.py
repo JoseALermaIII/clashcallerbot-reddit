@@ -35,11 +35,11 @@ class ClashCallerDatabase(object):
     Acts as an object-relational mapper for mysql.connector specific to ClashCallerBot.
 
     Attributes:
-        config_file (configparser.ConfigParser()): A configparser object with database.ini file pre-read.
+        config_file (configparser.ConfigParser): A configparser object with database.ini file pre-read.
         section (str): Section heading containing bot information. Defaults to 'bot'.
         root_user (bool): Specifies whether the database will be setup as root user.
-        mysql_connection (mysql.connector.connect()): A mysql.connector.connect() object.
-        cursor (mysql.connector.connect().cursor()): A mysql.connector.connect().cursor() object.
+        mysql_connection (mysql.connector.connect): A mysql.connector.connect object.
+        cursor (mysql.connector.connect.cursor): A mysql.connector.connect.cursor object.
     """
     def __init__(self, config_file=None, section='bot', root_user=None):
         if root_user is None:
