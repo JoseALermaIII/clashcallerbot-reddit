@@ -46,7 +46,10 @@ The PM will give you the permalink to your original comment.
 Do PMs work?
 ------------
 
-No, they don't. Everyone needs to see what you called so they know not to attack it.
+Kind of. Everyone needs to see what you called so they know not to attack it, so you cannot directly set a call via
+PM.
+
+However, **ClashCallerBot** can execute certain commands from the comment replies.
 
 What options does it have?
 --------------------------
