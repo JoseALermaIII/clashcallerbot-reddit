@@ -6,7 +6,7 @@ This module implements functions designed to clean up various data sets:
 
 * Sends and deletes stored messages in the MySQL-compatible database.
 * Checks bot's comments and removes comments below a certain threshold.
-* TODO: Checks bot's messages for keywords and deletes them after:
+* Checks bot's messages for keywords and deletes them after:
 
     * Adding message author to call reminder.
     * PMing list of message author's calls.
@@ -67,6 +67,9 @@ delete_re = re.compile(r'''
                         $               # end of string
                         ''', re.VERBOSE)
 
+# Call table spacers
+spacers = {'left': '| ', 'mid': ' | ', 'right': ' |'}
+
 
 def main():
     logger.info('Start reply.py...')
@@ -108,10 +111,48 @@ def check_messages()-> None:
             if not is_recent(message.created_utc, archive_time):
                 logger.debug(f'Inbox skip old message: {message.id}.')
                 continue
+
             # Process list command
-            if message.subject == 'MyReminders!':
+            if message.subject == 'MyCalls!':
                 logger.info(f'Inbox list: {message.id}.')
-                pass
+                call_table = [
+                    (spacers['left'], 'Permalink', spacers['mid'], 'Call Message', spacers['mid'], 'Expiration',
+                     spacers['right']),
+                    ('|', ':-', '|', ':-:', '|', ':-:', '|')
+                ]
+                # Check database for user's calls
+                db.open_connections()
+                current_calls = db.get_user_messages(message.author.name)
+                db.close_connections()
+                if not current_calls:
+                    logger.debug(f'Inbox skip list (no current_calls): {message.id}.')
+                    message.delete()
+                # Display calls, if found
+                for call in current_calls:
+                    _tid, link_saved, msg_saved, exp_saved, _usr = call
+                    exp_saved = datetime.datetime.strftime(exp_saved,
+                                                           '%b. %d, %Y at %I:%M:%S %p UTC')  # Human readable datetime
+                    link_saved = '\\' + link_saved  # escape reddit markdown syntax
+                    table_row = (spacers['left'], link_saved, spacers['mid'], msg_saved, spacers['mid'], exp_saved,
+                                 spacers['right'])
+                    call_table.append(table_row)
+                call_table_string = '\n'.join(''.join(element for element in row) for row in call_table)
+                calls_message = f"""ClashCallerBot here!  
+Your current calls are as follows:
+
+{call_table_string}
+
+If you wish to delete a call, copy the entry in the permalink column and paste it between the brackets in 
+[**THIS PM**](https://www.reddit.com/message/compose/?to=ClashCallerBot&subject=DeleteMe!&message=[PASTE_HERE]).
+
+Thank you for entrusting us with your warring needs,  
+- ClashCallerBot
+                                 """
+                message.author.message('ClashCallerBot List Calls', calls_message)
+                logger.info(f'Inbox list calls list sent: {message.id}.')
+                # Delete message
+                message.delete()
+
             # Process add command
             elif message.subject == 'AddMe!':
                 logger.info(f'Inbox add: {message.id}.')
