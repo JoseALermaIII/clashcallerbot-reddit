@@ -247,7 +247,7 @@ def process_my_calls(msg_obj: praw.reddit.models.Message):
     call_table = [
         (spacers['left'], 'Permalink', spacers['mid'], 'Call Message', spacers['mid'], 'Expiration',
          spacers['right']),
-        ('|', ':-', '|', ':-:', '|', ':-:', '|')
+        ('|', ':-:', '|', ':-:', '|', ':-:', '|')
     ]
     for call in current_calls:
         _tid, link_saved, msg_saved, exp_saved, _usr = call
