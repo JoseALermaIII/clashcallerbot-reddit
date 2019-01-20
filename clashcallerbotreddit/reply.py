@@ -254,7 +254,8 @@ def process_my_calls(msg_obj: praw.reddit.models.Message):
         exp_saved = datetime.datetime.strftime(exp_saved,
                                                '%b. %d, %Y at %I:%M:%S %p UTC')  # Human readable datetime
         link_saved = '\\' + link_saved  # escape reddit markdown syntax
-        table_row = (spacers['left'], link_saved, spacers['mid'], msg_saved, spacers['mid'], exp_saved,
+        table_row = (spacers['left'], link_saved, spacers['mid'], msg_saved, spacers['mid'],
+                     f'[**{exp_saved}**](http://www.wolframalpha.com/input/?i={exp_saved} To Local Time)',
                      spacers['right'])
         call_table.append(table_row)
     call_table_string = '\n'.join(''.join(element for element in row) for row in call_table)
