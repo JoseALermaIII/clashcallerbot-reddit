@@ -74,8 +74,11 @@ To sum:
 
 **ClashCallerBot** will then make this comment and will message you at the given time::
 
-    ClashCallerBot here!
-    I will be messaging you on Nov. 10, 2018 at 10:30:29 AM (UTC) to remind you of **this call.**
+    I will be messaging you on Jan. 21, 2019 at 06:17:09 PM UTC to remind you of this call.
+
+    Others can tap REMIND ME, TOO to send me a PM to be added to the call reminder and reduce spam.
+
+    You can also tap REMOVE ME to remove yourself from the call reminder or MY CALLS to list your current calls.
 
     Thank you for entrusting us with your warring needs!
 
