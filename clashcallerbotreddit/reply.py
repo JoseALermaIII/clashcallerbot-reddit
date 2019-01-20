@@ -33,7 +33,8 @@ logger = logging.getLogger('reply')
 
 # Generate reddit instance
 reddit = praw.Reddit('clashcallerreply')  # Section name in praw.ini
-subreddit = reddit.subreddit('ClashCallerBot')  # Limit scope for testing purposes
+#subreddit = reddit.subreddit('ClashCallerBot')  # Limit scope for testing purposes
+subreddit = reddit.subreddit('all')  # Production mode
 reddituser = reddit.user.me()
 
 # Make database instance

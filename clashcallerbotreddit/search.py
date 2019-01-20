@@ -32,7 +32,8 @@ logger = logging.getLogger('search')
 
 # Generate reddit instance
 reddit = praw.Reddit('clashcallersearch')  # Section name in praw.ini
-subreddit = reddit.subreddit('ClashCallerBot')  # Limit scope for testing purposes
+#subreddit = reddit.subreddit('ClashCallerBot')  # Limit scope for testing purposes
+subreddit = reddit.subreddit('all')  # Production mode
 
 # Regular expressions
 clashcaller_re = re.compile(r'''
