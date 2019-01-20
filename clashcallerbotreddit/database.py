@@ -293,6 +293,29 @@ class ClashCallerDatabase(object):
             logger.exception(f'get_rows: {err}')
         return rows
 
+    def get_user_messages(self, usr_name: str) -> list:
+        """Retrieves list of messages that match the username.
+
+        Checks the message table for rows containing the given user name.
+
+        Args:
+            usr_name: Reddit username wanting to list saved calls.
+
+        Returns:
+            List of messages matching query. Empty list if none found.
+        """
+        messages = []
+        try:
+            self.lock_read(self._message_table)
+            find_messages = f'SELECT * FROM {self._message_table} WHERE (username = \'{usr_name}\') GROUP BY id;'
+            self.cursor.execute(find_messages)
+            messages = self.cursor.fetchall()
+            self.unlock_tables()
+
+        except mysql.Error as err:
+            logger.exception(f'get_user_messages: {err}')
+        return messages
+
     def grant_permissions(self) -> None:
         """Grants bot user permissions to database.
 
