@@ -202,6 +202,31 @@ class ClashCallerDatabase(object):
         except (mysql.Error, mysql.ProgrammingError) as err:
             logger.exception(f'drop_table: {err}')
 
+    def get_removable_messages(self, usr_name: str, link: str) -> list:
+        """Retrieves list of messages that match the username and permalink.
+
+        Checks the message table for rows containing the given user name and given link.
+
+        Args:
+            usr_name: Reddit username wanting to delete saved calls.
+            link: Comment permalink of saved call (without domain prefix)
+
+        Returns:
+            List of messages matching query. Empty list if none found.
+        """
+        messages = []
+        try:
+            self.lock_read(self._message_table)
+            find_messages = f'SELECT * FROM {self._message_table} WHERE username IS \'{usr_name}\' AND permalink IS ' \
+                            f'\'{link}\' GROUP BY id;'
+            self.cursor.execute(find_messages)
+            messages = self.cursor.fetchall()
+            self.unlock_tables()
+
+        except mysql.Error as err:
+            logger.exception(f'get_removable_messages: {err}')
+        return messages
+
     def get_expired_messages(self, time_now: datetime.datetime) -> list:
         """Retrieves list of messages that have expired.
 
