@@ -266,7 +266,7 @@ to send me a PM to be added to the call reminder and reduce spam.
 You can also tap 
 [**REMOVE ME**](https://www.reddit.com/message/compose/?to=ClashCallerBot&subject=DeleteMe!&message=[{link}]) to remove
 yourself from the call reminder or
-[**MY CALLS**](https://www.reddit.com/message/compose/?to=ClashCallerBot&subject=MyReminders!&message=El Zilcho) 
+[**MY CALLS**](https://www.reddit.com/message/compose/?to=ClashCallerBot&subject=MyCalls!&message=El Zilcho) 
 to list your current calls.
 
 Thank you for entrusting us with your warring needs!
