@@ -57,6 +57,16 @@ addme_re = re.compile(r'''
                         (\d){2})        # two digit number followed (required)
                         ''', re.VERBOSE)
 
+delete_re = re.compile(r'''
+                        ^               # beginning of string
+                        \[              # opening square bracket (required)
+                        (?P<link_re>
+                        (\S)+)          # any non-whitespace characters (required)
+                        \]              # closing square bracket (required)
+                        (\s)*           # one or more spaces (optional)
+                        $               # end of string
+                        ''', re.VERBOSE)
+
 
 def main():
     logger.info('Start reply.py...')
@@ -136,10 +146,26 @@ def check_messages()-> None:
                 db.close_connections()
                 # Delete message
                 message.delete()
+
             # Process delete command
-            elif message.subject == 'Delete!':
+            elif message.subject == 'DeleteMe!':
                 logger.info(f'Inbox delete: {message.id}.')
-                pass
+                match = delete_re.search(message.body)
+                if not match:
+                    logger.debug(f'Inbox skip delete: {message.id}.')
+                    continue
+                link_re = match.group('link_re')
+                db.open_connections()
+                deletable_messages = db.get_removable_messages(message.author.name, link_re)
+                if not deletable_messages:
+                    logger.debug(f'Inbox skip delete (no deletable_messages): {message.id}.')
+                    continue
+                for deletable_message in deletable_messages:
+                    tid, link_saved, _msg, _exp, _usr = deletable_message
+                    db.delete_row(tid)
+                    logger.info(f'Inbox delete message deleted: {link_saved}.')
+                db.close_connections()
+
             # Process everything else
             else:
                 logger.exception(f'Inbox uncaught command: {message.subject}.\n'
