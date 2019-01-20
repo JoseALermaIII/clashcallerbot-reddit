@@ -361,11 +361,11 @@ class ClashCallerDatabase(object):
             usr_name: Comment author username.
 
         """
-        exp = self.convert_datetime(exp)
+        exp_mysql = self.convert_datetime(exp)
         try:
             self.lock_write(self._message_table)
             add_row = f'INSERT INTO {self._message_table} (permalink, message, new_date, username) ' \
-                      f'VALUES (\'{link}\', \'{msg}\', \'{exp}\', \'{usr_name}\');'
+                      f'VALUES (\'{link}\', \'{msg}\', \'{exp_mysql}\', \'{usr_name}\');'
             self.cursor.execute(add_row)
             self.mysql_connection.commit()
             self.unlock_tables()
