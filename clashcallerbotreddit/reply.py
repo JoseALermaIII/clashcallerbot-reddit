@@ -150,7 +150,7 @@ def check_database()-> None:
     db.open_connections()
     # Get list of messages older than current datetime
     now = datetime.datetime.now(datetime.timezone.utc)
-    messages = db.get_messages(now)
+    messages = db.get_expired_messages(now)
 
     if not messages:
         logger.debug(f'No messages before: {now}.')

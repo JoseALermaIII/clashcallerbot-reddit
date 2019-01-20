@@ -202,7 +202,7 @@ class ClashCallerDatabase(object):
         except (mysql.Error, mysql.ProgrammingError) as err:
             logger.exception(f'drop_table: {err}')
 
-    def get_messages(self, time_now: datetime.datetime) -> list:
+    def get_expired_messages(self, time_now: datetime.datetime) -> list:
         """Retrieves list of messages that have expired.
 
         Method returns list of messages whose expiration times are before current datetime.
@@ -223,7 +223,7 @@ class ClashCallerDatabase(object):
             self.unlock_tables()
 
         except mysql.Error as err:
-            logger.exception(f'get_messages: {err}')
+            logger.exception(f'get_expired_messages: {err}')
         return messages
 
     def get_tables(self) -> list:
