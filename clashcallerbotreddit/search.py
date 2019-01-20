@@ -248,11 +248,14 @@ def send_confirmation_reply(cid: str, link: str, exp: datetime.datetime):
         id of new comment if successful, None otherwise
     """
     permalink = 'https://np.reddit.com' + link  # Permalinks are missing prefix
-    exp = datetime.datetime.strftime(exp, '%b. %d, %Y at %I:%M:%S %p %Z')
+    pretty_exp = datetime.datetime.strftime(exp, '%b. %d, %Y at %I:%M:%S %p %Z')  # Human readable datetime
     message = f"""ClashCallerBot here!  
-I will be messaging you on [**{exp}**](http://www.wolframalpha.com/input/?i={exp} To Local Time) to remind 
-you of [**this call.**]({permalink})
- 
+I will be messaging you on [**{pretty_exp}**](http://www.wolframalpha.com/input/?i={pretty_exp} To Local Time) 
+to remind you of [**this call.**]({permalink})
+
+Others can [**CLICK HERE**](https://www.reddit.com/message/compose/?to=ClashCallerBot&subject=AddMe!&message=[{link}]{exp}) 
+to send me a PM to be added to the call reminder and reduce spam.
+
 Thank you for entrusting us with your warring needs!
  
 [^(More info)](https://www.reddit.com/r/ClashCallerBot/comments/4e9vo7/clashcallerbot_info/)
