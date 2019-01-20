@@ -27,7 +27,7 @@ from clashcallerbotreddit import LOGGING, config
 
 # Logger
 logging.config.dictConfig(LOGGING)
-logging.raiseExceptions = True  # Production mode if False (no console sys.stderr output)
+logging.raiseExceptions = False  # Production mode if False (no console sys.stderr output)
 logger = logging.getLogger('search')
 
 # Generate reddit instance
