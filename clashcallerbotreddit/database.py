@@ -217,8 +217,8 @@ class ClashCallerDatabase(object):
         messages = []
         try:
             self.lock_read(self._message_table)
-            find_messages = f'SELECT * FROM {self._message_table} WHERE username IS \'{usr_name}\' AND permalink IS ' \
-                            f'\'{link}\' GROUP BY id;'
+            find_messages = f'SELECT * FROM {self._message_table} WHERE (username = \'{usr_name}\') AND (permalink ' \
+                            f'= \'{link}\') GROUP BY id;'
             self.cursor.execute(find_messages)
             messages = self.cursor.fetchall()
             self.unlock_tables()
