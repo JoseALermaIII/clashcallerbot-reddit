@@ -115,78 +115,12 @@ def check_messages()-> None:
             # Process list command
             if message.subject == 'MyCalls!':
                 logger.info(f'Inbox list: {message.id}.')
-                call_table = [
-                    (spacers['left'], 'Permalink', spacers['mid'], 'Call Message', spacers['mid'], 'Expiration',
-                     spacers['right']),
-                    ('|', ':-', '|', ':-:', '|', ':-:', '|')
-                ]
-                # Check database for user's calls
-                db.open_connections()
-                current_calls = db.get_user_messages(message.author.name)
-                db.close_connections()
-                if not current_calls:
-                    logger.debug(f'Inbox skip list (no current_calls): {message.id}.')
-                    message.delete()
-                # Display calls, if found
-                for call in current_calls:
-                    _tid, link_saved, msg_saved, exp_saved, _usr = call
-                    exp_saved = datetime.datetime.strftime(exp_saved,
-                                                           '%b. %d, %Y at %I:%M:%S %p UTC')  # Human readable datetime
-                    link_saved = '\\' + link_saved  # escape reddit markdown syntax
-                    table_row = (spacers['left'], link_saved, spacers['mid'], msg_saved, spacers['mid'], exp_saved,
-                                 spacers['right'])
-                    call_table.append(table_row)
-                call_table_string = '\n'.join(''.join(element for element in row) for row in call_table)
-                calls_message = f"""ClashCallerBot here!  
-Your current calls are as follows:
-
-{call_table_string}
-
-If you wish to delete a call, copy the entry in the permalink column and paste it between the brackets in 
-[**THIS PM**](https://www.reddit.com/message/compose/?to=ClashCallerBot&subject=DeleteMe!&message=[PASTE_HERE]).
-
-Thank you for entrusting us with your warring needs,  
-- ClashCallerBot
-                                 """
-                message.author.message('ClashCallerBot List Calls', calls_message)
-                logger.info(f'Inbox list calls list sent: {message.id}.')
-                # Delete message
-                message.delete()
+                process_my_calls(message)
 
             # Process add command
             elif message.subject == 'AddMe!':
                 logger.info(f'Inbox add: {message.id}.')
-                # Get URL and expiration time from message body
-                match = addme_re.search(message.body)
-                if not match:
-                    logger.debug(f'Inbox skip add (bad message format): {message.id}.')
-                    message.delete()
-                    continue
-                link_re = match.group('link_re')
-                exp_re = match.group('exp_re')
-                exp_re += '+0000'  # add UTC offset
-                exp_datetime = datetime.datetime.strptime(exp_re, '%Y-%m-%d %H:%M:%S%z')
-                now = datetime.datetime.now(datetime.timezone.utc)
-                logger.info(f'Comment link: {link_re}.')
-                logger.info(f'Expiration datetime: {exp_datetime}.')
-                if now > exp_datetime:
-                    logger.debug(f'Inbox skip add (expired message): {message.id}')
-                    message.delete()
-                    continue
-                # Get call message from message body
-                match = message_re.search(message.body)
-                if not match:
-                    logger.debug(f'Inbox skip add (bad call message format): {message.id}.')
-                    message.delete()
-                    continue
-                call_message = match.group(0)
-                # Add to database
-                logger.info(f'Inbox add save to db: {message.id}.')
-                db.open_connections()
-                db.save_message(link_re, call_message, exp_datetime, message.author.name)
-                db.close_connections()
-                # Delete message
-                message.delete()
+                process_add_me(message)
 
             # Process delete command
             elif message.subject == 'DeleteMe!':
@@ -222,6 +156,109 @@ Thank you for entrusting us with your warring needs,
 
     except praw.exceptions.PRAWException as err:
         logger.exception(f'check_messages: {err}')
+
+
+def process_add_me(msg_obj: praw.reddit.models.Message):
+    """Process an AddMe! command from a message.
+
+    Processes an AddMe! command from a given message that invoked it. The message author is added to the
+    MySQL-compatible database with the permalink, message, and expiration time from the message body.
+
+    Args:
+        msg_obj: Instance of Message class that invoked the AddMe! command.
+
+    Returns:
+        Error message string if unsuccessful, None otherwise.
+
+    """
+    # Get URL and expiration time from message body
+    match = addme_re.search(msg_obj.body)
+    if not match:
+        err = f'Inbox skip add (bad message format): {msg_obj}.'
+        logger.debug(err)
+        msg_obj.delete()
+        return err
+    link_re = match.group('link_re')
+    exp_re = match.group('exp_re')
+    exp_re += '+0000'  # add UTC offset
+    exp_datetime = datetime.datetime.strptime(exp_re, '%Y-%m-%d %H:%M:%S%z')  # Convert to MySQL datetime object
+    now = datetime.datetime.now(datetime.timezone.utc)
+    logger.info(f'Comment link: {link_re}.')
+    logger.info(f'Expiration datetime: {exp_datetime}.')
+    if now > exp_datetime:
+        err = f'Inbox skip add (expired message): {msg_obj.id}'
+        logger.debug(err)
+        msg_obj.delete()
+        return err
+    # Get call message from message body
+    match = message_re.search(msg_obj.body)
+    if not match:
+        err = f'Inbox skip add (bad call message format): {msg_obj.id}.'
+        logger.debug(err)
+        msg_obj.delete()
+        return err
+    call_message = match.group(0)
+    # Add to database
+    logger.info(f'Inbox add save to db: {msg_obj.id}.')
+    db.open_connections()
+    db.save_message(link_re, call_message, exp_datetime, msg_obj.author.name)
+    db.close_connections()
+    # Delete message
+    msg_obj.delete()
+
+
+def process_my_calls(msg_obj: praw.reddit.models.Message):
+    """Process a MyCalls! command from a message.
+
+    Processes a MyCalls! command from a given message that invoked it. If calls from the message author are found in
+    the MySQL-compatible database, they are sent in a table format via PM.
+
+    Args:
+        msg_obj: Instance of Message class that invoked the MyCalls! command.
+
+    Returns:
+        Error message string if unsuccessful, None otherwise.
+
+    """
+    # Check database for user's calls
+    db.open_connections()
+    current_calls = db.get_user_messages(msg_obj.author.name)
+    db.close_connections()
+    if not current_calls:
+        err = f'Inbox skip list (no current_calls): {msg_obj.id}.'
+        logger.debug(err)
+        msg_obj.delete()
+        return err
+    # Display calls, if found
+    call_table = [
+        (spacers['left'], 'Permalink', spacers['mid'], 'Call Message', spacers['mid'], 'Expiration',
+         spacers['right']),
+        ('|', ':-', '|', ':-:', '|', ':-:', '|')
+    ]
+    for call in current_calls:
+        _tid, link_saved, msg_saved, exp_saved, _usr = call
+        exp_saved = datetime.datetime.strftime(exp_saved,
+                                               '%b. %d, %Y at %I:%M:%S %p UTC')  # Human readable datetime
+        link_saved = '\\' + link_saved  # escape reddit markdown syntax
+        table_row = (spacers['left'], link_saved, spacers['mid'], msg_saved, spacers['mid'], exp_saved,
+                     spacers['right'])
+        call_table.append(table_row)
+    call_table_string = '\n'.join(''.join(element for element in row) for row in call_table)
+    calls_message = f"""ClashCallerBot here!  
+Your current calls are as follows:
+
+{call_table_string}
+
+If you wish to delete a call, copy the entry in the permalink column and paste it between the brackets in 
+[**THIS PM**](https://www.reddit.com/message/compose/?to=ClashCallerBot&subject=DeleteMe!&message=[PASTE_HERE]).
+
+Thank you for entrusting us with your warring needs,  
+- ClashCallerBot
+                    """
+    msg_obj.author.message('ClashCallerBot List Calls', calls_message)
+    logger.info(f'Inbox list calls list sent: {msg_obj.id}.')
+    # Delete message
+    msg_obj.delete()
 
 
 def check_comments(usr: str, limit: int = -5)-> None:
