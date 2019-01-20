@@ -172,6 +172,11 @@ def main():
             time.sleep(10)
             pass
 
+        except AttributeError as err:
+            logger.exception(f'AttributeError: {err}')
+            time.sleep(10)
+            pass
+
 
 def send_confirmation(u_name: str, link: str, exp: datetime.datetime) -> None:
     """Send confirmation to reddit user.
