@@ -193,16 +193,16 @@ def send_confirmation(u_name: str, link: str, exp: datetime.datetime) -> None:
     permalink = 'https://np.reddit.com' + link  # Permalinks are missing prefix
     exp = datetime.datetime.strftime(exp, '%b. %d, %Y at %I:%M:%S %p %Z')
     message = f"""ClashCallerBot here!  
-              I will be messaging you on [**{exp}**](http://www.wolframalpha.com/input/?i={exp} To Local Time) to remind
-               you of [**this call.**]({permalink})
- 
-              Thank you for entrusting us with your warring needs,  
-              - ClashCallerBot
- 
-              [^(More info)](https://www.reddit.com/r/ClashCallerBot/comments/4e9vo7/clashcallerbot_info/)
+I will be messaging you on [**{exp}**](http://www.wolframalpha.com/input/?i={exp} To Local Time) to remind 
+you of [**this call.**]({permalink})
+
+Thank you for entrusting us with your warring needs,  
+- ClashCallerBot
+
+[^(More info)](https://www.reddit.com/r/ClashCallerBot/comments/4e9vo7/clashcallerbot_info/)
               """
     try:
-        reddit.redditor(u_name).message(subject, message.replace('              ', ''))
+        reddit.redditor(u_name).message(subject, message)
 
     except praw.exceptions.PRAWException as err:
         logger.exception(f'send_confirmation: {err}')
@@ -222,18 +222,18 @@ def send_error_message(u_name: str, link: str, error: str) -> None:
     subject = 'Unable to save call due to error'
     permalink = 'https://np.reddit.com' + link  # Permalinks are missing prefix
     message = f"""ClashCallerBot here!  
-              I regret to inform you that I could not save [**your call**]({permalink}) because of:
-              {error}  
-              Please delete your call to reduce spam and try again after making the
-              above change.
- 
-              Thank you for entrusting us with your warring needs,  
-              - ClashCallerBot
- 
-              [^(More info)](https://www.reddit.com/r/ClashCallerBot/comments/4e9vo7/clashcallerbot_info/)
+I regret to inform you that I could not save [**your call**]({permalink}) because of:
+{error}  
+Please delete your call to reduce spam and try again after making the
+above change.
+
+Thank you for entrusting us with your warring needs,  
+- ClashCallerBot
+
+[^(More info)](https://www.reddit.com/r/ClashCallerBot/comments/4e9vo7/clashcallerbot_info/)
               """
     try:
-        reddit.redditor(u_name).message(subject, message.replace('              ', ''))
+        reddit.redditor(u_name).message(subject, message)
 
     except praw.exceptions.PRAWException as err:
         logger.exception(f'send_error_message: {err}')
