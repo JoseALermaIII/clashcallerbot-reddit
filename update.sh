@@ -23,7 +23,7 @@ if [ -e ./archives/archive2.tar.gz ]; then
 	sleep 2
 fi
 
-if [ -e ./archives/master.zip.1 ]; then
+if [ -e ./archives/master.zip ]; then
 	echo '  Deleting old source downloads...'
 	rm ./archives/master.zip*
 	echo '  *****'
