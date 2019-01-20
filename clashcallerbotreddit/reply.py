@@ -165,7 +165,7 @@ def check_database()-> None:
         logger.info(f'Reminder sent: {link}.')
 
         # Delete message from database
-        db.delete_message(tid)
+        db.delete_row(tid)
         logger.info(f'Message deleted.')
     db.close_connections()
 

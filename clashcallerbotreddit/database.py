@@ -140,8 +140,8 @@ class ClashCallerDatabase(object):
         except mysql.Error as err:
             logger.exception(f'create_table: {err}')
 
-    def delete_message(self, tid: str) -> None:
-        """Deletes message from message_data table.
+    def delete_row(self, tid: str) -> None:
+        """Deletes row from message table.
 
         Method deletes given table id (row) from message_data table.
 
@@ -157,7 +157,7 @@ class ClashCallerDatabase(object):
             self.unlock_tables()
 
         except mysql.Error as err:
-            logger.exception(f'delete_message: {err}')
+            logger.exception(f'delete_row: {err}')
 
     def describe_table(self, tbl_name: str) -> list:
         """Gets description of table.
