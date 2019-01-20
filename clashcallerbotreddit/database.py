@@ -143,10 +143,10 @@ class ClashCallerDatabase(object):
     def delete_row(self, tid: str) -> None:
         """Deletes row from message table.
 
-        Method deletes given table id (row) from message_data table.
+        Method deletes given table id (row) from message table.
 
         Args:
-            tid:    Table id from id column of message_data table.
+            tid:    Table id from id column of message table.
 
         """
         try:
