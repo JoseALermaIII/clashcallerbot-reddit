@@ -57,8 +57,51 @@ def main():
         time.sleep(120)  # 2 minutes
 
 
-def check_messages():
-    pass
+def check_messages()-> None:
+    """Checks inbox messages.
+
+    Checks authorized user's inbox messages for commands, processes them, then deletes the message.
+
+    Returns:
+        None. Messages are processed then deleted.
+
+    Notes:
+        * Does not process mentions or comment replies.
+        * Skips old messages (> 6 months from start time).
+
+    """
+    try:
+        # Fetch as many messages as possible
+        messages = reddit.inbox.messages(limit=None)
+        for message in messages:
+            # Skip sent messages
+            if message.author.name == reddit.user.me().name:
+                logger.debug(f'Inbox skipping sent message: {message.id}.')
+                continue
+            # Skip old messages
+            elif not is_recent(message.created_utc, archive_time):
+                logger.debug(f'Inbox skipping archived message: {message.id}.')
+                continue
+            # Process list command
+            elif message.subject == 'MyReminders!':
+                logger.info(f'Inbox list: {message.id}.')
+                pass
+            # Process add command
+            elif message.subject == 'AddMe!':
+                logger.info(f'Inbox add: {message.id}.')
+                pass
+            # Process delete command
+            elif message.subject == 'Delete!':
+                logger.info(f'Inbox delete: {message.id}.')
+                pass
+            # Process everything else
+            else:
+                logger.exception(f'Inbox uncaught command: {message.subject}.\n'
+                                 f'Message: {message.body}.')
+                message.delete()
+
+    except praw.exceptions.PRAWException as err:
+        logger.exception(f'check_messages: {err}')
 
 
 def check_comments(usr: str, limit: int = -5)-> None:
