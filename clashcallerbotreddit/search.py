@@ -46,7 +46,7 @@ expiration_re = re.compile(r'''
                            (?P<exp_unit>minute(s)?\s|  # minute(s) (space after required)
                            min(s)?\s|                  # minute abbr. (space after required)
                            hour(s)?\s|                 # hour(s) (space after required)
-                           hr\s                        # hour abbr. (space after required)
+                           hr(s)?\s                    # hour abbr. (space after required)
                            )+''', re.VERBOSE | re.IGNORECASE)  # case-insensitive
 message_re = re.compile(r'''
                         (\s)*       # space (optional)
