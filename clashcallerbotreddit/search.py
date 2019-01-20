@@ -82,7 +82,7 @@ def main():
                     logger.debug(f'Stripped comment body: {comment.body}')
 
                     # Check for expiration time
-                    minute_tokens = ('min', 'minute', 'minutes')
+                    minute_tokens = ('min', 'mins', 'minute', 'minutes')
                     match = expiration_re.search(comment.body)
                     if not match:
                         timedelta = datetime.timedelta(hours=1)  # Default to 1 hour
