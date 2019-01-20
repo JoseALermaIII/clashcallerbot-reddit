@@ -87,7 +87,7 @@ class ClashCallerDatabase(object):
             logger.exception(f'close_connections: {err}')
 
     @staticmethod
-    def convert_datetime(dt: datetime) -> datetime:
+    def convert_datetime(dt: datetime) -> str:
         """Converts python datetime to MySQL datetime.
 
         Method converts given python datetime object to MySQL datetime format.
@@ -96,7 +96,7 @@ class ClashCallerDatabase(object):
             dt: Datetime object in default format.
 
         Returns:
-            Datetime object in MySQL format.
+            Datetime string in MySQL format.
         """
         return dt.strftime('%Y-%m-%d %H:%M:%S')  # Convert to MySQL datetime
 
