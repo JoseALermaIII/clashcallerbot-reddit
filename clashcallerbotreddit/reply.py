@@ -33,6 +33,7 @@ logger = logging.getLogger('reply')
 # Generate reddit instance
 reddit = praw.Reddit('clashcallerreply')  # Section name in praw.ini
 subreddit = reddit.subreddit('ClashCallerBot')  # Limit scope for testing purposes
+reddituser = reddit.user.me()
 
 # Make database instance
 db = ClashCallerDatabase(config, root_user=False)
@@ -49,7 +50,7 @@ def main():
         check_database()
 
         # Check for comments below threshold
-        check_comments('ClashCallerBot')
+        check_comments(reddituser.name)
 
         # Check messages for tasks
         check_messages()
@@ -75,7 +76,7 @@ def check_messages()-> None:
         messages = reddit.inbox.messages(limit=None)
         for message in messages:
             # Skip sent messages
-            if message.author.name == reddit.user.me().name:
+            if message.author.name == reddituser.name:
                 logger.debug(f'Inbox skipping sent message: {message.id}.')
                 continue
             # Skip old messages
