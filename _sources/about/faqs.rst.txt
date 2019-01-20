@@ -27,15 +27,14 @@ I plan to make a few more tweaks to make it even more useful.
 Is it ready yet?
 ----------------
 
-**Closed Beta** until I add a few more features. Let me know in `/r/ClashCallerBot
+What I thought I'd do was keep it in permanent **Open Beta**, like Google. Let me know in `/r/ClashCallerBot
 <https://np.reddit.com/r/ClashCallerBot/>`_ or via `PM
-<https://www.reddit.com/message/compose/?to=ClashCallerBotDbuggr&subject=Closed%20Beta>`_ if you'd like your subreddit
-to be added to the closed beta.
+<https://www.reddit.com/message/compose/?to=ClashCallerBotDbuggr&subject=Feedback>`_ when something breaks.
 
 How do you call ClashCallerBot?
 -------------------------------
 
-``ClashCaller! TIME OPTION "REQUIRED MESSAGE" (with quotes)``
+``ClashCaller! OPTIONAL TIME "REQUIRED MESSAGE" (with quotes)``
 
 Time is optional (defaults to an hour); however, a message is required. Meaning if you do a simple ``ClashCaller!`` the
 bot won't do anything, but you will contribute to spam. Ideally, the message will be something like "Base #3" or
@@ -47,7 +46,10 @@ The PM will give you the permalink to your original comment.
 Do PMs work?
 ------------
 
-No, they don't. Everyone needs to see what you called so they know not to attack it.
+Kind of. Everyone needs to see what you called so they know not to attack it, so you cannot directly set a call via
+PM.
+
+However, **ClashCallerBot** can execute certain commands from the comment replies.
 
 What options does it have?
 --------------------------
@@ -62,7 +64,7 @@ Usage can be inferred from the regular expressions used to process each comment 
 
 To sum:
 
-* The ``clashcaller`` string must be present in either lower or camelcase with an exclamation point ``!`` either
+* The ``clashcaller`` string must be present in either lower or CamelCase with an exclamation point ``!`` either
   before or after.
 * The expiration time in minutes or hours may follow either abbreviated or with full spelling with an
   optional space between the number and word, but mandatory space after the word: ``4min``. Case is ignored. If not
@@ -72,8 +74,11 @@ To sum:
 
 **ClashCallerBot** will then make this comment and will message you at the given time::
 
-    ClashCallerBot here!
-    I will be messaging you on Nov. 10, 2018 at 10:30:29 AM (UTC) to remind you of **this call.**
+    I will be messaging you on Jan. 21, 2019 at 06:17:09 PM UTC to remind you of this call.
+
+    Others can tap REMIND ME, TOO to send me a PM to be added to the call reminder and reduce spam.
+
+    You can also tap REMOVE ME to remove yourself from the call reminder or MY CALLS to list your current calls.
 
     Thank you for entrusting us with your warring needs!
 

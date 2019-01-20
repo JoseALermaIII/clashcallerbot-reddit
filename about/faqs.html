@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>FAQs &mdash; clashcallerbot-reddit 2.5.3 documentation</title>
+  <title>FAQs &mdash; clashcallerbot-reddit 2.6.0 documentation</title>
   
 
   
@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                2.5
+                2.6
               </div>
             
           
@@ -192,12 +192,11 @@ It’s a sweet (as in awesome) little program.</p>
 </div>
 <div class="section" id="is-it-ready-yet">
 <h2>Is it ready yet?<a class="headerlink" href="#is-it-ready-yet" title="Permalink to this headline">¶</a></h2>
-<p><strong>Closed Beta</strong> until I add a few more features. Let me know in <a class="reference external" href="https://np.reddit.com/r/ClashCallerBot/">/r/ClashCallerBot</a> or via <a class="reference external" href="https://www.reddit.com/message/compose/?to=ClashCallerBotDbuggr&amp;subject=Closed%20Beta">PM</a> if you’d like your subreddit
-to be added to the closed beta.</p>
+<p>What I thought I’d do was keep it in permanent <strong>Open Beta</strong>, like Google. Let me know in <a class="reference external" href="https://np.reddit.com/r/ClashCallerBot/">/r/ClashCallerBot</a> or via <a class="reference external" href="https://www.reddit.com/message/compose/?to=ClashCallerBotDbuggr&amp;subject=Feedback">PM</a> when something breaks.</p>
 </div>
 <div class="section" id="how-do-you-call-clashcallerbot">
 <h2>How do you call ClashCallerBot?<a class="headerlink" href="#how-do-you-call-clashcallerbot" title="Permalink to this headline">¶</a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">ClashCaller!</span> <span class="pre">TIME</span> <span class="pre">OPTION</span> <span class="pre">&quot;REQUIRED</span> <span class="pre">MESSAGE&quot;</span> <span class="pre">(with</span> <span class="pre">quotes)</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">ClashCaller!</span> <span class="pre">OPTIONAL</span> <span class="pre">TIME</span> <span class="pre">&quot;REQUIRED</span> <span class="pre">MESSAGE&quot;</span> <span class="pre">(with</span> <span class="pre">quotes)</span></code></p>
 <p>Time is optional (defaults to an hour); however, a message is required. Meaning if you do a simple <code class="docutils literal notranslate"><span class="pre">ClashCaller!</span></code> the
 bot won’t do anything, but you will contribute to spam. Ideally, the message will be something like “Base #3” or
 something to indicate the base being called. Everything before <code class="docutils literal notranslate"><span class="pre">ClashCaller!</span></code> is not caught and everything after is.
@@ -206,7 +205,9 @@ So feel free to use it in long winded posts but make sure it’s after to avoid 
 </div>
 <div class="section" id="do-pms-work">
 <h2>Do PMs work?<a class="headerlink" href="#do-pms-work" title="Permalink to this headline">¶</a></h2>
-<p>No, they don’t. Everyone needs to see what you called so they know not to attack it.</p>
+<p>Kind of. Everyone needs to see what you called so they know not to attack it, so you cannot directly set a call via
+PM.</p>
+<p>However, <strong>ClashCallerBot</strong> can execute certain commands from the comment replies.</p>
 </div>
 <div class="section" id="what-options-does-it-have">
 <h2>What options does it have?<a class="headerlink" href="#what-options-does-it-have" title="Permalink to this headline">¶</a></h2>
@@ -233,7 +234,8 @@ So feel free to use it in long winded posts but make sure it’s after to avoid 
 56
 57
 58
-59</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1"># Regular expressions</span>
+59</pre></div></td><td class="code"><div class="highlight"><pre><span></span>
+<span class="c1"># Regular expressions</span>
 <span class="n">clashcaller_re</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
 <span class="s1">                            [!|\s]?             # prefix ! or space (optional)</span>
 <span class="s1">                            [C|c]lash[C|c]aller # lower or camelcase ClashCaller (required)</span>
@@ -243,9 +245,9 @@ So feel free to use it in long winded posts but make sure it’s after to avoid 
 <span class="s1">                           (?P&lt;exp_digit&gt;(\d){1,2})    # single or double digit (required)</span>
 <span class="s1">                           (\s)?                       # space (optional)</span>
 <span class="s1">                           (?P&lt;exp_unit&gt;minute(s)?\s|  # minute(s) (space after required)</span>
-<span class="s1">                           min\s|                      # minute abbr. (space after required)</span>
+<span class="s1">                           min(s)?\s|                  # minute abbr. (space after required)</span>
 <span class="s1">                           hour(s)?\s|                 # hour(s) (space after required)</span>
-<span class="s1">                           hr\s                        # hour abbr. (space after required)</span>
+<span class="s1">                           hr(s)?\s                    # hour abbr. (space after required)</span>
 <span class="s1">                           )+&#39;&#39;&#39;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">VERBOSE</span> <span class="o">|</span> <span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">)</span>  <span class="c1"># case-insensitive</span>
 <span class="n">message_re</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
 <span class="s1">                        (\s)*       # space (optional)</span>
@@ -255,12 +257,11 @@ So feel free to use it in long winded posts but make sure it’s after to avoid 
 <span class="s1">                        (\d){1,2}   # single or double digit (required)</span>
 <span class="s1">                        .*          # any character after (optional)</span>
 <span class="s1">                        &quot;           # closing double quote (required)</span>
-<span class="s1">                        &#39;&#39;&#39;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">VERBOSE</span> <span class="o">|</span> <span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">)</span>  <span class="c1"># case-insensitive</span>
 </pre></div>
 </td></tr></table></div>
 <p>To sum:</p>
 <ul class="simple">
-<li>The <code class="docutils literal notranslate"><span class="pre">clashcaller</span></code> string must be present in either lower or camelcase with an exclamation point <code class="docutils literal notranslate"><span class="pre">!</span></code> either
+<li>The <code class="docutils literal notranslate"><span class="pre">clashcaller</span></code> string must be present in either lower or CamelCase with an exclamation point <code class="docutils literal notranslate"><span class="pre">!</span></code> either
 before or after.</li>
 <li>The expiration time in minutes or hours may follow either abbreviated or with full spelling with an
 optional space between the number and word, but mandatory space after the word: <code class="docutils literal notranslate"><span class="pre">4min</span></code>. Case is ignored. If not
@@ -269,8 +270,11 @@ given, defaults to 1 hour. The expiration time is limited to within 24 hours.</l
 digit number. Case is ignored. Maximum message length is 100 characters to save database space.</li>
 </ul>
 <p><strong>ClashCallerBot</strong> will then make this comment and will message you at the given time:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>ClashCallerBot here!
-I will be messaging you on Nov. 10, 2018 at 10:30:29 AM (UTC) to remind you of **this call.**
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>I will be messaging you on Jan. 21, 2019 at 06:17:09 PM UTC to remind you of this call.
+
+Others can tap REMIND ME, TOO to send me a PM to be added to the call reminder and reduce spam.
+
+You can also tap REMOVE ME to remove yourself from the call reminder or MY CALLS to list your current calls.
 
 Thank you for entrusting us with your warring needs!
 

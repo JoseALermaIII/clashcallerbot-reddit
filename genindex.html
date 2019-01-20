@@ -9,7 +9,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Index &mdash; clashcallerbot-reddit 2.5.3 documentation</title>
+  <title>Index &mdash; clashcallerbot-reddit 2.6.0 documentation</title>
   
 
   
@@ -57,7 +57,7 @@
             
             
               <div class="version">
-                2.5
+                2.6
               </div>
             
           
@@ -172,6 +172,7 @@
  | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
  | <a href="#O"><strong>O</strong></a>
+ | <a href="#P"><strong>P</strong></a>
  | <a href="#R"><strong>R</strong></a>
  | <a href="#S"><strong>S</strong></a>
  | <a href="#U"><strong>U</strong></a>
@@ -192,6 +193,8 @@
 </li>
       <li><a href="clashcallerbotreddit.html#clashcallerbotreddit.reply.check_database">check_database() (in module clashcallerbotreddit.reply)</a>
 </li>
+      <li><a href="clashcallerbotreddit.html#clashcallerbotreddit.reply.check_messages">check_messages() (in module clashcallerbotreddit.reply)</a>
+</li>
       <li><a href="clashcallerbotreddit.html#module-clashcallerbotreddit">clashcallerbotreddit (module)</a>
 </li>
       <li><a href="clashcallerbotreddit.html#module-clashcallerbotreddit.database">clashcallerbotreddit.database (module)</a>
@@ -200,10 +203,10 @@
 </li>
       <li><a href="clashcallerbotreddit.html#module-clashcallerbotreddit.search">clashcallerbotreddit.search (module)</a>
 </li>
-      <li><a href="clashcallerbotreddit.html#clashcallerbotreddit.database.ClashCallerDatabase">ClashCallerDatabase (class in clashcallerbotreddit.database)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="clashcallerbotreddit.html#clashcallerbotreddit.database.ClashCallerDatabase">ClashCallerDatabase (class in clashcallerbotreddit.database)</a>
+</li>
       <li><a href="clashcallerbotreddit.html#clashcallerbotreddit.database.ClashCallerDatabase.close_connections">close_connections() (clashcallerbotreddit.database.ClashCallerDatabase method)</a>
 </li>
       <li><a href="clashcallerbotreddit.html#clashcallerbotreddit.config">config (in module clashcallerbotreddit)</a>
@@ -224,7 +227,7 @@
 <h2 id="D">D</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="clashcallerbotreddit.html#clashcallerbotreddit.database.ClashCallerDatabase.delete_message">delete_message() (clashcallerbotreddit.database.ClashCallerDatabase method)</a>
+      <li><a href="clashcallerbotreddit.html#clashcallerbotreddit.database.ClashCallerDatabase.delete_row">delete_row() (clashcallerbotreddit.database.ClashCallerDatabase method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -238,15 +241,19 @@
 <h2 id="G">G</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="clashcallerbotreddit.html#clashcallerbotreddit.database.ClashCallerDatabase.get_messages">get_messages() (clashcallerbotreddit.database.ClashCallerDatabase method)</a>
+      <li><a href="clashcallerbotreddit.html#clashcallerbotreddit.database.ClashCallerDatabase.get_expired_messages">get_expired_messages() (clashcallerbotreddit.database.ClashCallerDatabase method)</a>
 </li>
       <li><a href="clashcallerbotreddit.html#clashcallerbotreddit.reply.get_parent">get_parent() (in module clashcallerbotreddit.reply)</a>
+</li>
+      <li><a href="clashcallerbotreddit.html#clashcallerbotreddit.database.ClashCallerDatabase.get_removable_messages">get_removable_messages() (clashcallerbotreddit.database.ClashCallerDatabase method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="clashcallerbotreddit.html#clashcallerbotreddit.database.ClashCallerDatabase.get_rows">get_rows() (clashcallerbotreddit.database.ClashCallerDatabase method)</a>
 </li>
       <li><a href="clashcallerbotreddit.html#clashcallerbotreddit.database.ClashCallerDatabase.get_tables">get_tables() (clashcallerbotreddit.database.ClashCallerDatabase method)</a>
+</li>
+      <li><a href="clashcallerbotreddit.html#clashcallerbotreddit.database.ClashCallerDatabase.get_user_messages">get_user_messages() (clashcallerbotreddit.database.ClashCallerDatabase method)</a>
 </li>
       <li><a href="clashcallerbotreddit.html#clashcallerbotreddit.database.ClashCallerDatabase.grant_permissions">grant_permissions() (clashcallerbotreddit.database.ClashCallerDatabase method)</a>
 </li>
@@ -309,6 +316,20 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="clashcallerbotreddit.html#clashcallerbotreddit.database.ClashCallerDatabase.open_connections">open_connections() (clashcallerbotreddit.database.ClashCallerDatabase method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="P">P</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="clashcallerbotreddit.html#clashcallerbotreddit.reply.process_add_me">process_add_me() (in module clashcallerbotreddit.reply)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="clashcallerbotreddit.html#clashcallerbotreddit.reply.process_delete_me">process_delete_me() (in module clashcallerbotreddit.reply)</a>
+</li>
+      <li><a href="clashcallerbotreddit.html#clashcallerbotreddit.reply.process_my_calls">process_my_calls() (in module clashcallerbotreddit.reply)</a>
 </li>
   </ul></td>
 </tr></table>

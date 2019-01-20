@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>clashcallerbotreddit.reply &mdash; clashcallerbot-reddit 2.5.3 documentation</title>
+  <title>clashcallerbotreddit.reply &mdash; clashcallerbot-reddit 2.6.0 documentation</title>
   
 
   
@@ -56,7 +56,7 @@
             
             
               <div class="version">
-                2.5
+                2.6
               </div>
             
           
@@ -167,7 +167,7 @@
 
 <span class="sd">* Sends and deletes stored messages in the MySQL-compatible database.</span>
 <span class="sd">* Checks bot&#39;s comments and removes comments below a certain threshold.</span>
-<span class="sd">* TODO: Checks bot&#39;s messages for keywords and deletes them after:</span>
+<span class="sd">* Checks bot&#39;s messages for keywords and deletes them after:</span>
 
 <span class="sd">    * Adding message author to call reminder.</span>
 <span class="sd">    * PMing list of message author&#39;s calls.</span>
@@ -179,21 +179,24 @@
 <span class="kn">import</span> <span class="nn">praw.exceptions</span>
 
 <span class="kn">import</span> <span class="nn">logging.config</span>
+<span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">datetime</span>
 <span class="kn">import</span> <span class="nn">time</span>
 
 <span class="kn">from</span> <span class="nn">clashcallerbotreddit.database</span> <span class="k">import</span> <span class="n">ClashCallerDatabase</span>
-<span class="kn">from</span> <span class="nn">clashcallerbotreddit.search</span> <span class="k">import</span> <span class="n">is_recent</span>
+<span class="kn">from</span> <span class="nn">clashcallerbotreddit.search</span> <span class="k">import</span> <span class="n">is_recent</span><span class="p">,</span> <span class="n">message_re</span>
 <span class="kn">from</span> <span class="nn">clashcallerbotreddit</span> <span class="k">import</span> <span class="n">LOGGING</span><span class="p">,</span> <span class="n">config</span>
 
 <span class="c1"># Logger</span>
 <span class="n">logging</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">dictConfig</span><span class="p">(</span><span class="n">LOGGING</span><span class="p">)</span>
-<span class="n">logging</span><span class="o">.</span><span class="n">raiseExceptions</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1"># Production mode if False (no console sys.stderr output)</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">raiseExceptions</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># Production mode if False (no console sys.stderr output)</span>
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;reply&#39;</span><span class="p">)</span>
 
 <span class="c1"># Generate reddit instance</span>
 <span class="n">reddit</span> <span class="o">=</span> <span class="n">praw</span><span class="o">.</span><span class="n">Reddit</span><span class="p">(</span><span class="s1">&#39;clashcallerreply&#39;</span><span class="p">)</span>  <span class="c1"># Section name in praw.ini</span>
-<span class="n">subreddit</span> <span class="o">=</span> <span class="n">reddit</span><span class="o">.</span><span class="n">subreddit</span><span class="p">(</span><span class="s1">&#39;ClashCallerBot&#39;</span><span class="p">)</span>  <span class="c1"># Limit scope for testing purposes</span>
+<span class="c1">#subreddit = reddit.subreddit(&#39;ClashCallerBot&#39;)  # Limit scope for testing purposes</span>
+<span class="n">subreddit</span> <span class="o">=</span> <span class="n">reddit</span><span class="o">.</span><span class="n">subreddit</span><span class="p">(</span><span class="s1">&#39;all&#39;</span><span class="p">)</span>  <span class="c1"># Production mode</span>
+<span class="n">reddituser</span> <span class="o">=</span> <span class="n">reddit</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">me</span><span class="p">()</span>
 
 <span class="c1"># Make database instance</span>
 <span class="n">db</span> <span class="o">=</span> <span class="n">ClashCallerDatabase</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">root_user</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -201,6 +204,33 @@
 <span class="c1"># Time constants</span>
 <span class="n">start_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span>
 <span class="n">archive_time</span> <span class="o">=</span> <span class="n">start_time</span> <span class="o">-</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">weeks</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>  <span class="c1"># 6 months archival time</span>
+
+<span class="c1"># Regular expressions</span>
+<span class="n">addme_re</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">                        \[              # opening square bracket (required)</span>
+<span class="s1">                        (?P&lt;link_re&gt;</span>
+<span class="s1">                        (\S)+)          # any non-whitespace characters (required)</span>
+<span class="s1">                        \]              # closing square bracket (required)</span>
+<span class="s1">                        (?P&lt;exp_re&gt; </span>
+<span class="s1">                        (\d)</span><span class="si">{4}</span><span class="s1">-        # four digit number followed by hyphen (required)</span>
+<span class="s1">                        (\d){1,2}-      # one or two digit number followed by hyphen (required)</span>
+<span class="s1">                        (\d){1,2}\s     # one or two digit number followed by space (required)</span>
+<span class="s1">                        ((\d)</span><span class="si">{2}</span><span class="s1">:)</span><span class="si">{2}</span><span class="s1">   # two, two digit numbers followed by a colon (required)</span>
+<span class="s1">                        (\d)</span><span class="si">{2}</span><span class="s1">)        # two digit number followed (required)</span>
+<span class="s1">                        &#39;&#39;&#39;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">VERBOSE</span><span class="p">)</span>
+
+<span class="n">delete_re</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">                        ^               # beginning of string</span>
+<span class="s1">                        \[              # opening square bracket (required)</span>
+<span class="s1">                        (?P&lt;link_re&gt;</span>
+<span class="s1">                        (\S)+)          # any non-whitespace characters (required)</span>
+<span class="s1">                        \]              # closing square bracket (required)</span>
+<span class="s1">                        (\s)*           # one or more spaces (optional)</span>
+<span class="s1">                        $               # end of string</span>
+<span class="s1">                        &#39;&#39;&#39;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">VERBOSE</span><span class="p">)</span>
+
+<span class="c1"># Call table spacers</span>
+<span class="n">spacers</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;left&#39;</span><span class="p">:</span> <span class="s1">&#39;| &#39;</span><span class="p">,</span> <span class="s1">&#39;mid&#39;</span><span class="p">:</span> <span class="s1">&#39; | &#39;</span><span class="p">,</span> <span class="s1">&#39;right&#39;</span><span class="p">:</span> <span class="s1">&#39; |&#39;</span><span class="p">}</span>
 
 
 <div class="viewcode-block" id="main"><a class="viewcode-back" href="../../clashcallerbotreddit.html#clashcallerbotreddit.reply.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
@@ -210,9 +240,202 @@
         <span class="n">check_database</span><span class="p">()</span>
 
         <span class="c1"># Check for comments below threshold</span>
-        <span class="n">check_comments</span><span class="p">(</span><span class="s1">&#39;ClashCallerBot&#39;</span><span class="p">)</span>
+        <span class="n">check_comments</span><span class="p">(</span><span class="n">reddituser</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+        <span class="c1"># Check messages for tasks</span>
+        <span class="n">check_messages</span><span class="p">()</span>
 
         <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">120</span><span class="p">)</span>  <span class="c1"># 2 minutes</span></div>
+
+
+<div class="viewcode-block" id="check_messages"><a class="viewcode-back" href="../../clashcallerbotreddit.html#clashcallerbotreddit.reply.check_messages">[docs]</a><span class="k">def</span> <span class="nf">check_messages</span><span class="p">()</span><span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Checks inbox messages.</span>
+
+<span class="sd">    Checks authorized user&#39;s inbox messages for commands, processes them, then deletes the message.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        None. Messages are processed then deleted.</span>
+
+<span class="sd">    Notes:</span>
+<span class="sd">        * Does not process mentions or comment replies.</span>
+<span class="sd">        * Skips old messages (&gt; 6 months from start time).</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># Fetch as many messages as possible</span>
+        <span class="n">messages</span> <span class="o">=</span> <span class="n">reddit</span><span class="o">.</span><span class="n">inbox</span><span class="o">.</span><span class="n">messages</span><span class="p">(</span><span class="n">limit</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">message</span> <span class="ow">in</span> <span class="n">messages</span><span class="p">:</span>
+            <span class="c1"># Skip sent messages</span>
+            <span class="k">if</span> <span class="n">message</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">reddituser</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Inbox skip sent message: </span><span class="si">{message.id}</span><span class="s1">.&#39;</span><span class="p">)</span>
+                <span class="k">continue</span>
+            <span class="c1"># Skip old messages</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">is_recent</span><span class="p">(</span><span class="n">message</span><span class="o">.</span><span class="n">created_utc</span><span class="p">,</span> <span class="n">archive_time</span><span class="p">):</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Inbox skip old message: </span><span class="si">{message.id}</span><span class="s1">.&#39;</span><span class="p">)</span>
+                <span class="k">continue</span>
+            <span class="c1"># Process list command</span>
+            <span class="k">if</span> <span class="n">message</span><span class="o">.</span><span class="n">subject</span> <span class="o">==</span> <span class="s1">&#39;MyCalls!&#39;</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Inbox list: </span><span class="si">{message.id}</span><span class="s1">.&#39;</span><span class="p">)</span>
+                <span class="n">process_my_calls</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+            <span class="c1"># Process add command</span>
+            <span class="k">elif</span> <span class="n">message</span><span class="o">.</span><span class="n">subject</span> <span class="o">==</span> <span class="s1">&#39;AddMe!&#39;</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Inbox add: </span><span class="si">{message.id}</span><span class="s1">.&#39;</span><span class="p">)</span>
+                <span class="n">process_add_me</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+            <span class="c1"># Process delete command</span>
+            <span class="k">elif</span> <span class="n">message</span><span class="o">.</span><span class="n">subject</span> <span class="o">==</span> <span class="s1">&#39;DeleteMe!&#39;</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Inbox delete: </span><span class="si">{message.id}</span><span class="s1">.&#39;</span><span class="p">)</span>
+                <span class="n">process_delete_me</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+            <span class="c1"># Process everything else</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Inbox uncaught command: </span><span class="si">{message.subject}</span><span class="s1">.</span><span class="se">\n</span><span class="s1">&#39;</span>
+                                 <span class="n">f</span><span class="s1">&#39;Message: </span><span class="si">{message.body}</span><span class="s1">.&#39;</span><span class="p">)</span>
+                <span class="n">message</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+
+    <span class="k">except</span> <span class="n">praw</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">PRAWException</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;check_messages: </span><span class="si">{err}</span><span class="s1">&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="process_add_me"><a class="viewcode-back" href="../../clashcallerbotreddit.html#clashcallerbotreddit.reply.process_add_me">[docs]</a><span class="k">def</span> <span class="nf">process_add_me</span><span class="p">(</span><span class="n">msg_obj</span><span class="p">:</span> <span class="n">praw</span><span class="o">.</span><span class="n">reddit</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">Message</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Process an AddMe! command from a message.</span>
+
+<span class="sd">    Processes an AddMe! command from a given message that invoked it. The message author is added to the</span>
+<span class="sd">    MySQL-compatible database with the permalink, message, and expiration time from the message body.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        msg_obj: Instance of Message class that invoked the AddMe! command.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Error message string if unsuccessful, None otherwise.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Get URL and expiration time from message body</span>
+    <span class="n">match</span> <span class="o">=</span> <span class="n">addme_re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">msg_obj</span><span class="o">.</span><span class="n">body</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">match</span><span class="p">:</span>
+        <span class="n">err</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;Inbox skip add (bad message format): </span><span class="si">{msg_obj}</span><span class="s1">.&#39;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+        <span class="n">msg_obj</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">err</span>
+    <span class="n">link_re</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s1">&#39;link_re&#39;</span><span class="p">)</span>
+    <span class="n">exp_re</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s1">&#39;exp_re&#39;</span><span class="p">)</span>
+    <span class="n">exp_re</span> <span class="o">+=</span> <span class="s1">&#39;+0000&#39;</span>  <span class="c1"># add UTC offset</span>
+    <span class="n">exp_datetime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">exp_re</span><span class="p">,</span> <span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S%z&#39;</span><span class="p">)</span>  <span class="c1"># Convert to MySQL datetime object</span>
+    <span class="n">now</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Comment link: </span><span class="si">{link_re}</span><span class="s1">.&#39;</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Expiration datetime: </span><span class="si">{exp_datetime}</span><span class="s1">.&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">now</span> <span class="o">&gt;</span> <span class="n">exp_datetime</span><span class="p">:</span>
+        <span class="n">err</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;Inbox skip add (expired message): </span><span class="si">{msg_obj.id}</span><span class="s1">&#39;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+        <span class="n">msg_obj</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">err</span>
+    <span class="c1"># Get call message from message body</span>
+    <span class="n">match</span> <span class="o">=</span> <span class="n">message_re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">msg_obj</span><span class="o">.</span><span class="n">body</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">match</span><span class="p">:</span>
+        <span class="n">err</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;Inbox skip add (bad call message format): </span><span class="si">{msg_obj.id}</span><span class="s1">.&#39;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+        <span class="n">msg_obj</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">err</span>
+    <span class="n">call_message</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="c1"># Add to database</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Inbox add save to db: </span><span class="si">{msg_obj.id}</span><span class="s1">.&#39;</span><span class="p">)</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">open_connections</span><span class="p">()</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">save_message</span><span class="p">(</span><span class="n">link_re</span><span class="p">,</span> <span class="n">call_message</span><span class="p">,</span> <span class="n">exp_datetime</span><span class="p">,</span> <span class="n">msg_obj</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">close_connections</span><span class="p">()</span>
+    <span class="c1"># Delete message</span>
+    <span class="n">msg_obj</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="process_delete_me"><a class="viewcode-back" href="../../clashcallerbotreddit.html#clashcallerbotreddit.reply.process_delete_me">[docs]</a><span class="k">def</span> <span class="nf">process_delete_me</span><span class="p">(</span><span class="n">msg_obj</span><span class="p">:</span> <span class="n">praw</span><span class="o">.</span><span class="n">reddit</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">Message</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Process a DeleteMe! command from a message.</span>
+
+<span class="sd">    Processes a DeleteMe! command from a given message that invoked it. If calls from the message author for the</span>
+<span class="sd">    permalink from the message body are found in the MySQL-compatible database, they are removed from the database.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        msg_obj: Instance of Message class that invoked the DeleteMe! command.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Error message string if unsuccessful, None otherwise.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Get URL from message body</span>
+    <span class="n">match</span> <span class="o">=</span> <span class="n">delete_re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">msg_obj</span><span class="o">.</span><span class="n">body</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">match</span><span class="p">:</span>
+        <span class="n">err</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;Inbox skip delete: </span><span class="si">{msg_obj.id}</span><span class="s1">.&#39;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+        <span class="n">msg_obj</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">err</span>
+    <span class="n">link_re</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s1">&#39;link_re&#39;</span><span class="p">)</span>
+    <span class="c1"># Check database for matching rows</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">open_connections</span><span class="p">()</span>
+    <span class="n">deletable_messages</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get_removable_messages</span><span class="p">(</span><span class="n">msg_obj</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">link_re</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">deletable_messages</span><span class="p">:</span>
+        <span class="n">err</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;Inbox skip delete (no deletable_messages): </span><span class="si">{msg_obj.id}</span><span class="s1">.&#39;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+        <span class="n">msg_obj</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">err</span>
+    <span class="c1"># Delete matching rows</span>
+    <span class="k">for</span> <span class="n">deletable_message</span> <span class="ow">in</span> <span class="n">deletable_messages</span><span class="p">:</span>
+        <span class="n">tid</span><span class="p">,</span> <span class="n">link_saved</span><span class="p">,</span> <span class="n">_msg</span><span class="p">,</span> <span class="n">_exp</span><span class="p">,</span> <span class="n">_usr</span> <span class="o">=</span> <span class="n">deletable_message</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">delete_row</span><span class="p">(</span><span class="n">tid</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Inbox delete message deleted: </span><span class="si">{link_saved}</span><span class="s1">.&#39;</span><span class="p">)</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">close_connections</span><span class="p">()</span>
+    <span class="c1"># Delete message</span>
+    <span class="n">msg_obj</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="process_my_calls"><a class="viewcode-back" href="../../clashcallerbotreddit.html#clashcallerbotreddit.reply.process_my_calls">[docs]</a><span class="k">def</span> <span class="nf">process_my_calls</span><span class="p">(</span><span class="n">msg_obj</span><span class="p">:</span> <span class="n">praw</span><span class="o">.</span><span class="n">reddit</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">Message</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Process a MyCalls! command from a message.</span>
+
+<span class="sd">    Processes a MyCalls! command from a given message that invoked it. If calls from the message author are found in</span>
+<span class="sd">    the MySQL-compatible database, they are sent in a table format via PM.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        msg_obj: Instance of Message class that invoked the MyCalls! command.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Error message string if unsuccessful, None otherwise.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Check database for user&#39;s calls</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">open_connections</span><span class="p">()</span>
+    <span class="n">current_calls</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get_user_messages</span><span class="p">(</span><span class="n">msg_obj</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">close_connections</span><span class="p">()</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">current_calls</span><span class="p">:</span>
+        <span class="n">err</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;Inbox skip list (no current_calls): </span><span class="si">{msg_obj.id}</span><span class="s1">.&#39;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+        <span class="n">msg_obj</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">err</span>
+    <span class="c1"># Display calls, if found</span>
+    <span class="n">call_table</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="n">spacers</span><span class="p">[</span><span class="s1">&#39;left&#39;</span><span class="p">],</span> <span class="s1">&#39;Permalink&#39;</span><span class="p">,</span> <span class="n">spacers</span><span class="p">[</span><span class="s1">&#39;mid&#39;</span><span class="p">],</span> <span class="s1">&#39;Call Message&#39;</span><span class="p">,</span> <span class="n">spacers</span><span class="p">[</span><span class="s1">&#39;mid&#39;</span><span class="p">],</span> <span class="s1">&#39;Expiration&#39;</span><span class="p">,</span>
+         <span class="n">spacers</span><span class="p">[</span><span class="s1">&#39;right&#39;</span><span class="p">]),</span>
+        <span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">,</span> <span class="s1">&#39;:-:&#39;</span><span class="p">,</span> <span class="s1">&#39;|&#39;</span><span class="p">,</span> <span class="s1">&#39;:-:&#39;</span><span class="p">,</span> <span class="s1">&#39;|&#39;</span><span class="p">,</span> <span class="s1">&#39;:-:&#39;</span><span class="p">,</span> <span class="s1">&#39;|&#39;</span><span class="p">)</span>
+    <span class="p">]</span>
+    <span class="k">for</span> <span class="n">call</span> <span class="ow">in</span> <span class="n">current_calls</span><span class="p">:</span>
+        <span class="n">_tid</span><span class="p">,</span> <span class="n">link_saved</span><span class="p">,</span> <span class="n">msg_saved</span><span class="p">,</span> <span class="n">exp_saved</span><span class="p">,</span> <span class="n">_usr</span> <span class="o">=</span> <span class="n">call</span>
+        <span class="n">exp_saved</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">exp_saved</span><span class="p">,</span>
+                                               <span class="s1">&#39;%b. </span><span class="si">%d</span><span class="s1">, %Y at %I:%M:%S %p UTC&#39;</span><span class="p">)</span>  <span class="c1"># Human readable datetime</span>
+        <span class="n">link_saved</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="n">link_saved</span>  <span class="c1"># escape reddit markdown syntax</span>
+        <span class="n">table_row</span> <span class="o">=</span> <span class="p">(</span><span class="n">spacers</span><span class="p">[</span><span class="s1">&#39;left&#39;</span><span class="p">],</span> <span class="n">link_saved</span><span class="p">,</span> <span class="n">spacers</span><span class="p">[</span><span class="s1">&#39;mid&#39;</span><span class="p">],</span> <span class="n">msg_saved</span><span class="p">,</span> <span class="n">spacers</span><span class="p">[</span><span class="s1">&#39;mid&#39;</span><span class="p">],</span>
+                     <span class="n">f</span><span class="s1">&#39;[**</span><span class="si">{exp_saved}</span><span class="s1">**](http://www.wolframalpha.com/input/?i=</span><span class="si">{exp_saved}</span><span class="s1"> To Local Time)&#39;</span><span class="p">,</span>
+                     <span class="n">spacers</span><span class="p">[</span><span class="s1">&#39;right&#39;</span><span class="p">])</span>
+        <span class="n">call_table</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">table_row</span><span class="p">)</span>
+    <span class="n">call_table_string</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">element</span> <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">row</span><span class="p">)</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">call_table</span><span class="p">)</span>
+    <span class="n">calls_message</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;&quot;&quot;ClashCallerBot here!  </span>
+<span class="s2">Your current calls are as follows:</span>
+
+<span class="si">{call_table_string}</span><span class="s2"></span>
+
+<span class="s2">If you wish to delete a call, copy the entry in the permalink column and paste it between the brackets in </span>
+<span class="s2">[**THIS PM**](https://www.reddit.com/message/compose/?to=ClashCallerBot&amp;subject=DeleteMe!&amp;message=[PASTE_HERE]).</span>
+
+<span class="s2">Thank you for entrusting us with your warring needs,  </span>
+<span class="s2">- ClashCallerBot</span>
+<span class="s2">                    &quot;&quot;&quot;</span>
+    <span class="n">msg_obj</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">message</span><span class="p">(</span><span class="s1">&#39;ClashCallerBot List Calls&#39;</span><span class="p">,</span> <span class="n">calls_message</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Inbox list calls list sent: </span><span class="si">{msg_obj.id}</span><span class="s1">.&#39;</span><span class="p">)</span>
+    <span class="c1"># Delete message</span>
+    <span class="n">msg_obj</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="check_comments"><a class="viewcode-back" href="../../clashcallerbotreddit.html#clashcallerbotreddit.reply.check_comments">[docs]</a><span class="k">def</span> <span class="nf">check_comments</span><span class="p">(</span><span class="n">usr</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">5</span><span class="p">)</span><span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -260,7 +483,7 @@
     <span class="n">db</span><span class="o">.</span><span class="n">open_connections</span><span class="p">()</span>
     <span class="c1"># Get list of messages older than current datetime</span>
     <span class="n">now</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span>
-    <span class="n">messages</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get_messages</span><span class="p">(</span><span class="n">now</span><span class="p">)</span>
+    <span class="n">messages</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get_expired_messages</span><span class="p">(</span><span class="n">now</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">messages</span><span class="p">:</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;No messages before: </span><span class="si">{now}</span><span class="s1">.&#39;</span><span class="p">)</span>
@@ -275,7 +498,7 @@
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Reminder sent: </span><span class="si">{link}</span><span class="s1">.&#39;</span><span class="p">)</span>
 
         <span class="c1"># Delete message from database</span>
-        <span class="n">db</span><span class="o">.</span><span class="n">delete_message</span><span class="p">(</span><span class="n">tid</span><span class="p">)</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">delete_row</span><span class="p">(</span><span class="n">tid</span><span class="p">)</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Message deleted.&#39;</span><span class="p">)</span>
     <span class="n">db</span><span class="o">.</span><span class="n">close_connections</span><span class="p">()</span></div>
 
@@ -295,16 +518,16 @@
     <span class="n">permalink</span> <span class="o">=</span> <span class="s1">&#39;https://np.reddit.com&#39;</span> <span class="o">+</span> <span class="n">link</span>  <span class="c1"># Permalinks are missing prefix</span>
     <span class="n">parent</span> <span class="o">=</span> <span class="n">get_parent</span><span class="p">(</span><span class="n">link</span><span class="p">)</span>
     <span class="n">message</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;&quot;&quot;**The message:** </span><span class="si">{msg}</span><span class="s2">  </span>
-<span class="s2">              **The original comment:** </span><span class="si">{permalink}</span><span class="s2">  </span>
-<span class="s2">              **The parent comment or submission:** </span><span class="si">{parent}</span><span class="s2">  </span>
+<span class="s2">**The original comment:** </span><span class="si">{permalink}</span><span class="s2">  </span>
+<span class="s2">**The parent comment or submission:** </span><span class="si">{parent}</span><span class="s2">  </span>
 
-<span class="s2">              Thank you for entrusting us with your warring needs,  </span>
-<span class="s2">              - ClashCallerBot</span>
+<span class="s2">Thank you for entrusting us with your warring needs,  </span>
+<span class="s2">- ClashCallerBot</span>
 
-<span class="s2">              [^(More info)](https://www.reddit.com/r/ClashCallerBot/comments/4e9vo7/clashcallerbot_info/)</span>
+<span class="s2">[^(More info)](https://www.reddit.com/r/ClashCallerBot/comments/4e9vo7/clashcallerbot_info/)</span>
 <span class="s2">              &quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">reddit</span><span class="o">.</span><span class="n">redditor</span><span class="p">(</span><span class="n">usr</span><span class="p">)</span><span class="o">.</span><span class="n">message</span><span class="p">(</span><span class="n">subject</span><span class="p">,</span> <span class="n">message</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;              &#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">))</span>
+        <span class="n">reddit</span><span class="o">.</span><span class="n">redditor</span><span class="p">(</span><span class="n">usr</span><span class="p">)</span><span class="o">.</span><span class="n">message</span><span class="p">(</span><span class="n">subject</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
 
     <span class="k">except</span> <span class="n">praw</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">PRAWException</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;send_reminder: </span><span class="si">{err}</span><span class="s1">&#39;</span><span class="p">)</span></div>

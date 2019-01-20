@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>clashcallerbotreddit package &mdash; clashcallerbot-reddit 2.5.3 documentation</title>
+  <title>clashcallerbotreddit package &mdash; clashcallerbot-reddit 2.6.0 documentation</title>
   
 
   
@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                2.5
+                2.6
               </div>
             
           
@@ -280,7 +280,7 @@ MySQL-compatible database:</p>
 
 <dl class="staticmethod">
 <dt id="clashcallerbotreddit.database.ClashCallerDatabase.convert_datetime">
-<em class="property">static </em><code class="descname">convert_datetime</code><span class="sig-paren">(</span><em>dt: &lt;module 'datetime' from '/usr/lib/python3.6/datetime.py'&gt;</em><span class="sig-paren">)</span> &#x2192; &lt;module 'datetime' from '/usr/lib/python3.6/datetime.py'&gt;<a class="reference internal" href="_modules/clashcallerbotreddit/database.html#ClashCallerDatabase.convert_datetime"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clashcallerbotreddit.database.ClashCallerDatabase.convert_datetime" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="descname">convert_datetime</code><span class="sig-paren">(</span><em>dt: &lt;module 'datetime' from '/usr/lib/python3.6/datetime.py'&gt;</em><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="_modules/clashcallerbotreddit/database.html#ClashCallerDatabase.convert_datetime"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clashcallerbotreddit.database.ClashCallerDatabase.convert_datetime" title="Permalink to this definition">¶</a></dt>
 <dd><p>Converts python datetime to MySQL datetime.</p>
 <p>Method converts given python datetime object to MySQL datetime format.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -289,7 +289,7 @@ MySQL-compatible database:</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dt</strong> – Datetime object in default format.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Datetime object in MySQL format.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Datetime string in MySQL format.</td>
 </tr>
 </tbody>
 </table>
@@ -334,15 +334,15 @@ MySQL-compatible database:</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="clashcallerbotreddit.database.ClashCallerDatabase.delete_message">
-<code class="descname">delete_message</code><span class="sig-paren">(</span><em>tid: str</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/clashcallerbotreddit/database.html#ClashCallerDatabase.delete_message"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clashcallerbotreddit.database.ClashCallerDatabase.delete_message" title="Permalink to this definition">¶</a></dt>
-<dd><p>Deletes message from message_data table.</p>
-<p>Method deletes given table id (row) from message_data table.</p>
+<dt id="clashcallerbotreddit.database.ClashCallerDatabase.delete_row">
+<code class="descname">delete_row</code><span class="sig-paren">(</span><em>tid: str</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/clashcallerbotreddit/database.html#ClashCallerDatabase.delete_row"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clashcallerbotreddit.database.ClashCallerDatabase.delete_row" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deletes row from message table.</p>
+<p>Method deletes given table id (row) from message table.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>tid</strong> – Table id from id column of message_data table.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>tid</strong> – Table id from id column of message table.</td>
 </tr>
 </tbody>
 </table>
@@ -381,8 +381,8 @@ MySQL-compatible database:</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="clashcallerbotreddit.database.ClashCallerDatabase.get_messages">
-<code class="descname">get_messages</code><span class="sig-paren">(</span><em>time_now: datetime.datetime</em><span class="sig-paren">)</span> &#x2192; list<a class="reference internal" href="_modules/clashcallerbotreddit/database.html#ClashCallerDatabase.get_messages"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clashcallerbotreddit.database.ClashCallerDatabase.get_messages" title="Permalink to this definition">¶</a></dt>
+<dt id="clashcallerbotreddit.database.ClashCallerDatabase.get_expired_messages">
+<code class="descname">get_expired_messages</code><span class="sig-paren">(</span><em>time_now: datetime.datetime</em><span class="sig-paren">)</span> &#x2192; list<a class="reference internal" href="_modules/clashcallerbotreddit/database.html#ClashCallerDatabase.get_expired_messages"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clashcallerbotreddit.database.ClashCallerDatabase.get_expired_messages" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieves list of messages that have expired.</p>
 <p>Method returns list of messages whose expiration times are before current datetime.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -392,6 +392,28 @@ MySQL-compatible database:</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>time_now</strong> – Current datetime.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">List containing results of query.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="clashcallerbotreddit.database.ClashCallerDatabase.get_removable_messages">
+<code class="descname">get_removable_messages</code><span class="sig-paren">(</span><em>usr_name: str</em>, <em>link: str</em><span class="sig-paren">)</span> &#x2192; list<a class="reference internal" href="_modules/clashcallerbotreddit/database.html#ClashCallerDatabase.get_removable_messages"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clashcallerbotreddit.database.ClashCallerDatabase.get_removable_messages" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves list of messages that match the username and permalink.</p>
+<p>Checks the message table for rows containing the given user name and given link.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>usr_name</strong> – Reddit username wanting to delete saved calls.</li>
+<li><strong>link</strong> – Comment permalink of saved call (without domain prefix)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">List of messages matching query. Empty list if none found.</p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -424,6 +446,23 @@ MySQL-compatible database:</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">List of table names.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="clashcallerbotreddit.database.ClashCallerDatabase.get_user_messages">
+<code class="descname">get_user_messages</code><span class="sig-paren">(</span><em>usr_name: str</em><span class="sig-paren">)</span> &#x2192; list<a class="reference internal" href="_modules/clashcallerbotreddit/database.html#ClashCallerDatabase.get_user_messages"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clashcallerbotreddit.database.ClashCallerDatabase.get_user_messages" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves list of messages that match the username.</p>
+<p>Checks the message table for rows containing the given user name.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>usr_name</strong> – Reddit username wanting to list saved calls.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">List of messages matching query. Empty list if none found.</td>
 </tr>
 </tbody>
 </table>
@@ -539,7 +578,7 @@ MySQL-compatible database:</p>
 </li>
 <li><p class="first">Checks bot’s comments and removes comments below a certain threshold.</p>
 </li>
-<li><p class="first">TODO: Checks bot’s messages for keywords and deletes them after:</p>
+<li><p class="first">Checks bot’s messages for keywords and deletes them after:</p>
 <blockquote>
 <div><ul class="simple">
 <li>Adding message author to call reminder.</li>
@@ -593,6 +632,26 @@ database.</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="clashcallerbotreddit.reply.check_messages">
+<code class="descclassname">clashcallerbotreddit.reply.</code><code class="descname">check_messages</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/clashcallerbotreddit/reply.html#check_messages"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clashcallerbotreddit.reply.check_messages" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks inbox messages.</p>
+<p>Checks authorized user’s inbox messages for commands, processes them, then deletes the message.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">None. Messages are processed then deleted.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li>Does not process mentions or comment replies.</li>
+<li>Skips old messages (&gt; 6 months from start time).</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
 <dt id="clashcallerbotreddit.reply.get_parent">
 <code class="descclassname">clashcallerbotreddit.reply.</code><code class="descname">get_parent</code><span class="sig-paren">(</span><em>link: str</em><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="_modules/clashcallerbotreddit/reply.html#get_parent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clashcallerbotreddit.reply.get_parent" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fetch parent comment or submission.</p>
@@ -613,6 +672,60 @@ database.</p>
 <dt id="clashcallerbotreddit.reply.main">
 <code class="descclassname">clashcallerbotreddit.reply.</code><code class="descname">main</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/clashcallerbotreddit/reply.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clashcallerbotreddit.reply.main" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="function">
+<dt id="clashcallerbotreddit.reply.process_add_me">
+<code class="descclassname">clashcallerbotreddit.reply.</code><code class="descname">process_add_me</code><span class="sig-paren">(</span><em>msg_obj: praw.models.reddit.message.Message</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clashcallerbotreddit/reply.html#process_add_me"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clashcallerbotreddit.reply.process_add_me" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process an AddMe! command from a message.</p>
+<p>Processes an AddMe! command from a given message that invoked it. The message author is added to the
+MySQL-compatible database with the permalink, message, and expiration time from the message body.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>msg_obj</strong> – Instance of Message class that invoked the AddMe! command.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Error message string if unsuccessful, None otherwise.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="clashcallerbotreddit.reply.process_delete_me">
+<code class="descclassname">clashcallerbotreddit.reply.</code><code class="descname">process_delete_me</code><span class="sig-paren">(</span><em>msg_obj: praw.models.reddit.message.Message</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clashcallerbotreddit/reply.html#process_delete_me"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clashcallerbotreddit.reply.process_delete_me" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process a DeleteMe! command from a message.</p>
+<p>Processes a DeleteMe! command from a given message that invoked it. If calls from the message author for the
+permalink from the message body are found in the MySQL-compatible database, they are removed from the database.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>msg_obj</strong> – Instance of Message class that invoked the DeleteMe! command.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Error message string if unsuccessful, None otherwise.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="clashcallerbotreddit.reply.process_my_calls">
+<code class="descclassname">clashcallerbotreddit.reply.</code><code class="descname">process_my_calls</code><span class="sig-paren">(</span><em>msg_obj: praw.models.reddit.message.Message</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clashcallerbotreddit/reply.html#process_my_calls"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clashcallerbotreddit.reply.process_my_calls" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process a MyCalls! command from a message.</p>
+<p>Processes a MyCalls! command from a given message that invoked it. If calls from the message author are found in
+the MySQL-compatible database, they are sent in a table format via PM.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>msg_obj</strong> – Instance of Message class that invoked the MyCalls! command.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Error message string if unsuccessful, None otherwise.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="function">
 <dt id="clashcallerbotreddit.reply.send_reminder">
@@ -715,7 +828,7 @@ applied, then all the comment data is saved to a MySQL-compatible database.</p>
 
 <dl class="function">
 <dt id="clashcallerbotreddit.search.send_confirmation_reply">
-<code class="descclassname">clashcallerbotreddit.search.</code><code class="descname">send_confirmation_reply</code><span class="sig-paren">(</span><em>cid: str</em>, <em>link: str</em>, <em>exp: datetime.datetime</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clashcallerbotreddit/search.html#send_confirmation_reply"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clashcallerbotreddit.search.send_confirmation_reply" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">clashcallerbotreddit.search.</code><code class="descname">send_confirmation_reply</code><span class="sig-paren">(</span><em>cid: str</em>, <em>link: str</em>, <em>exp: datetime.datetime</em>, <em>message_arg: str</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clashcallerbotreddit/search.html#send_confirmation_reply"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clashcallerbotreddit.search.send_confirmation_reply" title="Permalink to this definition">¶</a></dt>
 <dd><p>Replies to a comment.</p>
 <p>Function replies to a given comment ID with a given message.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -726,6 +839,7 @@ applied, then all the comment data is saved to a MySQL-compatible database.</p>
 <li><strong>cid</strong> – Comment ID to reply to.</li>
 <li><strong>link</strong> – Permalink of comment.</li>
 <li><strong>exp</strong> – Expiration datetime of call.</li>
+<li><strong>message_arg</strong> – Original call message.</li>
 </ul>
 </td>
 </tr>

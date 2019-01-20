@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Welcome to clashcallerbot-reddit! &mdash; clashcallerbot-reddit 2.5.3 documentation</title>
+  <title>Welcome to clashcallerbot-reddit! &mdash; clashcallerbot-reddit 2.6.0 documentation</title>
   
 
   
@@ -57,7 +57,7 @@
             
             
               <div class="version">
-                2.5
+                2.6
               </div>
             
           
@@ -201,7 +201,8 @@ It’s a sweet (as in awesome) little program.</p>
 56
 57
 58
-59</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1"># Regular expressions</span>
+59</pre></div></td><td class="code"><div class="highlight"><pre><span></span>
+<span class="c1"># Regular expressions</span>
 <span class="n">clashcaller_re</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
 <span class="s1">                            [!|\s]?             # prefix ! or space (optional)</span>
 <span class="s1">                            [C|c]lash[C|c]aller # lower or camelcase ClashCaller (required)</span>
@@ -211,9 +212,9 @@ It’s a sweet (as in awesome) little program.</p>
 <span class="s1">                           (?P&lt;exp_digit&gt;(\d){1,2})    # single or double digit (required)</span>
 <span class="s1">                           (\s)?                       # space (optional)</span>
 <span class="s1">                           (?P&lt;exp_unit&gt;minute(s)?\s|  # minute(s) (space after required)</span>
-<span class="s1">                           min\s|                      # minute abbr. (space after required)</span>
+<span class="s1">                           min(s)?\s|                  # minute abbr. (space after required)</span>
 <span class="s1">                           hour(s)?\s|                 # hour(s) (space after required)</span>
-<span class="s1">                           hr\s                        # hour abbr. (space after required)</span>
+<span class="s1">                           hr(s)?\s                    # hour abbr. (space after required)</span>
 <span class="s1">                           )+&#39;&#39;&#39;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">VERBOSE</span> <span class="o">|</span> <span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">)</span>  <span class="c1"># case-insensitive</span>
 <span class="n">message_re</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
 <span class="s1">                        (\s)*       # space (optional)</span>
@@ -223,12 +224,11 @@ It’s a sweet (as in awesome) little program.</p>
 <span class="s1">                        (\d){1,2}   # single or double digit (required)</span>
 <span class="s1">                        .*          # any character after (optional)</span>
 <span class="s1">                        &quot;           # closing double quote (required)</span>
-<span class="s1">                        &#39;&#39;&#39;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">VERBOSE</span> <span class="o">|</span> <span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">)</span>  <span class="c1"># case-insensitive</span>
 </pre></div>
 </td></tr></table></div>
 <p>To sum:</p>
 <ul class="simple">
-<li>The <code class="docutils literal notranslate"><span class="pre">clashcaller</span></code> string must be present in either lower or camelcase with an exclamation point <code class="docutils literal notranslate"><span class="pre">!</span></code> either
+<li>The <code class="docutils literal notranslate"><span class="pre">clashcaller</span></code> string must be present in either lower or CamelCase with an exclamation point <code class="docutils literal notranslate"><span class="pre">!</span></code> either
 before or after.</li>
 <li>The expiration time in minutes or hours may follow either abbreviated or with full spelling with an
 optional space between the number and word, but mandatory space after the word: <code class="docutils literal notranslate"><span class="pre">4min</span></code>. Case is ignored. If not
