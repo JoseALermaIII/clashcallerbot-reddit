@@ -255,7 +255,7 @@ def send_confirmation_reply(cid: str, link: str, exp: datetime.datetime, message
     """
     permalink = 'https://np.reddit.com' + link  # Permalinks are missing prefix
     pretty_exp = datetime.datetime.strftime(exp, '%b. %d, %Y at %I:%M:%S %p %Z')  # Human readable datetime
-    message = f"""ClashCallerBot here!  
+    message = f"""
 I will be messaging you on [**{pretty_exp}**](http://www.wolframalpha.com/input/?i={pretty_exp} To Local Time) 
 to remind you of [**this call.**]({permalink})
 
