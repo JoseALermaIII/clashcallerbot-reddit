@@ -148,7 +148,7 @@ def main():
 
                     # Reply and send PM
                     send_confirmation(comment.author.name, comment.permalink, expiration_datetime)
-                    send_confirmation_reply(comment.id, comment.permalink, expiration_datetime)
+                    send_confirmation_reply(comment.id, comment.permalink, expiration_datetime, message)
 
                     db.close_connections()
 
@@ -234,7 +234,7 @@ def send_error_message(u_name: str, link: str, error: str) -> None:
         logger.exception(f'send_error_message: {err}')
 
 
-def send_confirmation_reply(cid: str, link: str, exp: datetime.datetime):
+def send_confirmation_reply(cid: str, link: str, exp: datetime.datetime, message_arg: str):
     """Replies to a comment.
 
     Function replies to a given comment ID with a given message.
@@ -243,6 +243,7 @@ def send_confirmation_reply(cid: str, link: str, exp: datetime.datetime):
         cid:    Comment ID to reply to.
         link:   Permalink of comment.
         exp:    Expiration datetime of call.
+        message_arg: Original call message.
 
     Returns:
         id of new comment if successful, None otherwise
@@ -253,7 +254,7 @@ def send_confirmation_reply(cid: str, link: str, exp: datetime.datetime):
 I will be messaging you on [**{pretty_exp}**](http://www.wolframalpha.com/input/?i={pretty_exp} To Local Time) 
 to remind you of [**this call.**]({permalink})
 
-Others can [**CLICK HERE**](https://www.reddit.com/message/compose/?to=ClashCallerBot&subject=AddMe!&message=[{link}]{exp}) 
+Others can [**CLICK HERE**](https://www.reddit.com/message/compose/?to=ClashCallerBot&subject=AddMe!&message=[{link}]{exp}"{message_arg}") 
 to send me a PM to be added to the call reminder and reduce spam.
 
 Thank you for entrusting us with your warring needs!
