@@ -111,43 +111,18 @@ def check_messages()-> None:
             if not is_recent(message.created_utc, archive_time):
                 logger.debug(f'Inbox skip old message: {message.id}.')
                 continue
-
             # Process list command
             if message.subject == 'MyCalls!':
                 logger.info(f'Inbox list: {message.id}.')
                 process_my_calls(message)
-
             # Process add command
             elif message.subject == 'AddMe!':
                 logger.info(f'Inbox add: {message.id}.')
                 process_add_me(message)
-
             # Process delete command
             elif message.subject == 'DeleteMe!':
                 logger.info(f'Inbox delete: {message.id}.')
-                # Get URL from message body
-                match = delete_re.search(message.body)
-                if not match:
-                    logger.debug(f'Inbox skip delete: {message.id}.')
-                    message.delete()
-                    continue
-                link_re = match.group('link_re')
-                # Check database for matching rows
-                db.open_connections()
-                deletable_messages = db.get_removable_messages(message.author.name, link_re)
-                if not deletable_messages:
-                    logger.debug(f'Inbox skip delete (no deletable_messages): {message.id}.')
-                    message.delete()
-                    continue
-                # Delete matching rows
-                for deletable_message in deletable_messages:
-                    tid, link_saved, _msg, _exp, _usr = deletable_message
-                    db.delete_row(tid)
-                    logger.info(f'Inbox delete message deleted: {link_saved}.')
-                db.close_connections()
-                # Delete message
-                message.delete()
-
+                process_delete_me(message)
             # Process everything else
             else:
                 logger.exception(f'Inbox uncaught command: {message.subject}.\n'
@@ -202,6 +177,45 @@ def process_add_me(msg_obj: praw.reddit.models.Message):
     logger.info(f'Inbox add save to db: {msg_obj.id}.')
     db.open_connections()
     db.save_message(link_re, call_message, exp_datetime, msg_obj.author.name)
+    db.close_connections()
+    # Delete message
+    msg_obj.delete()
+
+
+def process_delete_me(msg_obj: praw.reddit.models.Message):
+    """Process a DeleteMe! command from a message.
+
+    Processes a DeleteMe! command from a given message that invoked it. If calls from the message author for the
+    permalink from the message body are found in the MySQL-compatible database, they are removed from the database.
+
+    Args:
+        msg_obj: Instance of Message class that invoked the DeleteMe! command.
+
+    Returns:
+        Error message string if unsuccessful, None otherwise.
+
+    """
+    # Get URL from message body
+    match = delete_re.search(msg_obj.body)
+    if not match:
+        err = f'Inbox skip delete: {msg_obj.id}.'
+        logger.debug(err)
+        msg_obj.delete()
+        return err
+    link_re = match.group('link_re')
+    # Check database for matching rows
+    db.open_connections()
+    deletable_messages = db.get_removable_messages(msg_obj.author.name, link_re)
+    if not deletable_messages:
+        err = f'Inbox skip delete (no deletable_messages): {msg_obj.id}.'
+        logger.debug(err)
+        msg_obj.delete()
+        return err
+    # Delete matching rows
+    for deletable_message in deletable_messages:
+        tid, link_saved, _msg, _exp, _usr = deletable_message
+        db.delete_row(tid)
+        logger.info(f'Inbox delete message deleted: {link_saved}.')
     db.close_connections()
     # Delete message
     msg_obj.delete()
