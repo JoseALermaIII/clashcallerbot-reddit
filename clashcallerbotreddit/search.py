@@ -263,6 +263,9 @@ Others can
 [**CLICK HERE**](https://www.reddit.com/message/compose/?to=ClashCallerBot&subject=AddMe!&message=[{link}]{exp}{message_arg}) 
 to send me a PM to be added to the call reminder and reduce spam.
 
+You can also remove yourself from this call reminder by 
+[**CLICKING HERE**](https://www.reddit.com/message/compose/?to=ClashCallerBot&subject=DeleteMe!&message=[{link}])
+
 Thank you for entrusting us with your warring needs!
  
 [^(More info)](https://www.reddit.com/r/ClashCallerBot/comments/4e9vo7/clashcallerbot_info/)
