@@ -61,7 +61,7 @@ Usage can be inferred from the regular expressions used to process each comment 
 
 To sum:
 
-* The ``clashcaller`` string must be present in either lower or camelcase with an exclamation point ``!`` either
+* The ``clashcaller`` string must be present in either lower or CamelCase with an exclamation point ``!`` either
   before or after.
 * The expiration time in minutes or hours may follow either abbreviated or with full spelling with an
   optional space between the number and word, but mandatory space after the word: ``4min``. Case is ignored. If not
