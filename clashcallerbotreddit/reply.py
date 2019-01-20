@@ -355,16 +355,16 @@ def send_reminder(link: str, msg: str, usr: str)-> None:
     permalink = 'https://np.reddit.com' + link  # Permalinks are missing prefix
     parent = get_parent(link)
     message = f"""**The message:** {msg}  
-              **The original comment:** {permalink}  
-              **The parent comment or submission:** {parent}  
+**The original comment:** {permalink}  
+**The parent comment or submission:** {parent}  
 
-              Thank you for entrusting us with your warring needs,  
-              - ClashCallerBot
+Thank you for entrusting us with your warring needs,  
+- ClashCallerBot
 
-              [^(More info)](https://www.reddit.com/r/ClashCallerBot/comments/4e9vo7/clashcallerbot_info/)
+[^(More info)](https://www.reddit.com/r/ClashCallerBot/comments/4e9vo7/clashcallerbot_info/)
               """
     try:
-        reddit.redditor(usr).message(subject, message.replace('              ', ''))
+        reddit.redditor(usr).message(subject, message)
 
     except praw.exceptions.PRAWException as err:
         logger.exception(f'send_reminder: {err}')
