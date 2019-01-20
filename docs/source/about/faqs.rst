@@ -27,10 +27,9 @@ I plan to make a few more tweaks to make it even more useful.
 Is it ready yet?
 ----------------
 
-**Closed Beta** until I add a few more features. Let me know in `/r/ClashCallerBot
+What I thought I'd do was keep it in permanent **Open Beta**, like Google. Let me know in `/r/ClashCallerBot
 <https://np.reddit.com/r/ClashCallerBot/>`_ or via `PM
-<https://www.reddit.com/message/compose/?to=ClashCallerBotDbuggr&subject=Closed%20Beta>`_ if you'd like your subreddit
-to be added to the closed beta.
+<https://www.reddit.com/message/compose/?to=ClashCallerBotDbuggr&subject=Feedback>`_ when something breaks.
 
 How do you call ClashCallerBot?
 -------------------------------
