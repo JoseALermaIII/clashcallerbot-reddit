@@ -77,14 +77,14 @@ def check_messages()-> None:
         for message in messages:
             # Skip sent messages
             if message.author.name == reddituser.name:
-                logger.debug(f'Inbox skipping sent message: {message.id}.')
+                logger.debug(f'Inbox skip sent message: {message.id}.')
                 continue
             # Skip old messages
-            elif not is_recent(message.created_utc, archive_time):
-                logger.debug(f'Inbox skipping archived message: {message.id}.')
+            if not is_recent(message.created_utc, archive_time):
+                logger.debug(f'Inbox skip old message: {message.id}.')
                 continue
             # Process list command
-            elif message.subject == 'MyReminders!':
+            if message.subject == 'MyReminders!':
                 logger.info(f'Inbox list: {message.id}.')
                 pass
             # Process add command
