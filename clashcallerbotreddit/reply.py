@@ -150,21 +150,28 @@ def check_messages()-> None:
             # Process delete command
             elif message.subject == 'DeleteMe!':
                 logger.info(f'Inbox delete: {message.id}.')
+                # Get URL from message body
                 match = delete_re.search(message.body)
                 if not match:
                     logger.debug(f'Inbox skip delete: {message.id}.')
+                    message.delete()
                     continue
                 link_re = match.group('link_re')
+                # Check database for matching rows
                 db.open_connections()
                 deletable_messages = db.get_removable_messages(message.author.name, link_re)
                 if not deletable_messages:
                     logger.debug(f'Inbox skip delete (no deletable_messages): {message.id}.')
+                    message.delete()
                     continue
+                # Delete matching rows
                 for deletable_message in deletable_messages:
                     tid, link_saved, _msg, _exp, _usr = deletable_message
                     db.delete_row(tid)
                     logger.info(f'Inbox delete message deleted: {link_saved}.')
                 db.close_connections()
+                # Delete message
+                message.delete()
 
             # Process everything else
             else:
