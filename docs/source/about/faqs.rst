@@ -34,7 +34,7 @@ What I thought I'd do was keep it in permanent **Open Beta**, like Google. Let m
 How do you call ClashCallerBot?
 -------------------------------
 
-``ClashCaller! TIME OPTION "REQUIRED MESSAGE" (with quotes)``
+``ClashCaller! OPTIONAL TIME "REQUIRED MESSAGE" (with quotes)``
 
 Time is optional (defaults to an hour); however, a message is required. Meaning if you do a simple ``ClashCaller!`` the
 bot won't do anything, but you will contribute to spam. Ideally, the message will be something like "Base #3" or
