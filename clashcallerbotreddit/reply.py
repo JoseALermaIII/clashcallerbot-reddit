@@ -150,7 +150,7 @@ def process_add_me(msg_obj: praw.reddit.models.Message):
     # Get URL and expiration time from message body
     match = addme_re.search(msg_obj.body)
     if not match:
-        err = f'Inbox skip add (bad message format): {msg_obj}.'
+        err = f'Inbox skip add (bad message format): {msg_obj.id}.'
         logger.debug(err)
         msg_obj.delete()
         return err
@@ -176,7 +176,6 @@ def process_add_me(msg_obj: praw.reddit.models.Message):
     call_message = match.group(0)
     # Add to database
     logger.info(f'Inbox add save to db: {msg_obj.id}.')
-    db.open_connections()
     db.save_message(link_re, call_message, exp_datetime, msg_obj.author.name)
     db.close_connections()
     # Delete message
