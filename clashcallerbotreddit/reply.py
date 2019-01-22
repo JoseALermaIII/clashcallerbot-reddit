@@ -171,7 +171,7 @@ def process_add_me(msg_obj: praw.reddit.models.Message):
     logger.info(f'Comment link: {link_re}.')
     logger.info(f'Expiration datetime: {exp_datetime}.')
     if now > exp_datetime:
-        err = f'Inbox skip add (expired message): {msg_obj.id}'
+        err = f'Inbox skip add (expired message): {msg_obj.id}.'
         logger.debug(err)
         msg_obj.delete()
         return err
