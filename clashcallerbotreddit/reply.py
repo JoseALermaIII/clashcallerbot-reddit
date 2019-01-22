@@ -155,6 +155,15 @@ def process_add_me(msg_obj: praw.reddit.models.Message):
         msg_obj.delete()
         return err
     link_re = match.group('link_re')
+    # Check if call already in db
+    db.open_connections()
+    user_calls = db.get_removable_messages(msg_obj.author.name, link_re)
+    if user_calls:
+        err = f'Inbox skip add (call already in db): {msg_obj.id}.'
+        logger.debug(err)
+        msg_obj.delete()
+        db.close_connections()
+        return err
     exp_re = match.group('exp_re')
     exp_re += '+0000'  # add UTC offset
     exp_datetime = datetime.datetime.strptime(exp_re, '%Y-%m-%d %H:%M:%S%z')  # Convert to MySQL datetime object
