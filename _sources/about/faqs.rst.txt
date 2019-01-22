@@ -64,13 +64,9 @@ Usage can be inferred from the regular expressions used to process each comment 
 
 To sum:
 
-* The ``clashcaller`` string must be present in either lower or CamelCase with an exclamation point ``!`` either
-  before or after.
-* The expiration time in minutes or hours may follow either abbreviated or with full spelling with an
-  optional space between the number and word, but mandatory space after the word: ``4min``. Case is ignored. If not
-  given, defaults to 1 hour. The expiration time is limited to within 24 hours.
-* The message within quotes must follow with the singular or plural form of ``base`` and a required single or double
-  digit number. Case is ignored. Maximum message length is 100 characters to save database space.
+.. include:: ../index.rst
+    :start-after: To sum:
+    :end-before: ..
 
 **ClashCallerBot** will then make this comment and will message you at the given time::
 
