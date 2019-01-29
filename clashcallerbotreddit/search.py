@@ -27,7 +27,8 @@ from clashcallerbotreddit import LOGGING, config
 
 # Logger
 logging.config.dictConfig(LOGGING)
-logging.raiseExceptions = False  # Production mode if False (no console sys.stderr output)
+# FIXME: logging.raiseExceptions = False crashes during exception. Maybe remove console handler?
+logging.raiseExceptions = True  # Production mode if False (no console sys.stderr output)
 logger = logging.getLogger('search')
 
 # Generate reddit instance
