@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>FAQs &mdash; clashcallerbot-reddit 2.6.2 documentation</title>
+  <title>FAQs &mdash; clashcallerbot-reddit 2.6.3 documentation</title>
   
 
   
@@ -234,7 +234,8 @@ PM.</p>
 56
 57
 58
-59</pre></div></td><td class="code"><div class="highlight"><pre><span></span>
+59</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="n">subreddit</span> <span class="o">=</span> <span class="n">reddit</span><span class="o">.</span><span class="n">subreddit</span><span class="p">(</span><span class="s1">&#39;all&#39;</span><span class="p">)</span>  <span class="c1"># Production mode</span>
+
 <span class="c1"># Regular expressions</span>
 <span class="n">clashcaller_re</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
 <span class="s1">                            [!|\s]?             # prefix ! or space (optional)</span>
@@ -256,7 +257,6 @@ PM.</p>
 <span class="s1">                        [\W|\s]*    # non-word character or space (optional)</span>
 <span class="s1">                        (\d){1,2}   # single or double digit (required)</span>
 <span class="s1">                        .*          # any character after (optional)</span>
-<span class="s1">                        &quot;           # closing double quote (required)</span>
 </pre></div>
 </td></tr></table></div>
 <p>To sum:</p>
