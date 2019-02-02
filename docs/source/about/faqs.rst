@@ -85,7 +85,7 @@ Hey, why didn't it notice me?
 
 Whoops! You should delete your comment (cut down on spam) and try again. Sometimes the bot misses a comment because
 there are too many comments happening at once on reddit, connection issues, my PC restarted, my Internet is down/too
-slow, or I'm watching Netflix. Do not worry about the reminder though, as long you got the confirmation PM/comment,
+slow, or I'm watching Crunchyroll. Do not worry about the reminder though, as long you got the confirmation PM/comment,
 the reminder PM will come. Worst case scenario is that it will come late if there are connection issues.
 
 Also, make sure you are calling the bot correctly. Like so::
