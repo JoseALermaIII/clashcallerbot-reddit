@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Welcome to clashcallerbot-reddit! &mdash; clashcallerbot-reddit 2.6.3 documentation</title>
+  <title>Welcome to clashcallerbot-reddit! &mdash; clashcallerbot-reddit 2.6.4 documentation</title>
   
 
   
@@ -179,9 +179,7 @@ It’s a sweet (as in awesome) little program.</p>
 <div class="section" id="usage-information">
 <h1>Usage Information<a class="headerlink" href="#usage-information" title="Permalink to this headline">¶</a></h1>
 <p>Usage can be inferred from the regular expressions used to process each comment in <a class="reference internal" href="clashcallerbotreddit.html#module-clashcallerbotreddit.search" title="clashcallerbotreddit.search"><code class="xref py py-mod docutils literal notranslate"><span class="pre">clashcallerbotreddit.search</span></code></a>:</p>
-<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>37
-38
-39
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>39
 40
 41
 42
@@ -201,9 +199,10 @@ It’s a sweet (as in awesome) little program.</p>
 56
 57
 58
-59</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="n">subreddit</span> <span class="o">=</span> <span class="n">reddit</span><span class="o">.</span><span class="n">subreddit</span><span class="p">(</span><span class="s1">&#39;all&#39;</span><span class="p">)</span>  <span class="c1"># Production mode</span>
-
-<span class="c1"># Regular expressions</span>
+59
+60
+61
+62</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1"># Regular expressions</span>
 <span class="n">clashcaller_re</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
 <span class="s1">                            [!|\s]?             # prefix ! or space (optional)</span>
 <span class="s1">                            [C|c]lash[C|c]aller # lower or camelcase ClashCaller (required)</span>
@@ -224,6 +223,9 @@ It’s a sweet (as in awesome) little program.</p>
 <span class="s1">                        [\W|\s]*    # non-word character or space (optional)</span>
 <span class="s1">                        (\d){1,2}   # single or double digit (required)</span>
 <span class="s1">                        .*          # any character after (optional)</span>
+<span class="s1">                        &quot;           # closing double quote (required)</span>
+<span class="s1">                        &#39;&#39;&#39;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">VERBOSE</span> <span class="o">|</span> <span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">)</span>  <span class="c1"># case-insensitive</span>
+
 </pre></div>
 </td></tr></table></div>
 <p>To sum:</p>

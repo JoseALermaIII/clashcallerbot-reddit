@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>clashcallerbotreddit.reply &mdash; clashcallerbot-reddit 2.6.3 documentation</title>
+  <title>clashcallerbotreddit.reply &mdash; clashcallerbot-reddit 2.6.4 documentation</title>
   
 
   
@@ -237,6 +237,8 @@
 <div class="viewcode-block" id="main"><a class="viewcode-back" href="../../clashcallerbotreddit.html#clashcallerbotreddit.reply.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Start reply.py...&#39;</span><span class="p">)</span>
     <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">120</span><span class="p">)</span>  <span class="c1"># 2 minutes</span>
+
         <span class="c1"># Check saved messages</span>
         <span class="n">check_database</span><span class="p">()</span>
 
@@ -244,9 +246,7 @@
         <span class="n">check_comments</span><span class="p">(</span><span class="n">reddituser</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 
         <span class="c1"># Check messages for tasks</span>
-        <span class="n">check_messages</span><span class="p">()</span>
-
-        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">120</span><span class="p">)</span>  <span class="c1"># 2 minutes</span></div>
+        <span class="n">check_messages</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="check_messages"><a class="viewcode-back" href="../../clashcallerbotreddit.html#clashcallerbotreddit.reply.check_messages">[docs]</a><span class="k">def</span> <span class="nf">check_messages</span><span class="p">()</span><span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -268,11 +268,11 @@
         <span class="k">for</span> <span class="n">message</span> <span class="ow">in</span> <span class="n">messages</span><span class="p">:</span>
             <span class="c1"># Skip sent messages</span>
             <span class="k">if</span> <span class="n">message</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">reddituser</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
-                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Inbox skip sent message: </span><span class="si">{message.id}</span><span class="s1">.&#39;</span><span class="p">)</span>
+                <span class="c1">#logger.debug(f&#39;Inbox skip sent message: {message.id}.&#39;)</span>
                 <span class="k">continue</span>
             <span class="c1"># Skip old messages</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">is_recent</span><span class="p">(</span><span class="n">message</span><span class="o">.</span><span class="n">created_utc</span><span class="p">,</span> <span class="n">archive_time</span><span class="p">):</span>
-                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Inbox skip old message: </span><span class="si">{message.id}</span><span class="s1">.&#39;</span><span class="p">)</span>
+                <span class="c1">#logger.debug(f&#39;Inbox skip old message: {message.id}.&#39;)</span>
                 <span class="k">continue</span>
             <span class="c1"># Process list command</span>
             <span class="k">if</span> <span class="n">message</span><span class="o">.</span><span class="n">subject</span> <span class="o">==</span> <span class="s1">&#39;MyCalls!&#39;</span><span class="p">:</span>
@@ -473,7 +473,7 @@
             <span class="k">if</span> <span class="n">comment</span><span class="o">.</span><span class="n">score</span> <span class="o">&lt;=</span> <span class="n">limit</span><span class="p">:</span>
                 <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Deleting comment at or below threshold of </span><span class="si">{limit}</span><span class="s1">: </span><span class="si">{comment.id}</span><span class="s1">.&#39;</span><span class="p">)</span>
                 <span class="n">comment</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Comment# </span><span class="si">{comment.id}</span><span class="s1">, karma:</span><span class="si">{comment.score}</span><span class="s1"> is above threshold of </span><span class="si">{limit}</span><span class="s1">.&#39;</span><span class="p">)</span>
+            <span class="c1">#logger.debug(f&#39;Comment# {comment.id}, karma:{comment.score} is above threshold of {limit}.&#39;)</span>
             <span class="k">continue</span>
     <span class="k">except</span> <span class="n">praw</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">PRAWException</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;check_comments: </span><span class="si">{err}</span><span class="s1">&#39;</span><span class="p">)</span></div>
@@ -495,7 +495,7 @@
     <span class="n">messages</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get_expired_messages</span><span class="p">(</span><span class="n">now</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">messages</span><span class="p">:</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;No messages before: </span><span class="si">{now}</span><span class="s1">.&#39;</span><span class="p">)</span>
+        <span class="c1">#logger.debug(f&#39;No messages before: {now}.&#39;)</span>
         <span class="n">db</span><span class="o">.</span><span class="n">close_connections</span><span class="p">()</span>
         <span class="k">return</span> <span class="kc">None</span>
 

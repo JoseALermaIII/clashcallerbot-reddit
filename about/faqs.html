@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>FAQs &mdash; clashcallerbot-reddit 2.6.3 documentation</title>
+  <title>FAQs &mdash; clashcallerbot-reddit 2.6.4 documentation</title>
   
 
   
@@ -212,9 +212,7 @@ PM.</p>
 <div class="section" id="what-options-does-it-have">
 <h2>What options does it have?<a class="headerlink" href="#what-options-does-it-have" title="Permalink to this headline">¶</a></h2>
 <p>Usage can be inferred from the regular expressions used to process each comment in <a class="reference internal" href="../clashcallerbotreddit.html#module-clashcallerbotreddit.search" title="clashcallerbotreddit.search"><code class="xref py py-mod docutils literal notranslate"><span class="pre">clashcallerbotreddit.search</span></code></a>:</p>
-<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>37
-38
-39
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>39
 40
 41
 42
@@ -234,9 +232,10 @@ PM.</p>
 56
 57
 58
-59</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="n">subreddit</span> <span class="o">=</span> <span class="n">reddit</span><span class="o">.</span><span class="n">subreddit</span><span class="p">(</span><span class="s1">&#39;all&#39;</span><span class="p">)</span>  <span class="c1"># Production mode</span>
-
-<span class="c1"># Regular expressions</span>
+59
+60
+61
+62</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1"># Regular expressions</span>
 <span class="n">clashcaller_re</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
 <span class="s1">                            [!|\s]?             # prefix ! or space (optional)</span>
 <span class="s1">                            [C|c]lash[C|c]aller # lower or camelcase ClashCaller (required)</span>
@@ -257,6 +256,9 @@ PM.</p>
 <span class="s1">                        [\W|\s]*    # non-word character or space (optional)</span>
 <span class="s1">                        (\d){1,2}   # single or double digit (required)</span>
 <span class="s1">                        .*          # any character after (optional)</span>
+<span class="s1">                        &quot;           # closing double quote (required)</span>
+<span class="s1">                        &#39;&#39;&#39;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">VERBOSE</span> <span class="o">|</span> <span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">)</span>  <span class="c1"># case-insensitive</span>
+
 </pre></div>
 </td></tr></table></div>
 <p>To sum:</p>
@@ -286,7 +288,7 @@ Thank you for entrusting us with your warring needs!
 <h2>Hey, why didn’t it notice me?<a class="headerlink" href="#hey-why-didn-t-it-notice-me" title="Permalink to this headline">¶</a></h2>
 <p>Whoops! You should delete your comment (cut down on spam) and try again. Sometimes the bot misses a comment because
 there are too many comments happening at once on reddit, connection issues, my PC restarted, my Internet is down/too
-slow, or I’m watching Netflix. Do not worry about the reminder though, as long you got the confirmation PM/comment,
+slow, or I’m watching Crunchyroll. Do not worry about the reminder though, as long you got the confirmation PM/comment,
 the reminder PM will come. Worst case scenario is that it will come late if there are connection issues.</p>
 <p>Also, make sure you are calling the bot correctly. Like so:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>ClashCaller! OPTIONAL TIME (default is an hour without it) &quot;REQUIRED MESSAGE&quot;.

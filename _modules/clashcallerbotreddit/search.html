@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>clashcallerbotreddit.search &mdash; clashcallerbot-reddit 2.6.3 documentation</title>
+  <title>clashcallerbotreddit.search &mdash; clashcallerbot-reddit 2.6.4 documentation</title>
   
 
   
@@ -236,7 +236,7 @@
                 <span class="n">db</span><span class="o">.</span><span class="n">open_connections</span><span class="p">()</span>
                 <span class="n">match</span> <span class="o">=</span> <span class="n">clashcaller_re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">comment</span><span class="o">.</span><span class="n">body</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">match</span> <span class="ow">and</span> <span class="n">comment</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">name</span> <span class="o">!=</span> <span class="s1">&#39;ClashCallerBot&#39;</span> \
-                        <span class="ow">and</span> <span class="ow">not</span> <span class="n">have_replied</span><span class="p">(</span><span class="n">comment</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="s1">&#39;ClashCallerBot&#39;</span><span class="p">)</span> \
+                        <span class="ow">and</span> <span class="ow">not</span> <span class="n">have_replied</span><span class="p">(</span><span class="n">comment</span><span class="p">,</span> <span class="s1">&#39;ClashCallerBot&#39;</span><span class="p">)</span> \
                         <span class="ow">and</span> <span class="n">is_recent</span><span class="p">(</span><span class="n">comment</span><span class="o">.</span><span class="n">created_utc</span><span class="p">,</span> <span class="n">start_time</span><span class="p">):</span>
                     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;In: </span><span class="si">{comment}</span><span class="s1">&#39;</span><span class="p">)</span>
 
@@ -313,8 +313,6 @@
                     <span class="n">send_confirmation</span><span class="p">(</span><span class="n">comment</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">comment</span><span class="o">.</span><span class="n">permalink</span><span class="p">,</span> <span class="n">expiration_datetime</span><span class="p">)</span>
                     <span class="n">send_confirmation_reply</span><span class="p">(</span><span class="n">comment</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">comment</span><span class="o">.</span><span class="n">permalink</span><span class="p">,</span> <span class="n">expiration_datetime</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
 
-                    <span class="n">db</span><span class="o">.</span><span class="n">close_connections</span><span class="p">()</span>
-
         <span class="k">except</span> <span class="n">urllib3</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">ConnectionError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;urllib3: </span><span class="si">{err}</span><span class="s1">&#39;</span><span class="p">)</span>
             <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
@@ -338,7 +336,10 @@
         <span class="k">except</span> <span class="ne">AttributeError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;AttributeError: </span><span class="si">{err}</span><span class="s1">&#39;</span><span class="p">)</span>
             <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
-            <span class="k">pass</span></div>
+            <span class="k">pass</span>
+
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">close_connections</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="send_confirmation"><a class="viewcode-back" href="../../clashcallerbotreddit.html#clashcallerbotreddit.search.send_confirmation">[docs]</a><span class="k">def</span> <span class="nf">send_confirmation</span><span class="p">(</span><span class="n">u_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">link</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">exp</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -446,26 +447,25 @@
     <span class="k">return</span> <span class="n">comment_id</span></div>
 
 
-<div class="viewcode-block" id="have_replied"><a class="viewcode-back" href="../../clashcallerbotreddit.html#clashcallerbotreddit.search.have_replied">[docs]</a><span class="k">def</span> <span class="nf">have_replied</span><span class="p">(</span><span class="n">cid</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">bot_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Checks if bot user has replied to a comment.</span>
+<div class="viewcode-block" id="have_replied"><a class="viewcode-back" href="../../clashcallerbotreddit.html#clashcallerbotreddit.search.have_replied">[docs]</a><span class="k">def</span> <span class="nf">have_replied</span><span class="p">(</span><span class="n">cmnt</span><span class="p">:</span> <span class="n">reddit</span><span class="o">.</span><span class="n">comment</span><span class="p">,</span> <span class="n">usr_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Check if user has replied to a comment.</span>
 
-<span class="sd">    Function checks reply authors for bot user.</span>
+<span class="sd">    Function checks reply authors of given comment for given user.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        cid:        Comment ID to get replies of.</span>
-<span class="sd">        bot_name:   Name of bot to check for.</span>
+<span class="sd">        cmnt:       Comment to get replies of.</span>
+<span class="sd">        usr_name:   Name of bot to check for.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        True if successful, False otherwise.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">comment</span> <span class="o">=</span> <span class="n">reddit</span><span class="o">.</span><span class="n">comment</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">cid</span><span class="p">)</span>
-        <span class="n">comment</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>  <span class="c1"># Refreshes attributes of comment to load replies</span>
+        <span class="n">cmnt</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>  <span class="c1"># Refreshes attributes of comment to load replies</span>
 
         <span class="c1"># Keep fetching 20 new replies until it finishes</span>
         <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
-                <span class="n">replies</span> <span class="o">=</span> <span class="n">comment</span><span class="o">.</span><span class="n">replies</span><span class="o">.</span><span class="n">replace_more</span><span class="p">()</span>
+                <span class="n">replies</span> <span class="o">=</span> <span class="n">cmnt</span><span class="o">.</span><span class="n">replies</span><span class="o">.</span><span class="n">replace_more</span><span class="p">()</span>
                 <span class="k">break</span>
             <span class="k">except</span> <span class="n">praw</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">PRAWException</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
                 <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;comment.replies.replace_more: </span><span class="si">{err}</span><span class="s1">&#39;</span><span class="p">)</span>
@@ -475,7 +475,7 @@
             <span class="k">return</span> <span class="kc">False</span>
 
         <span class="k">for</span> <span class="n">reply</span> <span class="ow">in</span> <span class="n">replies</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">reply</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">bot_name</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">reply</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">usr_name</span><span class="p">:</span>
                 <span class="k">return</span> <span class="kc">True</span>
 
     <span class="k">except</span> <span class="n">praw</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">PRAWException</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
