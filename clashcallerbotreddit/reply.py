@@ -76,6 +76,8 @@ spacers = {'left': '| ', 'mid': ' | ', 'right': ' |'}
 def main():
     logger.info('Start reply.py...')
     while True:
+        time.sleep(120)  # 2 minutes
+
         # Check saved messages
         check_database()
 
@@ -84,8 +86,6 @@ def main():
 
         # Check messages for tasks
         check_messages()
-
-        time.sleep(120)  # 2 minutes
 
 
 def check_messages()-> None:
