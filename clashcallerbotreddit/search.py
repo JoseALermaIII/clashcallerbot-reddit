@@ -75,7 +75,7 @@ def main():
                 db.open_connections()
                 match = clashcaller_re.search(comment.body)
                 if match and comment.author.name != 'ClashCallerBot' \
-                        and not have_replied(comment.id, 'ClashCallerBot') \
+                        and not have_replied(comment, 'ClashCallerBot') \
                         and is_recent(comment.created_utc, start_time):
                     logger.info(f'In: {comment}')
 
@@ -286,26 +286,25 @@ Thank you for entrusting us with your warring needs!
     return comment_id
 
 
-def have_replied(cid: str, bot_name: str) -> bool:
-    """Checks if bot user has replied to a comment.
+def have_replied(cmnt: reddit.comment, usr_name: str) -> bool:
+    """Check if user has replied to a comment.
 
-    Function checks reply authors for bot user.
+    Function checks reply authors of given comment for given user.
 
     Args:
-        cid:        Comment ID to get replies of.
-        bot_name:   Name of bot to check for.
+        cmnt:       Comment to get replies of.
+        usr_name:   Name of bot to check for.
 
     Returns:
         True if successful, False otherwise.
     """
     try:
-        comment = reddit.comment(id=cid)
-        comment.refresh()  # Refreshes attributes of comment to load replies
+        cmnt.refresh()  # Refreshes attributes of comment to load replies
 
         # Keep fetching 20 new replies until it finishes
         while True:
             try:
-                replies = comment.replies.replace_more()
+                replies = cmnt.replies.replace_more()
                 break
             except praw.exceptions.PRAWException as err:
                 logger.exception(f'comment.replies.replace_more: {err}')
@@ -315,7 +314,7 @@ def have_replied(cid: str, bot_name: str) -> bool:
             return False
 
         for reply in replies:
-            if reply.author.name == bot_name:
+            if reply.author.name == usr_name:
                 return True
 
     except praw.exceptions.PRAWException as err:
