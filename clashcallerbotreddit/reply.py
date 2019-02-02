@@ -107,11 +107,11 @@ def check_messages()-> None:
         for message in messages:
             # Skip sent messages
             if message.author.name == reddituser.name:
-                logger.debug(f'Inbox skip sent message: {message.id}.')
+                #logger.debug(f'Inbox skip sent message: {message.id}.')
                 continue
             # Skip old messages
             if not is_recent(message.created_utc, archive_time):
-                logger.debug(f'Inbox skip old message: {message.id}.')
+                #logger.debug(f'Inbox skip old message: {message.id}.')
                 continue
             # Process list command
             if message.subject == 'MyCalls!':
@@ -334,7 +334,7 @@ def check_database()-> None:
     messages = db.get_expired_messages(now)
 
     if not messages:
-        logger.debug(f'No messages before: {now}.')
+        #logger.debug(f'No messages before: {now}.')
         db.close_connections()
         return None
 
