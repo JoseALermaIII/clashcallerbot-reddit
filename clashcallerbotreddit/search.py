@@ -152,8 +152,6 @@ def main():
                     send_confirmation(comment.author.name, comment.permalink, expiration_datetime)
                     send_confirmation_reply(comment.id, comment.permalink, expiration_datetime, message)
 
-                    db.close_connections()
-
         except urllib3.exceptions.ConnectionError as err:
             logger.exception(f'urllib3: {err}')
             time.sleep(20)
@@ -178,6 +176,9 @@ def main():
             logger.exception(f'AttributeError: {err}')
             time.sleep(10)
             pass
+
+        finally:
+            db.close_connections()
 
 
 def send_confirmation(u_name: str, link: str, exp: datetime.datetime) -> None:
