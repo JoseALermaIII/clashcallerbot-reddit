@@ -411,6 +411,8 @@ class ClashCallerDatabase(object):
 
         """
         exp_mysql = self.convert_datetime(exp)
+        if "'" in msg:
+            msg = msg.replace("'", "")  # Remove apostrophes in message
         try:
             self.lock_write(self._message_table)
             add_row = f'INSERT INTO {self._message_table} (permalink, message, new_date, username) ' \
