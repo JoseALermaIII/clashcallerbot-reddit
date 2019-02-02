@@ -58,9 +58,9 @@ Usage can be inferred from the regular expressions used to process each comment 
 
 .. literalinclude:: ../../../clashcallerbotreddit/search.py
     :linenos:
-    :lineno-start: 37
+    :lineno-start: 39
     :language: python
-    :lines: 37-59
+    :lines: 39-62
 
 To sum:
 
