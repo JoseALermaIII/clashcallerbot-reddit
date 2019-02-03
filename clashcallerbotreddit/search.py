@@ -286,25 +286,25 @@ Thank you for entrusting us with your warring needs!
     return comment_id
 
 
-def have_replied(cmnt: reddit.comment, usr_name: str) -> bool:
+def have_replied(cmnt_obj: reddit.comment, usr_name: str) -> bool:
     """Check if user has replied to a comment.
 
     Function checks reply authors of given comment for given user.
 
     Args:
-        cmnt:       Comment to get replies of.
+        cmnt_obj:   Comment object to get replies of.
         usr_name:   Name of bot to check for.
 
     Returns:
         True if successful, False otherwise.
     """
     try:
-        cmnt.refresh()  # Refreshes attributes of comment to load replies
+        cmnt_obj.refresh()  # Refreshes attributes of comment to load replies
 
         # Keep fetching 20 new replies until it finishes
         while True:
             try:
-                replies = cmnt.replies.replace_more()
+                replies = cmnt_obj.replies.replace_more()
                 break
             except praw.exceptions.PRAWException as err:
                 logger.exception(f'comment.replies.replace_more: {err}')
