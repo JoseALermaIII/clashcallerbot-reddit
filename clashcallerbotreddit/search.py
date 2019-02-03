@@ -74,83 +74,92 @@ def main():
             for comment in subreddit.stream.comments():
                 db.open_connections()
                 match = clashcaller_re.search(comment.body)
-                if match and comment.author.name != 'ClashCallerBot' \
-                        and not have_replied(comment, 'ClashCallerBot') \
-                        and is_recent(comment.created_utc, start_time):
-                    logger.info(f'In: {comment}')
+                if not match:
+                    # Skip comments that don't have the clashcaller string
+                    continue
+                if not is_recent(comment.created_utc, start_time):
+                    # Skip comments that are before start_time
+                    continue
+                if comment.author.name == reddit.user.me().name:
+                    # Skip bot's comments
+                    continue
+                if have_replied(comment, reddit.user.me().name):
+                    # Skip comments already replied to
+                    continue
+                logger.info(f'In: {comment}')
 
-                    # Strip everything before and including ClashCaller! string
-                    comment.body = comment.body[match.end():].strip()
-                    logger.debug(f'Stripped comment body: {comment.body}')
+                # Strip everything before and including ClashCaller! string
+                comment.body = comment.body[match.end():].strip()
+                logger.debug(f'Stripped comment body: {comment.body}')
 
-                    # Check for expiration time
-                    minute_tokens = ('min', 'mins', 'minute', 'minutes')
-                    match = expiration_re.search(comment.body)
-                    if not match:
-                        timedelta = datetime.timedelta(hours=1)  # Default to 1 hour
-                    else:
-                        exp_digit = int(match.group('exp_digit').strip())
-                        if exp_digit == 0:  # ignore zeros
-                            # Send message and ignore comment
-                            error = 'Expiration time is zero.'
-                            # send_error_message(comment.author.name, comment.permalink, error)
-                            logging.error(error)
-                            continue
-                        exp_unit = match.group('exp_unit').strip().lower()
-                        if exp_unit in minute_tokens:
-                            timedelta = datetime.timedelta(minutes=exp_digit)
-                        else:
-                            if exp_digit >= 24:  # ignore days
-                                # Send message and ignore comment
-                                error = 'Expiration time is >= 1 day.'
-                                # send_error_message(comment.author.name, comment.permalink, error)
-                                logging.error(error)
-                                continue
-                            timedelta = datetime.timedelta(hours=exp_digit)
-                    logger.debug(f'timedelta = {timedelta.seconds} seconds')
-
-                    # Apply expiration time to comment date
-                    comment_datetime = datetime.datetime.fromtimestamp(comment.created_utc, datetime.timezone.utc)
-                    expiration_datetime = comment_datetime + timedelta
-                    logger.info(f'comment_datetime = {comment_datetime}')
-                    logger.info(f'expiration_datetime = {expiration_datetime}')
-
-                    # Ignore if expire time passed
-                    if expiration_datetime < datetime.datetime.now(datetime.timezone.utc):
+                # Check for expiration time
+                minute_tokens = ('min', 'mins', 'minute', 'minutes')
+                match = expiration_re.search(comment.body)
+                if not match:
+                    timedelta = datetime.timedelta(hours=1)  # Default to 1 hour
+                else:
+                    exp_digit = int(match.group('exp_digit').strip())
+                    if exp_digit == 0:  # ignore zeros
                         # Send message and ignore comment
-                        error = 'Expiration time has already passed.'
+                        error = 'Expiration time is zero.'
                         # send_error_message(comment.author.name, comment.permalink, error)
                         logging.error(error)
                         continue
+                    exp_unit = match.group('exp_unit').strip().lower()
+                    if exp_unit in minute_tokens:
+                        timedelta = datetime.timedelta(minutes=exp_digit)
+                    else:
+                        if exp_digit >= 24:  # ignore days
+                            # Send message and ignore comment
+                            error = 'Expiration time is >= 1 day.'
+                            # send_error_message(comment.author.name, comment.permalink, error)
+                            logging.error(error)
+                            continue
+                        timedelta = datetime.timedelta(hours=exp_digit)
+                logger.debug(f'timedelta = {timedelta.seconds} seconds')
 
-                    # Strip expiration time
-                    comment.body = comment.body[match.end():].strip()
+                # Apply expiration time to comment date
+                comment_datetime = datetime.datetime.fromtimestamp(comment.created_utc, datetime.timezone.utc)
+                expiration_datetime = comment_datetime + timedelta
+                logger.info(f'comment_datetime = {comment_datetime}')
+                logger.info(f'expiration_datetime = {expiration_datetime}')
 
-                    # Evaluate message
-                    if len(comment.body) > 100:
-                        # Send message and ignore comment
-                        error = 'Message length > 100 characters.'
-                        # send_error_message(comment.author.name, comment.permalink, error)
-                        logger.error(error)
-                        continue
+                # Ignore if expire time passed
+                if expiration_datetime < datetime.datetime.now(datetime.timezone.utc):
+                    # Send message and ignore comment
+                    error = 'Expiration time has already passed.'
+                    # send_error_message(comment.author.name, comment.permalink, error)
+                    logging.error(error)
+                    continue
 
-                    match = message_re.search(comment.body)
-                    if not match:
-                        # Send message and ignore comment
-                        error = 'Message not properly formatted.'
-                        # send_error_message(comment.author.name, comment.permalink, error)
-                        logger.error(error)
-                        continue
+                # Strip expiration time
+                comment.body = comment.body[match.end():].strip()
 
-                    message = comment.body
-                    logger.debug(f'message = {message}')
+                # Evaluate message
+                if len(comment.body) > 100:
+                    # Send message and ignore comment
+                    error = 'Message length > 100 characters.'
+                    # send_error_message(comment.author.name, comment.permalink, error)
+                    logger.error(error)
+                    continue
 
-                    # Save message data to MySQL-compatible database
-                    db.save_message(comment.permalink, message, expiration_datetime, comment.author.name)
+                match = message_re.search(comment.body)
+                if not match:
+                    # Send message and ignore comment
+                    error = 'Message not properly formatted.'
+                    # send_error_message(comment.author.name, comment.permalink, error)
+                    logger.error(error)
+                    continue
 
-                    # Reply and send PM
-                    send_confirmation(comment.author.name, comment.permalink, expiration_datetime)
-                    send_confirmation_reply(comment.id, comment.permalink, expiration_datetime, message)
+                message = comment.body
+                logger.debug(f'message = {message}')
+
+                # Save message data to MySQL-compatible database
+                db.save_message(comment.permalink, message, expiration_datetime, comment.author.name)
+
+                # Reply and send PM
+                send_confirmation(comment.author.name, comment.permalink, expiration_datetime)
+                send_confirmation_reply(comment.id, comment.permalink, expiration_datetime, message)
 
         except urllib3.exceptions.ConnectionError as err:
             logger.exception(f'urllib3: {err}')
