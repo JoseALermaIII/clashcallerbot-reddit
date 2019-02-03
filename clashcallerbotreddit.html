@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>clashcallerbotreddit package &mdash; clashcallerbot-reddit 2.6.4 documentation</title>
+  <title>clashcallerbotreddit package &mdash; clashcallerbot-reddit 2.6.5 documentation</title>
   
 
   
@@ -759,7 +759,7 @@ applied, then all the comment data is saved to a MySQL-compatible database.</p>
 <p>The comment is replied to, then the userID is PM’ed confirmation.</p>
 <dl class="function">
 <dt id="clashcallerbotreddit.search.have_replied">
-<code class="descclassname">clashcallerbotreddit.search.</code><code class="descname">have_replied</code><span class="sig-paren">(</span><em>cmnt: praw.reddit.Reddit.comment</em>, <em>usr_name: str</em><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="_modules/clashcallerbotreddit/search.html#have_replied"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clashcallerbotreddit.search.have_replied" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">clashcallerbotreddit.search.</code><code class="descname">have_replied</code><span class="sig-paren">(</span><em>cmnt_obj: praw.reddit.Reddit.comment</em>, <em>usr_name: str</em><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="_modules/clashcallerbotreddit/search.html#have_replied"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clashcallerbotreddit.search.have_replied" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check if user has replied to a comment.</p>
 <p>Function checks reply authors of given comment for given user.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -767,7 +767,7 @@ applied, then all the comment data is saved to a MySQL-compatible database.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>cmnt</strong> – Comment to get replies of.</li>
+<li><strong>cmnt_obj</strong> – Comment object to get replies of.</li>
 <li><strong>usr_name</strong> – Name of bot to check for.</li>
 </ul>
 </td>

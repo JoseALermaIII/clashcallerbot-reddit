@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>clashcallerbotreddit.search &mdash; clashcallerbot-reddit 2.6.4 documentation</title>
+  <title>clashcallerbotreddit.search &mdash; clashcallerbot-reddit 2.6.5 documentation</title>
   
 
   
@@ -235,83 +235,92 @@
             <span class="k">for</span> <span class="n">comment</span> <span class="ow">in</span> <span class="n">subreddit</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">comments</span><span class="p">():</span>
                 <span class="n">db</span><span class="o">.</span><span class="n">open_connections</span><span class="p">()</span>
                 <span class="n">match</span> <span class="o">=</span> <span class="n">clashcaller_re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">comment</span><span class="o">.</span><span class="n">body</span><span class="p">)</span>
-                <span class="k">if</span> <span class="n">match</span> <span class="ow">and</span> <span class="n">comment</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">name</span> <span class="o">!=</span> <span class="s1">&#39;ClashCallerBot&#39;</span> \
-                        <span class="ow">and</span> <span class="ow">not</span> <span class="n">have_replied</span><span class="p">(</span><span class="n">comment</span><span class="p">,</span> <span class="s1">&#39;ClashCallerBot&#39;</span><span class="p">)</span> \
-                        <span class="ow">and</span> <span class="n">is_recent</span><span class="p">(</span><span class="n">comment</span><span class="o">.</span><span class="n">created_utc</span><span class="p">,</span> <span class="n">start_time</span><span class="p">):</span>
-                    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;In: </span><span class="si">{comment}</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">match</span><span class="p">:</span>
+                    <span class="c1"># Skip comments that don&#39;t have the clashcaller string</span>
+                    <span class="k">continue</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">is_recent</span><span class="p">(</span><span class="n">comment</span><span class="o">.</span><span class="n">created_utc</span><span class="p">,</span> <span class="n">start_time</span><span class="p">):</span>
+                    <span class="c1"># Skip comments that are before start_time</span>
+                    <span class="k">continue</span>
+                <span class="k">if</span> <span class="n">comment</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">reddit</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">me</span><span class="p">()</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+                    <span class="c1"># Skip bot&#39;s comments</span>
+                    <span class="k">continue</span>
+                <span class="k">if</span> <span class="n">have_replied</span><span class="p">(</span><span class="n">comment</span><span class="p">,</span> <span class="n">reddit</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">me</span><span class="p">()</span><span class="o">.</span><span class="n">name</span><span class="p">):</span>
+                    <span class="c1"># Skip comments already replied to</span>
+                    <span class="k">continue</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;In: </span><span class="si">{comment}</span><span class="s1">&#39;</span><span class="p">)</span>
 
-                    <span class="c1"># Strip everything before and including ClashCaller! string</span>
-                    <span class="n">comment</span><span class="o">.</span><span class="n">body</span> <span class="o">=</span> <span class="n">comment</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="n">match</span><span class="o">.</span><span class="n">end</span><span class="p">():]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-                    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Stripped comment body: </span><span class="si">{comment.body}</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="c1"># Strip everything before and including ClashCaller! string</span>
+                <span class="n">comment</span><span class="o">.</span><span class="n">body</span> <span class="o">=</span> <span class="n">comment</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="n">match</span><span class="o">.</span><span class="n">end</span><span class="p">():]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Stripped comment body: </span><span class="si">{comment.body}</span><span class="s1">&#39;</span><span class="p">)</span>
 
-                    <span class="c1"># Check for expiration time</span>
-                    <span class="n">minute_tokens</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="s1">&#39;mins&#39;</span><span class="p">,</span> <span class="s1">&#39;minute&#39;</span><span class="p">,</span> <span class="s1">&#39;minutes&#39;</span><span class="p">)</span>
-                    <span class="n">match</span> <span class="o">=</span> <span class="n">expiration_re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">comment</span><span class="o">.</span><span class="n">body</span><span class="p">)</span>
-                    <span class="k">if</span> <span class="ow">not</span> <span class="n">match</span><span class="p">:</span>
-                        <span class="n">timedelta</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># Default to 1 hour</span>
-                    <span class="k">else</span><span class="p">:</span>
-                        <span class="n">exp_digit</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s1">&#39;exp_digit&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
-                        <span class="k">if</span> <span class="n">exp_digit</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>  <span class="c1"># ignore zeros</span>
-                            <span class="c1"># Send message and ignore comment</span>
-                            <span class="n">error</span> <span class="o">=</span> <span class="s1">&#39;Expiration time is zero.&#39;</span>
-                            <span class="c1"># send_error_message(comment.author.name, comment.permalink, error)</span>
-                            <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
-                            <span class="k">continue</span>
-                        <span class="n">exp_unit</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s1">&#39;exp_unit&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
-                        <span class="k">if</span> <span class="n">exp_unit</span> <span class="ow">in</span> <span class="n">minute_tokens</span><span class="p">:</span>
-                            <span class="n">timedelta</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">minutes</span><span class="o">=</span><span class="n">exp_digit</span><span class="p">)</span>
-                        <span class="k">else</span><span class="p">:</span>
-                            <span class="k">if</span> <span class="n">exp_digit</span> <span class="o">&gt;=</span> <span class="mi">24</span><span class="p">:</span>  <span class="c1"># ignore days</span>
-                                <span class="c1"># Send message and ignore comment</span>
-                                <span class="n">error</span> <span class="o">=</span> <span class="s1">&#39;Expiration time is &gt;= 1 day.&#39;</span>
-                                <span class="c1"># send_error_message(comment.author.name, comment.permalink, error)</span>
-                                <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
-                                <span class="k">continue</span>
-                            <span class="n">timedelta</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="n">exp_digit</span><span class="p">)</span>
-                    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;timedelta = </span><span class="si">{timedelta.seconds}</span><span class="s1"> seconds&#39;</span><span class="p">)</span>
-
-                    <span class="c1"># Apply expiration time to comment date</span>
-                    <span class="n">comment_datetime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="n">comment</span><span class="o">.</span><span class="n">created_utc</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span>
-                    <span class="n">expiration_datetime</span> <span class="o">=</span> <span class="n">comment_datetime</span> <span class="o">+</span> <span class="n">timedelta</span>
-                    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;comment_datetime = </span><span class="si">{comment_datetime}</span><span class="s1">&#39;</span><span class="p">)</span>
-                    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;expiration_datetime = </span><span class="si">{expiration_datetime}</span><span class="s1">&#39;</span><span class="p">)</span>
-
-                    <span class="c1"># Ignore if expire time passed</span>
-                    <span class="k">if</span> <span class="n">expiration_datetime</span> <span class="o">&lt;</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">):</span>
+                <span class="c1"># Check for expiration time</span>
+                <span class="n">minute_tokens</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="s1">&#39;mins&#39;</span><span class="p">,</span> <span class="s1">&#39;minute&#39;</span><span class="p">,</span> <span class="s1">&#39;minutes&#39;</span><span class="p">)</span>
+                <span class="n">match</span> <span class="o">=</span> <span class="n">expiration_re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">comment</span><span class="o">.</span><span class="n">body</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">match</span><span class="p">:</span>
+                    <span class="n">timedelta</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># Default to 1 hour</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">exp_digit</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s1">&#39;exp_digit&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+                    <span class="k">if</span> <span class="n">exp_digit</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>  <span class="c1"># ignore zeros</span>
                         <span class="c1"># Send message and ignore comment</span>
-                        <span class="n">error</span> <span class="o">=</span> <span class="s1">&#39;Expiration time has already passed.&#39;</span>
+                        <span class="n">error</span> <span class="o">=</span> <span class="s1">&#39;Expiration time is zero.&#39;</span>
                         <span class="c1"># send_error_message(comment.author.name, comment.permalink, error)</span>
                         <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
                         <span class="k">continue</span>
+                    <span class="n">exp_unit</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s1">&#39;exp_unit&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+                    <span class="k">if</span> <span class="n">exp_unit</span> <span class="ow">in</span> <span class="n">minute_tokens</span><span class="p">:</span>
+                        <span class="n">timedelta</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">minutes</span><span class="o">=</span><span class="n">exp_digit</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">exp_digit</span> <span class="o">&gt;=</span> <span class="mi">24</span><span class="p">:</span>  <span class="c1"># ignore days</span>
+                            <span class="c1"># Send message and ignore comment</span>
+                            <span class="n">error</span> <span class="o">=</span> <span class="s1">&#39;Expiration time is &gt;= 1 day.&#39;</span>
+                            <span class="c1"># send_error_message(comment.author.name, comment.permalink, error)</span>
+                            <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+                            <span class="k">continue</span>
+                        <span class="n">timedelta</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="n">exp_digit</span><span class="p">)</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;timedelta = </span><span class="si">{timedelta.seconds}</span><span class="s1"> seconds&#39;</span><span class="p">)</span>
 
-                    <span class="c1"># Strip expiration time</span>
-                    <span class="n">comment</span><span class="o">.</span><span class="n">body</span> <span class="o">=</span> <span class="n">comment</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="n">match</span><span class="o">.</span><span class="n">end</span><span class="p">():]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                <span class="c1"># Apply expiration time to comment date</span>
+                <span class="n">comment_datetime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="n">comment</span><span class="o">.</span><span class="n">created_utc</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span>
+                <span class="n">expiration_datetime</span> <span class="o">=</span> <span class="n">comment_datetime</span> <span class="o">+</span> <span class="n">timedelta</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;comment_datetime = </span><span class="si">{comment_datetime}</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;expiration_datetime = </span><span class="si">{expiration_datetime}</span><span class="s1">&#39;</span><span class="p">)</span>
 
-                    <span class="c1"># Evaluate message</span>
-                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">comment</span><span class="o">.</span><span class="n">body</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">100</span><span class="p">:</span>
-                        <span class="c1"># Send message and ignore comment</span>
-                        <span class="n">error</span> <span class="o">=</span> <span class="s1">&#39;Message length &gt; 100 characters.&#39;</span>
-                        <span class="c1"># send_error_message(comment.author.name, comment.permalink, error)</span>
-                        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
-                        <span class="k">continue</span>
+                <span class="c1"># Ignore if expire time passed</span>
+                <span class="k">if</span> <span class="n">expiration_datetime</span> <span class="o">&lt;</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">):</span>
+                    <span class="c1"># Send message and ignore comment</span>
+                    <span class="n">error</span> <span class="o">=</span> <span class="s1">&#39;Expiration time has already passed.&#39;</span>
+                    <span class="c1"># send_error_message(comment.author.name, comment.permalink, error)</span>
+                    <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+                    <span class="k">continue</span>
 
-                    <span class="n">match</span> <span class="o">=</span> <span class="n">message_re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">comment</span><span class="o">.</span><span class="n">body</span><span class="p">)</span>
-                    <span class="k">if</span> <span class="ow">not</span> <span class="n">match</span><span class="p">:</span>
-                        <span class="c1"># Send message and ignore comment</span>
-                        <span class="n">error</span> <span class="o">=</span> <span class="s1">&#39;Message not properly formatted.&#39;</span>
-                        <span class="c1"># send_error_message(comment.author.name, comment.permalink, error)</span>
-                        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
-                        <span class="k">continue</span>
+                <span class="c1"># Strip expiration time</span>
+                <span class="n">comment</span><span class="o">.</span><span class="n">body</span> <span class="o">=</span> <span class="n">comment</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="n">match</span><span class="o">.</span><span class="n">end</span><span class="p">():]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
 
-                    <span class="n">message</span> <span class="o">=</span> <span class="n">comment</span><span class="o">.</span><span class="n">body</span>
-                    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;message = </span><span class="si">{message}</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="c1"># Evaluate message</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">comment</span><span class="o">.</span><span class="n">body</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">100</span><span class="p">:</span>
+                    <span class="c1"># Send message and ignore comment</span>
+                    <span class="n">error</span> <span class="o">=</span> <span class="s1">&#39;Message length &gt; 100 characters.&#39;</span>
+                    <span class="c1"># send_error_message(comment.author.name, comment.permalink, error)</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+                    <span class="k">continue</span>
 
-                    <span class="c1"># Save message data to MySQL-compatible database</span>
-                    <span class="n">db</span><span class="o">.</span><span class="n">save_message</span><span class="p">(</span><span class="n">comment</span><span class="o">.</span><span class="n">permalink</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">expiration_datetime</span><span class="p">,</span> <span class="n">comment</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                <span class="n">match</span> <span class="o">=</span> <span class="n">message_re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">comment</span><span class="o">.</span><span class="n">body</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">match</span><span class="p">:</span>
+                    <span class="c1"># Send message and ignore comment</span>
+                    <span class="n">error</span> <span class="o">=</span> <span class="s1">&#39;Message not properly formatted.&#39;</span>
+                    <span class="c1"># send_error_message(comment.author.name, comment.permalink, error)</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+                    <span class="k">continue</span>
 
-                    <span class="c1"># Reply and send PM</span>
-                    <span class="n">send_confirmation</span><span class="p">(</span><span class="n">comment</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">comment</span><span class="o">.</span><span class="n">permalink</span><span class="p">,</span> <span class="n">expiration_datetime</span><span class="p">)</span>
-                    <span class="n">send_confirmation_reply</span><span class="p">(</span><span class="n">comment</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">comment</span><span class="o">.</span><span class="n">permalink</span><span class="p">,</span> <span class="n">expiration_datetime</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
+                <span class="n">message</span> <span class="o">=</span> <span class="n">comment</span><span class="o">.</span><span class="n">body</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;message = </span><span class="si">{message}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+                <span class="c1"># Save message data to MySQL-compatible database</span>
+                <span class="n">db</span><span class="o">.</span><span class="n">save_message</span><span class="p">(</span><span class="n">comment</span><span class="o">.</span><span class="n">permalink</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">expiration_datetime</span><span class="p">,</span> <span class="n">comment</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+                <span class="c1"># Reply and send PM</span>
+                <span class="n">send_confirmation</span><span class="p">(</span><span class="n">comment</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">comment</span><span class="o">.</span><span class="n">permalink</span><span class="p">,</span> <span class="n">expiration_datetime</span><span class="p">)</span>
+                <span class="n">send_confirmation_reply</span><span class="p">(</span><span class="n">comment</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">comment</span><span class="o">.</span><span class="n">permalink</span><span class="p">,</span> <span class="n">expiration_datetime</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
 
         <span class="k">except</span> <span class="n">urllib3</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">ConnectionError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;urllib3: </span><span class="si">{err}</span><span class="s1">&#39;</span><span class="p">)</span>
@@ -447,25 +456,25 @@
     <span class="k">return</span> <span class="n">comment_id</span></div>
 
 
-<div class="viewcode-block" id="have_replied"><a class="viewcode-back" href="../../clashcallerbotreddit.html#clashcallerbotreddit.search.have_replied">[docs]</a><span class="k">def</span> <span class="nf">have_replied</span><span class="p">(</span><span class="n">cmnt</span><span class="p">:</span> <span class="n">reddit</span><span class="o">.</span><span class="n">comment</span><span class="p">,</span> <span class="n">usr_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<div class="viewcode-block" id="have_replied"><a class="viewcode-back" href="../../clashcallerbotreddit.html#clashcallerbotreddit.search.have_replied">[docs]</a><span class="k">def</span> <span class="nf">have_replied</span><span class="p">(</span><span class="n">cmnt_obj</span><span class="p">:</span> <span class="n">reddit</span><span class="o">.</span><span class="n">comment</span><span class="p">,</span> <span class="n">usr_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Check if user has replied to a comment.</span>
 
 <span class="sd">    Function checks reply authors of given comment for given user.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        cmnt:       Comment to get replies of.</span>
+<span class="sd">        cmnt_obj:   Comment object to get replies of.</span>
 <span class="sd">        usr_name:   Name of bot to check for.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        True if successful, False otherwise.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">cmnt</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>  <span class="c1"># Refreshes attributes of comment to load replies</span>
+        <span class="n">cmnt_obj</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>  <span class="c1"># Refreshes attributes of comment to load replies</span>
 
         <span class="c1"># Keep fetching 20 new replies until it finishes</span>
         <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
-                <span class="n">replies</span> <span class="o">=</span> <span class="n">cmnt</span><span class="o">.</span><span class="n">replies</span><span class="o">.</span><span class="n">replace_more</span><span class="p">()</span>
+                <span class="n">replies</span> <span class="o">=</span> <span class="n">cmnt_obj</span><span class="o">.</span><span class="n">replies</span><span class="o">.</span><span class="n">replace_more</span><span class="p">()</span>
                 <span class="k">break</span>
             <span class="k">except</span> <span class="n">praw</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">PRAWException</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
                 <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;comment.replies.replace_more: </span><span class="si">{err}</span><span class="s1">&#39;</span><span class="p">)</span>
