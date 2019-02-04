@@ -72,7 +72,6 @@ def main():
         try:
             # Search recent comments for ClashCaller! string
             for comment in subreddit.stream.comments():
-                db.open_connections()
                 match = clashcaller_re.search(comment.body)
                 if not match:
                     # Skip comments that don't have the clashcaller string
@@ -155,7 +154,9 @@ def main():
                 logger.debug(f'message = {message}')
 
                 # Save message data to MySQL-compatible database
+                db.open_connections()
                 db.save_message(comment.permalink, message, expiration_datetime, comment.author.name)
+                db.close_connections()
 
                 # Reply and send PM
                 send_confirmation(comment.author.name, comment.permalink, expiration_datetime)
@@ -185,9 +186,6 @@ def main():
             logger.exception(f'AttributeError: {err}')
             time.sleep(10)
             pass
-
-        finally:
-            db.close_connections()
 
 
 def send_confirmation(u_name: str, link: str, exp: datetime.datetime) -> None:
