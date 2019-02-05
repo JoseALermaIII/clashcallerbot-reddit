@@ -189,13 +189,13 @@ def main():
             pass
 
 
-def send_confirmation(u_name: str, link: str, exp: datetime.datetime) -> None:
+def send_confirmation(usr_name: str, link: str, exp: datetime.datetime) -> None:
     """Send confirmation to reddit user.
 
     Function sends given user confirmation of given expiration time with given link.
 
     Args:
-        u_name: username of user.
+        usr_name: username of user.
         link:   Permalink of comment.
         exp:    Expiration datetime of call.
 
@@ -213,19 +213,19 @@ Thank you for entrusting us with your warring needs,
 [^(More info)](https://www.reddit.com/r/{reddituser.name}/comments/4e9vo7/clashcallerbot_info/)
               """
     try:
-        reddit.redditor(u_name).message(subject, message)
+        reddit.redditor(usr_name).message(subject, message)
 
     except praw.exceptions.PRAWException as err:
         logger.exception(f'send_confirmation: {err}')
 
 
-def send_error_message(u_name: str, link: str, error: str) -> None:
+def send_error_message(usr_name: str, link: str, error: str) -> None:
     """Send error message to reddit user.
 
     Function sends given error to given user.
 
     Args:
-        u_name:   username of user.
+        usr_name:   username of user.
         link:     Permalink of comment.
         error:    Error to send to user.
 
@@ -244,7 +244,7 @@ Thank you for entrusting us with your warring needs,
 [^(More info)](https://www.reddit.com/r/{reddituser.name}/comments/4e9vo7/clashcallerbot_info/)
               """
     try:
-        reddit.redditor(u_name).message(subject, message)
+        reddit.redditor(usr_name).message(subject, message)
 
     except praw.exceptions.PRAWException as err:
         logger.exception(f'send_error_message: {err}')
