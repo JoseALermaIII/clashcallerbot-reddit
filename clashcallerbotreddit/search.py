@@ -35,6 +35,7 @@ logger = logging.getLogger('search')
 reddit = praw.Reddit('clashcallersearch')  # Section name in praw.ini
 #subreddit = reddit.subreddit('ClashCallerBot')  # Limit scope for testing purposes
 subreddit = reddit.subreddit('all')  # Production mode
+reddituser = reddit.user.me()
 
 # Regular expressions
 clashcaller_re = re.compile(r'''
@@ -79,10 +80,10 @@ def main():
                 if not is_recent(comment.created_utc, start_time):
                     # Skip comments that are before start_time
                     continue
-                if comment.author.name == reddit.user.me().name:
+                if comment.author.name == reddituser.name:
                     # Skip bot's comments
                     continue
-                if have_replied(comment, reddit.user.me().name):
+                if have_replied(comment, reddituser.name):
                     # Skip comments already replied to
                     continue
                 logger.info(f'In: {comment}')
@@ -199,17 +200,17 @@ def send_confirmation(u_name: str, link: str, exp: datetime.datetime) -> None:
         exp:    Expiration datetime of call.
 
     """
-    subject = 'ClashCallerBot Confirmation Sent'
+    subject = f'{reddituser.name} Confirmation Sent'
     permalink = 'https://np.reddit.com' + link  # Permalinks are missing prefix
     exp = datetime.datetime.strftime(exp, '%b. %d, %Y at %I:%M:%S %p %Z')
-    message = f"""ClashCallerBot here!  
+    message = f"""{reddituser.name} here!  
 I will be messaging you on [**{exp}**](http://www.wolframalpha.com/input/?i={exp} To Local Time) to remind 
 you of [**this call.**]({permalink})
 
 Thank you for entrusting us with your warring needs,  
-- ClashCallerBot
+- {reddituser.name}
 
-[^(More info)](https://www.reddit.com/r/ClashCallerBot/comments/4e9vo7/clashcallerbot_info/)
+[^(More info)](https://www.reddit.com/r/{reddituser.name}/comments/4e9vo7/clashcallerbot_info/)
               """
     try:
         reddit.redditor(u_name).message(subject, message)
@@ -231,16 +232,16 @@ def send_error_message(u_name: str, link: str, error: str) -> None:
     """
     subject = 'Unable to save call due to error'
     permalink = 'https://np.reddit.com' + link  # Permalinks are missing prefix
-    message = f"""ClashCallerBot here!  
+    message = f"""{reddituser.name} here!  
 I regret to inform you that I could not save [**your call**]({permalink}) because of:
 {error}  
 Please delete your call to reduce spam and try again after making the
 above change.
 
 Thank you for entrusting us with your warring needs,  
-- ClashCallerBot
+- {reddituser.name}
 
-[^(More info)](https://www.reddit.com/r/ClashCallerBot/comments/4e9vo7/clashcallerbot_info/)
+[^(More info)](https://www.reddit.com/r/{reddituser.name}/comments/4e9vo7/clashcallerbot_info/)
               """
     try:
         reddit.redditor(u_name).message(subject, message)
@@ -270,18 +271,18 @@ I will be messaging you on [**{pretty_exp}**](http://www.wolframalpha.com/input/
 to remind you of [**this call.**]({permalink})
 
 Others can tap
-[**REMIND ME, TOO**](https://www.reddit.com/message/compose/?to=ClashCallerBot&subject=AddMe!&message=[{link}]{exp}{message_arg}) 
+[**REMIND ME, TOO**](https://www.reddit.com/message/compose/?to={reddituser.name}&subject=AddMe!&message=[{link}]{exp}{message_arg}) 
 to send me a PM to be added to the call reminder and reduce spam.
 
 You can also tap 
-[**REMOVE ME**](https://www.reddit.com/message/compose/?to=ClashCallerBot&subject=DeleteMe!&message=[{link}]) to remove
-yourself from the call reminder or
-[**MY CALLS**](https://www.reddit.com/message/compose/?to=ClashCallerBot&subject=MyCalls!&message=El Zilcho) 
+[**REMOVE ME**](https://www.reddit.com/message/compose/?to={reddituser.name}&subject=DeleteMe!&message=[{link}]) to 
+remove yourself from the call reminder or
+[**MY CALLS**](https://www.reddit.com/message/compose/?to={reddituser.name}&subject=MyCalls!&message=El Zilcho) 
 to list your current calls.
 
 Thank you for entrusting us with your warring needs!
  
-[^(More info)](https://www.reddit.com/r/ClashCallerBot/comments/4e9vo7/clashcallerbot_info/)
+[^(More info)](https://www.reddit.com/r/{reddituser.name}/comments/4e9vo7/clashcallerbot_info/)
               """
     comment_id = None
     try:
