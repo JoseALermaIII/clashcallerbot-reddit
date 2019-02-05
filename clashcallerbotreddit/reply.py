@@ -23,7 +23,7 @@ import datetime
 import time
 
 from clashcallerbotreddit.database import ClashCallerDatabase
-from clashcallerbotreddit.search import is_recent, message_re
+from clashcallerbotreddit.search import is_recent, message_re, send_message
 from clashcallerbotreddit import LOGGING, config
 
 # Logger
@@ -280,7 +280,7 @@ If you wish to delete a call, copy the entry in the permalink column and paste i
 Thank you for entrusting us with your warring needs,  
 - ClashCallerBot
                     """
-    msg_obj.author.message('ClashCallerBot List Calls', calls_message)
+    send_message(msg_obj.author, f'{reddituser.name} List Calls', calls_message)
     logger.info(f'Inbox list calls list sent: {msg_obj.id}.')
     # Delete message
     msg_obj.delete()
@@ -375,7 +375,7 @@ Thank you for entrusting us with your warring needs,
 [^(More info)](https://www.reddit.com/r/ClashCallerBot/comments/4e9vo7/clashcallerbot_info/)
               """
     try:
-        reddit.redditor(usr).message(subject, message)
+        send_message(usr, subject, message)
 
     except praw.exceptions.PRAWException as err:
         logger.exception(f'send_reminder: {err}')
