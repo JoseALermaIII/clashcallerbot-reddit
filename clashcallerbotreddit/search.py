@@ -160,7 +160,7 @@ def main():
 
                 # Reply and send PM
                 send_confirmation(comment.author.name, comment.permalink, expiration_datetime)
-                send_confirmation_reply(comment.id, comment.permalink, expiration_datetime, message)
+                send_confirmation_reply(comment, expiration_datetime, message)
 
         except urllib3.exceptions.ConnectionError as err:
             logger.exception(f'urllib3: {err}')
@@ -249,20 +249,20 @@ Thank you for entrusting us with your warring needs,
         logger.exception(f'send_error_message: {err}')
 
 
-def send_confirmation_reply(cid: str, link: str, exp: datetime.datetime, message_arg: str):
+def send_confirmation_reply(cmnt_obj: reddit.comment, exp: datetime.datetime, message_arg: str):
     """Replies to a comment.
 
-    Function replies to a given comment ID with a given message.
+    Function replies to a given comment object with a given message.
 
     Args:
-        cid:    Comment ID to reply to.
-        link:   Permalink of comment.
+        cmnt_obj: Comment object to reply to.
         exp:    Expiration datetime of call.
         message_arg: Original call message.
 
     Returns:
         id of new comment if successful, None otherwise
     """
+    link = cmnt_obj.permalink
     permalink = 'https://np.reddit.com' + link  # Permalinks are missing prefix
     pretty_exp = datetime.datetime.strftime(exp, '%b. %d, %Y at %I:%M:%S %p %Z')  # Human readable datetime
     message = f"""
@@ -285,8 +285,7 @@ Thank you for entrusting us with your warring needs!
               """
     comment_id = None
     try:
-        comment_obj = reddit.comment(id=cid)
-        comment_id = comment_obj.reply(message)
+        comment_id = cmnt_obj.reply(message)
 
     except praw.exceptions.PRAWException as err:
         logger.exception(f'send_confirmation_reply: {err}')
