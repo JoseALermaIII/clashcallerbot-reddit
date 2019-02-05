@@ -269,16 +269,16 @@ def process_my_calls(msg_obj: praw.reddit.models.Message):
                      spacers['right'])
         call_table.append(table_row)
     call_table_string = '\n'.join(''.join(element for element in row) for row in call_table)
-    calls_message = f"""ClashCallerBot here!  
+    calls_message = f"""{reddituser.name} here!  
 Your current calls are as follows:
 
 {call_table_string}
 
 If you wish to delete a call, copy the entry in the permalink column and paste it between the brackets in 
-[**THIS PM**](https://www.reddit.com/message/compose/?to=ClashCallerBot&subject=DeleteMe!&message=[PASTE_HERE]).
+[**THIS PM**](https://www.reddit.com/message/compose/?to={reddituser.name}&subject=DeleteMe!&message=[PASTE_HERE]).
 
 Thank you for entrusting us with your warring needs,  
-- ClashCallerBot
+- {reddituser.name}
                     """
     send_message(msg_obj.author, f'{reddituser.name} List Calls', calls_message)
     logger.info(f'Inbox list calls list sent: {msg_obj.id}.')
@@ -362,7 +362,7 @@ def send_reminder(link: str, msg: str, usr: str)-> None:
          usr:   User to send reminder to.
 
     """
-    subject = 'ClashCallerBot Private Message Here!'
+    subject = f'{reddituser.name} Private Message Here!'
     permalink = 'https://np.reddit.com' + link  # Permalinks are missing prefix
     parent = get_parent(link)
     message = f"""**The message:** {msg}  
@@ -370,9 +370,9 @@ def send_reminder(link: str, msg: str, usr: str)-> None:
 **The parent comment or submission:** {parent}  
 
 Thank you for entrusting us with your warring needs,  
-- ClashCallerBot
+- {reddituser.name}
 
-[^(More info)](https://www.reddit.com/r/ClashCallerBot/comments/4e9vo7/clashcallerbot_info/)
+[^(More info)](https://www.reddit.com/r/{reddituser.name}/comments/4e9vo7/clashcallerbot_info/)
               """
     try:
         send_message(usr, subject, message)
