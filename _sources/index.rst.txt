@@ -24,9 +24,9 @@ Usage can be inferred from the regular expressions used to process each comment 
 
 .. literalinclude:: ../../clashcallerbotreddit/search.py
     :linenos:
-    :lineno-start: 39
+    :lineno-start: 40
     :language: python
-    :lines: 39-62
+    :lines: 40-63
 
 To sum:
 

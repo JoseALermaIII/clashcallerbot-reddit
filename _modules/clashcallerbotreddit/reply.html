@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>clashcallerbotreddit.reply &mdash; clashcallerbot-reddit 2.6.5 documentation</title>
+  <title>clashcallerbotreddit.reply &mdash; clashcallerbot-reddit 2.6.6 documentation</title>
   
 
   
@@ -184,7 +184,7 @@
 <span class="kn">import</span> <span class="nn">time</span>
 
 <span class="kn">from</span> <span class="nn">clashcallerbotreddit.database</span> <span class="k">import</span> <span class="n">ClashCallerDatabase</span>
-<span class="kn">from</span> <span class="nn">clashcallerbotreddit.search</span> <span class="k">import</span> <span class="n">is_recent</span><span class="p">,</span> <span class="n">message_re</span>
+<span class="kn">from</span> <span class="nn">clashcallerbotreddit.search</span> <span class="k">import</span> <span class="n">is_recent</span><span class="p">,</span> <span class="n">message_re</span><span class="p">,</span> <span class="n">send_message</span>
 <span class="kn">from</span> <span class="nn">clashcallerbotreddit</span> <span class="k">import</span> <span class="n">LOGGING</span><span class="p">,</span> <span class="n">config</span>
 
 <span class="c1"># Logger</span>
@@ -430,18 +430,18 @@
                      <span class="n">spacers</span><span class="p">[</span><span class="s1">&#39;right&#39;</span><span class="p">])</span>
         <span class="n">call_table</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">table_row</span><span class="p">)</span>
     <span class="n">call_table_string</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">element</span> <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">row</span><span class="p">)</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">call_table</span><span class="p">)</span>
-    <span class="n">calls_message</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;&quot;&quot;ClashCallerBot here!  </span>
+    <span class="n">calls_message</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;&quot;&quot;</span><span class="si">{reddituser.name}</span><span class="s2"> here!  </span>
 <span class="s2">Your current calls are as follows:</span>
 
 <span class="si">{call_table_string}</span><span class="s2"></span>
 
 <span class="s2">If you wish to delete a call, copy the entry in the permalink column and paste it between the brackets in </span>
-<span class="s2">[**THIS PM**](https://www.reddit.com/message/compose/?to=ClashCallerBot&amp;subject=DeleteMe!&amp;message=[PASTE_HERE]).</span>
+<span class="s2">[**THIS PM**](https://www.reddit.com/message/compose/?to=</span><span class="si">{reddituser.name}</span><span class="s2">&amp;subject=DeleteMe!&amp;message=[PASTE_HERE]).</span>
 
 <span class="s2">Thank you for entrusting us with your warring needs,  </span>
-<span class="s2">- ClashCallerBot</span>
+<span class="s2">- </span><span class="si">{reddituser.name}</span><span class="s2"></span>
 <span class="s2">                    &quot;&quot;&quot;</span>
-    <span class="n">msg_obj</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">message</span><span class="p">(</span><span class="s1">&#39;ClashCallerBot List Calls&#39;</span><span class="p">,</span> <span class="n">calls_message</span><span class="p">)</span>
+    <span class="n">send_message</span><span class="p">(</span><span class="n">msg_obj</span><span class="o">.</span><span class="n">author</span><span class="p">,</span> <span class="n">f</span><span class="s1">&#39;</span><span class="si">{reddituser.name}</span><span class="s1"> List Calls&#39;</span><span class="p">,</span> <span class="n">calls_message</span><span class="p">)</span>
     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Inbox list calls list sent: </span><span class="si">{msg_obj.id}</span><span class="s1">.&#39;</span><span class="p">)</span>
     <span class="c1"># Delete message</span>
     <span class="n">msg_obj</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span></div>
@@ -467,7 +467,7 @@
         <span class="n">comments</span> <span class="o">=</span> <span class="n">reddit</span><span class="o">.</span><span class="n">redditor</span><span class="p">(</span><span class="n">usr</span><span class="p">)</span><span class="o">.</span><span class="n">comments</span><span class="o">.</span><span class="n">new</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">comment</span> <span class="ow">in</span> <span class="n">comments</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">is_recent</span><span class="p">(</span><span class="n">comment</span><span class="o">.</span><span class="n">created_utc</span><span class="p">,</span> <span class="n">archive_time</span><span class="p">):</span>
-                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Skipping comments after </span><span class="si">{archive_time}</span><span class="s1">.&#39;</span><span class="p">)</span>
+                <span class="c1">#logger.info(f&#39;Skipping comments after {archive_time}.&#39;)</span>
                 <span class="k">return</span> <span class="kc">None</span>
 
             <span class="k">if</span> <span class="n">comment</span><span class="o">.</span><span class="n">score</span> <span class="o">&lt;=</span> <span class="n">limit</span><span class="p">:</span>
@@ -523,7 +523,7 @@
 <span class="sd">         usr:   User to send reminder to.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">subject</span> <span class="o">=</span> <span class="s1">&#39;ClashCallerBot Private Message Here!&#39;</span>
+    <span class="n">subject</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;</span><span class="si">{reddituser.name}</span><span class="s1"> Private Message Here!&#39;</span>
     <span class="n">permalink</span> <span class="o">=</span> <span class="s1">&#39;https://np.reddit.com&#39;</span> <span class="o">+</span> <span class="n">link</span>  <span class="c1"># Permalinks are missing prefix</span>
     <span class="n">parent</span> <span class="o">=</span> <span class="n">get_parent</span><span class="p">(</span><span class="n">link</span><span class="p">)</span>
     <span class="n">message</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;&quot;&quot;**The message:** </span><span class="si">{msg}</span><span class="s2">  </span>
@@ -531,12 +531,12 @@
 <span class="s2">**The parent comment or submission:** </span><span class="si">{parent}</span><span class="s2">  </span>
 
 <span class="s2">Thank you for entrusting us with your warring needs,  </span>
-<span class="s2">- ClashCallerBot</span>
+<span class="s2">- </span><span class="si">{reddituser.name}</span><span class="s2"></span>
 
-<span class="s2">[^(More info)](https://www.reddit.com/r/ClashCallerBot/comments/4e9vo7/clashcallerbot_info/)</span>
+<span class="s2">[^(More info)](https://www.reddit.com/r/</span><span class="si">{reddituser.name}</span><span class="s2">/comments/4e9vo7/clashcallerbot_info/)</span>
 <span class="s2">              &quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">reddit</span><span class="o">.</span><span class="n">redditor</span><span class="p">(</span><span class="n">usr</span><span class="p">)</span><span class="o">.</span><span class="n">message</span><span class="p">(</span><span class="n">subject</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
+        <span class="n">send_message</span><span class="p">(</span><span class="n">usr</span><span class="p">,</span> <span class="n">subject</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
 
     <span class="k">except</span> <span class="n">praw</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">PRAWException</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;send_reminder: </span><span class="si">{err}</span><span class="s1">&#39;</span><span class="p">)</span></div>

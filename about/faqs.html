@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>FAQs &mdash; clashcallerbot-reddit 2.6.5 documentation</title>
+  <title>FAQs &mdash; clashcallerbot-reddit 2.6.6 documentation</title>
   
 
   
@@ -212,8 +212,7 @@ PM.</p>
 <div class="section" id="what-options-does-it-have">
 <h2>What options does it have?<a class="headerlink" href="#what-options-does-it-have" title="Permalink to this headline">¶</a></h2>
 <p>Usage can be inferred from the regular expressions used to process each comment in <a class="reference internal" href="../clashcallerbotreddit.html#module-clashcallerbotreddit.search" title="clashcallerbotreddit.search"><code class="xref py py-mod docutils literal notranslate"><span class="pre">clashcallerbotreddit.search</span></code></a>:</p>
-<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>39
-40
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>40
 41
 42
 43
@@ -235,7 +234,8 @@ PM.</p>
 59
 60
 61
-62</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1"># Regular expressions</span>
+62
+63</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="c1"># Regular expressions</span>
 <span class="n">clashcaller_re</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
 <span class="s1">                            [!|\s]?             # prefix ! or space (optional)</span>
 <span class="s1">                            [C|c]lash[C|c]aller # lower or camelcase ClashCaller (required)</span>

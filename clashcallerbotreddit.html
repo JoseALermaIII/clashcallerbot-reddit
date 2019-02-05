@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>clashcallerbotreddit package &mdash; clashcallerbot-reddit 2.6.5 documentation</title>
+  <title>clashcallerbotreddit package &mdash; clashcallerbot-reddit 2.6.6 documentation</title>
   
 
   
@@ -808,18 +808,21 @@ applied, then all the comment data is saved to a MySQL-compatible database.</p>
 
 <dl class="function">
 <dt id="clashcallerbotreddit.search.send_confirmation">
-<code class="descclassname">clashcallerbotreddit.search.</code><code class="descname">send_confirmation</code><span class="sig-paren">(</span><em>u_name: str</em>, <em>link: str</em>, <em>exp: datetime.datetime</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/clashcallerbotreddit/search.html#send_confirmation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clashcallerbotreddit.search.send_confirmation" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">clashcallerbotreddit.search.</code><code class="descname">send_confirmation</code><span class="sig-paren">(</span><em>usr_name: str</em>, <em>link: str</em>, <em>exp: datetime.datetime</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/clashcallerbotreddit/search.html#send_confirmation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clashcallerbotreddit.search.send_confirmation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Send confirmation to reddit user.</p>
 <p>Function sends given user confirmation of given expiration time with given link.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>u_name</strong> – username of user.</li>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>usr_name</strong> – username of user.</li>
 <li><strong>link</strong> – Permalink of comment.</li>
 <li><strong>exp</strong> – Expiration datetime of call.</li>
 </ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">None.</p>
 </td>
 </tr>
 </tbody>
@@ -828,16 +831,15 @@ applied, then all the comment data is saved to a MySQL-compatible database.</p>
 
 <dl class="function">
 <dt id="clashcallerbotreddit.search.send_confirmation_reply">
-<code class="descclassname">clashcallerbotreddit.search.</code><code class="descname">send_confirmation_reply</code><span class="sig-paren">(</span><em>cid: str</em>, <em>link: str</em>, <em>exp: datetime.datetime</em>, <em>message_arg: str</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clashcallerbotreddit/search.html#send_confirmation_reply"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clashcallerbotreddit.search.send_confirmation_reply" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">clashcallerbotreddit.search.</code><code class="descname">send_confirmation_reply</code><span class="sig-paren">(</span><em>cmnt_obj: praw.reddit.Reddit.comment</em>, <em>exp: datetime.datetime</em>, <em>message_arg: str</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clashcallerbotreddit/search.html#send_confirmation_reply"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clashcallerbotreddit.search.send_confirmation_reply" title="Permalink to this definition">¶</a></dt>
 <dd><p>Replies to a comment.</p>
-<p>Function replies to a given comment ID with a given message.</p>
+<p>Function replies to a given comment object with a given message.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>cid</strong> – Comment ID to reply to.</li>
-<li><strong>link</strong> – Permalink of comment.</li>
+<li><strong>cmnt_obj</strong> – Comment object to reply to.</li>
 <li><strong>exp</strong> – Expiration datetime of call.</li>
 <li><strong>message_arg</strong> – Original call message.</li>
 </ul>
@@ -852,18 +854,44 @@ applied, then all the comment data is saved to a MySQL-compatible database.</p>
 
 <dl class="function">
 <dt id="clashcallerbotreddit.search.send_error_message">
-<code class="descclassname">clashcallerbotreddit.search.</code><code class="descname">send_error_message</code><span class="sig-paren">(</span><em>u_name: str</em>, <em>link: str</em>, <em>error: str</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/clashcallerbotreddit/search.html#send_error_message"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clashcallerbotreddit.search.send_error_message" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">clashcallerbotreddit.search.</code><code class="descname">send_error_message</code><span class="sig-paren">(</span><em>usr_name: str</em>, <em>link: str</em>, <em>error: str</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/clashcallerbotreddit/search.html#send_error_message"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clashcallerbotreddit.search.send_error_message" title="Permalink to this definition">¶</a></dt>
 <dd><p>Send error message to reddit user.</p>
 <p>Function sends given error to given user.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>u_name</strong> – username of user.</li>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>usr_name</strong> – username of user.</li>
 <li><strong>link</strong> – Permalink of comment.</li>
 <li><strong>error</strong> – Error to send to user.</li>
 </ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">None.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="clashcallerbotreddit.search.send_message">
+<code class="descclassname">clashcallerbotreddit.search.</code><code class="descname">send_message</code><span class="sig-paren">(</span><em>usr_name: str</em>, <em>subject_arg: str</em>, <em>message_arg: str</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/clashcallerbotreddit/search.html#send_message"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clashcallerbotreddit.search.send_message" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send message to reddit user.</p>
+<p>Sends a message to a reddit user with given subject line.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>usr_name</strong> – username of user.</li>
+<li><strong>subject_arg</strong> – Subject line of message.</li>
+<li><strong>message_arg</strong> – Message to send.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">None.</p>
 </td>
 </tr>
 </tbody>

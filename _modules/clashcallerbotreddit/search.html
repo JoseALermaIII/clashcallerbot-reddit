@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>clashcallerbotreddit.search &mdash; clashcallerbot-reddit 2.6.5 documentation</title>
+  <title>clashcallerbotreddit.search &mdash; clashcallerbot-reddit 2.6.6 documentation</title>
   
 
   
@@ -196,6 +196,7 @@
 <span class="n">reddit</span> <span class="o">=</span> <span class="n">praw</span><span class="o">.</span><span class="n">Reddit</span><span class="p">(</span><span class="s1">&#39;clashcallersearch&#39;</span><span class="p">)</span>  <span class="c1"># Section name in praw.ini</span>
 <span class="c1">#subreddit = reddit.subreddit(&#39;ClashCallerBot&#39;)  # Limit scope for testing purposes</span>
 <span class="n">subreddit</span> <span class="o">=</span> <span class="n">reddit</span><span class="o">.</span><span class="n">subreddit</span><span class="p">(</span><span class="s1">&#39;all&#39;</span><span class="p">)</span>  <span class="c1"># Production mode</span>
+<span class="n">reddituser</span> <span class="o">=</span> <span class="n">reddit</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">me</span><span class="p">()</span>
 
 <span class="c1"># Regular expressions</span>
 <span class="n">clashcaller_re</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;&#39;</span>
@@ -233,7 +234,6 @@
         <span class="k">try</span><span class="p">:</span>
             <span class="c1"># Search recent comments for ClashCaller! string</span>
             <span class="k">for</span> <span class="n">comment</span> <span class="ow">in</span> <span class="n">subreddit</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">comments</span><span class="p">():</span>
-                <span class="n">db</span><span class="o">.</span><span class="n">open_connections</span><span class="p">()</span>
                 <span class="n">match</span> <span class="o">=</span> <span class="n">clashcaller_re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">comment</span><span class="o">.</span><span class="n">body</span><span class="p">)</span>
                 <span class="k">if</span> <span class="ow">not</span> <span class="n">match</span><span class="p">:</span>
                     <span class="c1"># Skip comments that don&#39;t have the clashcaller string</span>
@@ -241,11 +241,12 @@
                 <span class="k">if</span> <span class="ow">not</span> <span class="n">is_recent</span><span class="p">(</span><span class="n">comment</span><span class="o">.</span><span class="n">created_utc</span><span class="p">,</span> <span class="n">start_time</span><span class="p">):</span>
                     <span class="c1"># Skip comments that are before start_time</span>
                     <span class="k">continue</span>
-                <span class="k">if</span> <span class="n">comment</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">reddit</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">me</span><span class="p">()</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">comment</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">reddituser</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
                     <span class="c1"># Skip bot&#39;s comments</span>
                     <span class="k">continue</span>
-                <span class="k">if</span> <span class="n">have_replied</span><span class="p">(</span><span class="n">comment</span><span class="p">,</span> <span class="n">reddit</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">me</span><span class="p">()</span><span class="o">.</span><span class="n">name</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">have_replied</span><span class="p">(</span><span class="n">comment</span><span class="p">,</span> <span class="n">reddituser</span><span class="o">.</span><span class="n">name</span><span class="p">):</span>
                     <span class="c1"># Skip comments already replied to</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Skipping </span><span class="si">{comment}</span><span class="s1">: already replied.&#39;</span><span class="p">)</span>
                     <span class="k">continue</span>
                 <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;In: </span><span class="si">{comment}</span><span class="s1">&#39;</span><span class="p">)</span>
 
@@ -316,11 +317,13 @@
                 <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;message = </span><span class="si">{message}</span><span class="s1">&#39;</span><span class="p">)</span>
 
                 <span class="c1"># Save message data to MySQL-compatible database</span>
+                <span class="n">db</span><span class="o">.</span><span class="n">open_connections</span><span class="p">()</span>
                 <span class="n">db</span><span class="o">.</span><span class="n">save_message</span><span class="p">(</span><span class="n">comment</span><span class="o">.</span><span class="n">permalink</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">expiration_datetime</span><span class="p">,</span> <span class="n">comment</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                <span class="n">db</span><span class="o">.</span><span class="n">close_connections</span><span class="p">()</span>
 
                 <span class="c1"># Reply and send PM</span>
                 <span class="n">send_confirmation</span><span class="p">(</span><span class="n">comment</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">comment</span><span class="o">.</span><span class="n">permalink</span><span class="p">,</span> <span class="n">expiration_datetime</span><span class="p">)</span>
-                <span class="n">send_confirmation_reply</span><span class="p">(</span><span class="n">comment</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">comment</span><span class="o">.</span><span class="n">permalink</span><span class="p">,</span> <span class="n">expiration_datetime</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
+                <span class="n">send_confirmation_reply</span><span class="p">(</span><span class="n">comment</span><span class="p">,</span> <span class="n">expiration_datetime</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
 
         <span class="k">except</span> <span class="n">urllib3</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">ConnectionError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;urllib3: </span><span class="si">{err}</span><span class="s1">&#39;</span><span class="p">)</span>
@@ -345,87 +348,108 @@
         <span class="k">except</span> <span class="ne">AttributeError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;AttributeError: </span><span class="si">{err}</span><span class="s1">&#39;</span><span class="p">)</span>
             <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
-            <span class="k">pass</span>
-
-        <span class="k">finally</span><span class="p">:</span>
-            <span class="n">db</span><span class="o">.</span><span class="n">close_connections</span><span class="p">()</span></div>
+            <span class="k">pass</span></div>
 
 
-<div class="viewcode-block" id="send_confirmation"><a class="viewcode-back" href="../../clashcallerbotreddit.html#clashcallerbotreddit.search.send_confirmation">[docs]</a><span class="k">def</span> <span class="nf">send_confirmation</span><span class="p">(</span><span class="n">u_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">link</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">exp</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="send_message"><a class="viewcode-back" href="../../clashcallerbotreddit.html#clashcallerbotreddit.search.send_message">[docs]</a><span class="k">def</span> <span class="nf">send_message</span><span class="p">(</span><span class="n">usr_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">subject_arg</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">message_arg</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Send message to reddit user.</span>
+
+<span class="sd">    Sends a message to a reddit user with given subject line.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">         usr_name: username of user.</span>
+<span class="sd">         subject_arg: Subject line of message.</span>
+<span class="sd">         message_arg: Message to send.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        None.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">reddit</span><span class="o">.</span><span class="n">redditor</span><span class="p">(</span><span class="n">usr_name</span><span class="p">)</span><span class="o">.</span><span class="n">message</span><span class="p">(</span><span class="n">subject_arg</span><span class="p">,</span> <span class="n">message_arg</span><span class="p">)</span>
+
+    <span class="k">except</span> <span class="n">praw</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">PRAWException</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;send_message: </span><span class="si">{err}</span><span class="s1">&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="send_confirmation"><a class="viewcode-back" href="../../clashcallerbotreddit.html#clashcallerbotreddit.search.send_confirmation">[docs]</a><span class="k">def</span> <span class="nf">send_confirmation</span><span class="p">(</span><span class="n">usr_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">link</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">exp</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Send confirmation to reddit user.</span>
 
 <span class="sd">    Function sends given user confirmation of given expiration time with given link.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        u_name: username of user.</span>
+<span class="sd">        usr_name: username of user.</span>
 <span class="sd">        link:   Permalink of comment.</span>
 <span class="sd">        exp:    Expiration datetime of call.</span>
 
+<span class="sd">    Returns:</span>
+<span class="sd">        None.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">subject</span> <span class="o">=</span> <span class="s1">&#39;ClashCallerBot Confirmation Sent&#39;</span>
+    <span class="n">subject</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;</span><span class="si">{reddituser.name}</span><span class="s1"> Confirmation Sent&#39;</span>
     <span class="n">permalink</span> <span class="o">=</span> <span class="s1">&#39;https://np.reddit.com&#39;</span> <span class="o">+</span> <span class="n">link</span>  <span class="c1"># Permalinks are missing prefix</span>
     <span class="n">exp</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">exp</span><span class="p">,</span> <span class="s1">&#39;%b. </span><span class="si">%d</span><span class="s1">, %Y at %I:%M:%S %p %Z&#39;</span><span class="p">)</span>
-    <span class="n">message</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;&quot;&quot;ClashCallerBot here!  </span>
+    <span class="n">message</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;&quot;&quot;</span><span class="si">{reddituser.name}</span><span class="s2"> here!  </span>
 <span class="s2">I will be messaging you on [**</span><span class="si">{exp}</span><span class="s2">**](http://www.wolframalpha.com/input/?i=</span><span class="si">{exp}</span><span class="s2"> To Local Time) to remind </span>
 <span class="s2">you of [**this call.**](</span><span class="si">{permalink}</span><span class="s2">)</span>
 
 <span class="s2">Thank you for entrusting us with your warring needs,  </span>
-<span class="s2">- ClashCallerBot</span>
+<span class="s2">- </span><span class="si">{reddituser.name}</span><span class="s2"></span>
 
-<span class="s2">[^(More info)](https://www.reddit.com/r/ClashCallerBot/comments/4e9vo7/clashcallerbot_info/)</span>
+<span class="s2">[^(More info)](https://www.reddit.com/r/</span><span class="si">{reddituser.name}</span><span class="s2">/comments/4e9vo7/clashcallerbot_info/)</span>
 <span class="s2">              &quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">reddit</span><span class="o">.</span><span class="n">redditor</span><span class="p">(</span><span class="n">u_name</span><span class="p">)</span><span class="o">.</span><span class="n">message</span><span class="p">(</span><span class="n">subject</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
+        <span class="n">send_message</span><span class="p">(</span><span class="n">usr_name</span><span class="p">,</span> <span class="n">subject</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
 
     <span class="k">except</span> <span class="n">praw</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">PRAWException</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;send_confirmation: </span><span class="si">{err}</span><span class="s1">&#39;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="send_error_message"><a class="viewcode-back" href="../../clashcallerbotreddit.html#clashcallerbotreddit.search.send_error_message">[docs]</a><span class="k">def</span> <span class="nf">send_error_message</span><span class="p">(</span><span class="n">u_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">link</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">error</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="send_error_message"><a class="viewcode-back" href="../../clashcallerbotreddit.html#clashcallerbotreddit.search.send_error_message">[docs]</a><span class="k">def</span> <span class="nf">send_error_message</span><span class="p">(</span><span class="n">usr_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">link</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">error</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Send error message to reddit user.</span>
 
 <span class="sd">    Function sends given error to given user.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        u_name:   username of user.</span>
+<span class="sd">        usr_name:   username of user.</span>
 <span class="sd">        link:     Permalink of comment.</span>
 <span class="sd">        error:    Error to send to user.</span>
 
+<span class="sd">    Returns:</span>
+<span class="sd">        None.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">subject</span> <span class="o">=</span> <span class="s1">&#39;Unable to save call due to error&#39;</span>
     <span class="n">permalink</span> <span class="o">=</span> <span class="s1">&#39;https://np.reddit.com&#39;</span> <span class="o">+</span> <span class="n">link</span>  <span class="c1"># Permalinks are missing prefix</span>
-    <span class="n">message</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;&quot;&quot;ClashCallerBot here!  </span>
+    <span class="n">message</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;&quot;&quot;</span><span class="si">{reddituser.name}</span><span class="s2"> here!  </span>
 <span class="s2">I regret to inform you that I could not save [**your call**](</span><span class="si">{permalink}</span><span class="s2">) because of:</span>
 <span class="si">{error}</span><span class="s2">  </span>
 <span class="s2">Please delete your call to reduce spam and try again after making the</span>
 <span class="s2">above change.</span>
 
 <span class="s2">Thank you for entrusting us with your warring needs,  </span>
-<span class="s2">- ClashCallerBot</span>
+<span class="s2">- </span><span class="si">{reddituser.name}</span><span class="s2"></span>
 
-<span class="s2">[^(More info)](https://www.reddit.com/r/ClashCallerBot/comments/4e9vo7/clashcallerbot_info/)</span>
+<span class="s2">[^(More info)](https://www.reddit.com/r/</span><span class="si">{reddituser.name}</span><span class="s2">/comments/4e9vo7/clashcallerbot_info/)</span>
 <span class="s2">              &quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">reddit</span><span class="o">.</span><span class="n">redditor</span><span class="p">(</span><span class="n">u_name</span><span class="p">)</span><span class="o">.</span><span class="n">message</span><span class="p">(</span><span class="n">subject</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
+        <span class="n">send_message</span><span class="p">(</span><span class="n">usr_name</span><span class="p">,</span> <span class="n">subject</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
 
     <span class="k">except</span> <span class="n">praw</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">PRAWException</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;send_error_message: </span><span class="si">{err}</span><span class="s1">&#39;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="send_confirmation_reply"><a class="viewcode-back" href="../../clashcallerbotreddit.html#clashcallerbotreddit.search.send_confirmation_reply">[docs]</a><span class="k">def</span> <span class="nf">send_confirmation_reply</span><span class="p">(</span><span class="n">cid</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">link</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">exp</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">,</span> <span class="n">message_arg</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<div class="viewcode-block" id="send_confirmation_reply"><a class="viewcode-back" href="../../clashcallerbotreddit.html#clashcallerbotreddit.search.send_confirmation_reply">[docs]</a><span class="k">def</span> <span class="nf">send_confirmation_reply</span><span class="p">(</span><span class="n">cmnt_obj</span><span class="p">:</span> <span class="n">reddit</span><span class="o">.</span><span class="n">comment</span><span class="p">,</span> <span class="n">exp</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">,</span> <span class="n">message_arg</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Replies to a comment.</span>
 
-<span class="sd">    Function replies to a given comment ID with a given message.</span>
+<span class="sd">    Function replies to a given comment object with a given message.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        cid:    Comment ID to reply to.</span>
-<span class="sd">        link:   Permalink of comment.</span>
+<span class="sd">        cmnt_obj: Comment object to reply to.</span>
 <span class="sd">        exp:    Expiration datetime of call.</span>
 <span class="sd">        message_arg: Original call message.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        id of new comment if successful, None otherwise</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">link</span> <span class="o">=</span> <span class="n">cmnt_obj</span><span class="o">.</span><span class="n">permalink</span>
     <span class="n">permalink</span> <span class="o">=</span> <span class="s1">&#39;https://np.reddit.com&#39;</span> <span class="o">+</span> <span class="n">link</span>  <span class="c1"># Permalinks are missing prefix</span>
     <span class="n">pretty_exp</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">exp</span><span class="p">,</span> <span class="s1">&#39;%b. </span><span class="si">%d</span><span class="s1">, %Y at %I:%M:%S %p %Z&#39;</span><span class="p">)</span>  <span class="c1"># Human readable datetime</span>
     <span class="n">message</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;&quot;&quot;</span>
@@ -433,23 +457,22 @@
 <span class="s2">to remind you of [**this call.**](</span><span class="si">{permalink}</span><span class="s2">)</span>
 
 <span class="s2">Others can tap</span>
-<span class="s2">[**REMIND ME, TOO**](https://www.reddit.com/message/compose/?to=ClashCallerBot&amp;subject=AddMe!&amp;message=[</span><span class="si">{link}</span><span class="s2">]</span><span class="si">{exp}{message_arg}</span><span class="s2">) </span>
+<span class="s2">[**REMIND ME, TOO**](https://www.reddit.com/message/compose/?to=</span><span class="si">{reddituser.name}</span><span class="s2">&amp;subject=AddMe!&amp;message=[</span><span class="si">{link}</span><span class="s2">]</span><span class="si">{exp}{message_arg}</span><span class="s2">) </span>
 <span class="s2">to send me a PM to be added to the call reminder and reduce spam.</span>
 
 <span class="s2">You can also tap </span>
-<span class="s2">[**REMOVE ME**](https://www.reddit.com/message/compose/?to=ClashCallerBot&amp;subject=DeleteMe!&amp;message=[</span><span class="si">{link}</span><span class="s2">]) to remove</span>
-<span class="s2">yourself from the call reminder or</span>
-<span class="s2">[**MY CALLS**](https://www.reddit.com/message/compose/?to=ClashCallerBot&amp;subject=MyCalls!&amp;message=El Zilcho) </span>
+<span class="s2">[**REMOVE ME**](https://www.reddit.com/message/compose/?to=</span><span class="si">{reddituser.name}</span><span class="s2">&amp;subject=DeleteMe!&amp;message=[</span><span class="si">{link}</span><span class="s2">]) to </span>
+<span class="s2">remove yourself from the call reminder or</span>
+<span class="s2">[**MY CALLS**](https://www.reddit.com/message/compose/?to=</span><span class="si">{reddituser.name}</span><span class="s2">&amp;subject=MyCalls!&amp;message=El Zilcho) </span>
 <span class="s2">to list your current calls.</span>
 
 <span class="s2">Thank you for entrusting us with your warring needs!</span>
 <span class="s2"> </span>
-<span class="s2">[^(More info)](https://www.reddit.com/r/ClashCallerBot/comments/4e9vo7/clashcallerbot_info/)</span>
+<span class="s2">[^(More info)](https://www.reddit.com/r/</span><span class="si">{reddituser.name}</span><span class="s2">/comments/4e9vo7/clashcallerbot_info/)</span>
 <span class="s2">              &quot;&quot;&quot;</span>
     <span class="n">comment_id</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">comment_obj</span> <span class="o">=</span> <span class="n">reddit</span><span class="o">.</span><span class="n">comment</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">cid</span><span class="p">)</span>
-        <span class="n">comment_id</span> <span class="o">=</span> <span class="n">comment_obj</span><span class="o">.</span><span class="n">reply</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+        <span class="n">comment_id</span> <span class="o">=</span> <span class="n">cmnt_obj</span><span class="o">.</span><span class="n">reply</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
 
     <span class="k">except</span> <span class="n">praw</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">PRAWException</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;send_confirmation_reply: </span><span class="si">{err}</span><span class="s1">&#39;</span><span class="p">)</span>
