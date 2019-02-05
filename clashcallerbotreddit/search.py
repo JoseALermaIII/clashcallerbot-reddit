@@ -198,6 +198,9 @@ def send_message(usr_name: str, subject_arg: str, message_arg: str) -> None:
          usr_name: username of user.
          subject_arg: Subject line of message.
          message_arg: Message to send.
+
+    Returns:
+        None.
     """
     try:
         reddit.redditor(usr_name).message(subject_arg, message_arg)
@@ -216,6 +219,8 @@ def send_confirmation(usr_name: str, link: str, exp: datetime.datetime) -> None:
         link:   Permalink of comment.
         exp:    Expiration datetime of call.
 
+    Returns:
+        None.
     """
     subject = f'{reddituser.name} Confirmation Sent'
     permalink = 'https://np.reddit.com' + link  # Permalinks are missing prefix
@@ -246,6 +251,8 @@ def send_error_message(usr_name: str, link: str, error: str) -> None:
         link:     Permalink of comment.
         error:    Error to send to user.
 
+    Returns:
+        None.
     """
     subject = 'Unable to save call due to error'
     permalink = 'https://np.reddit.com' + link  # Permalinks are missing prefix
