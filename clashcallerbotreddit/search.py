@@ -189,6 +189,23 @@ def main():
             pass
 
 
+def send_message(usr_name: str, subject_arg: str, message_arg: str) -> None:
+    """Send message to reddit user.
+
+    Sends a message to a reddit user with given subject line.
+
+    Args:
+         usr_name: username of user.
+         subject_arg: Subject line of message.
+         message_arg: Message to send.
+    """
+    try:
+        reddit.redditor(usr_name).message(subject_arg, message_arg)
+
+    except praw.exceptions.PRAWException as err:
+        logger.exception(f'send_message: {err}')
+
+
 def send_confirmation(usr_name: str, link: str, exp: datetime.datetime) -> None:
     """Send confirmation to reddit user.
 
@@ -213,7 +230,7 @@ Thank you for entrusting us with your warring needs,
 [^(More info)](https://www.reddit.com/r/{reddituser.name}/comments/4e9vo7/clashcallerbot_info/)
               """
     try:
-        reddit.redditor(usr_name).message(subject, message)
+        send_message(usr_name, subject, message)
 
     except praw.exceptions.PRAWException as err:
         logger.exception(f'send_confirmation: {err}')
@@ -244,7 +261,7 @@ Thank you for entrusting us with your warring needs,
 [^(More info)](https://www.reddit.com/r/{reddituser.name}/comments/4e9vo7/clashcallerbot_info/)
               """
     try:
-        reddit.redditor(usr_name).message(subject, message)
+        send_message(usr_name, subject, message)
 
     except praw.exceptions.PRAWException as err:
         logger.exception(f'send_error_message: {err}')
