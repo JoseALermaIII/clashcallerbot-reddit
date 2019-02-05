@@ -306,7 +306,7 @@ def check_comments(usr: str, limit: int = -5)-> None:
         comments = reddit.redditor(usr).comments.new()
         for comment in comments:
             if not is_recent(comment.created_utc, archive_time):
-                logger.info(f'Skipping comments after {archive_time}.')
+                #logger.info(f'Skipping comments after {archive_time}.')
                 return None
 
             if comment.score <= limit:
