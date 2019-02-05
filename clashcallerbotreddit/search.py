@@ -85,6 +85,7 @@ def main():
                     continue
                 if have_replied(comment, reddituser.name):
                     # Skip comments already replied to
+                    logger.debug(f'Skipping {comment}: already replied.')
                     continue
                 logger.info(f'In: {comment}')
 
