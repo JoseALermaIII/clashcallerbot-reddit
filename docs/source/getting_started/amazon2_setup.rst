@@ -27,15 +27,15 @@ orchestration, but worth it.
     * Opted for a ``t3.micro`` instance since that's what's 'in' right now.
       Also used Security Groups to limit access to My IP and used a key pair.
     * It is a good idea to `enable billing alerts`_.
+    * The root volume is deleted on termination of the instance, so I enabled termination protection. Alternatively,
+      the root volume can be `changed to persist`_.
 
 `Configure`_ an :abbr:`EBS (Elastic Block Store)` to store the database. Went with 20 GB since that should be more
 than enough. Also went with magnetic storage because it costs less than SSD storage and the I/O speed is not
 needed right now.
 
-.. note::
+.. tip::
 
-    * The root volume is deleted on termination of the instance, so I enabled termination protection. Alternatively,
-      the root volume can be `changed to persist`_.
     * When connecting from Windows operating systems, I prefer `PuTTY`_/`KiTTY`_, but there is a `doc detailing setup`_.
 
 Next, `secure the EC2 instance`_. It is an old guide, so the only thing that
