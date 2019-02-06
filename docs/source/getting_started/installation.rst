@@ -19,6 +19,7 @@ instance in hopes of minimizing costs.
     centos_setup
     no_root_setup
     amazon_setup
+    amazon2_setup
 
 
 Building Documentation
