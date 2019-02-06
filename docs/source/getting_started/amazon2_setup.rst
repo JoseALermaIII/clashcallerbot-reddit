@@ -59,7 +59,7 @@ needs to be done is adding a new user (with limited access, by default) to run t
 .. _PuTTY: http://www.chiark.greenend.org.uk/~sgtatham/putty/
 .. _KiTTY: http://www.9bis.net/kitty/
 .. _doc detailing setup: http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/putty.html
-.. _secure the EC2 instance: https://aws.amazon.com/articles/1233/
+.. _secure the EC2 instance: https://aws.amazon.com/articles/tips-for-securing-your-ec2-instance/
 .. _root volume snapshot can be made: http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSSnapshots.html
 .. _Install and enable yum-cron:
     https://community.centminmod.com/threads/automatic-nightly-yum-updates-with-yum-cron.1507/?PageSpeed=noscript
