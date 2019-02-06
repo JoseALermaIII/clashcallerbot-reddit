@@ -69,8 +69,8 @@ Setup pip and python
 
 Install some dependencies as the **default user**, not the new one. ::
 
-    sudo yum install gcc python36-devel.x86_64 openssl-devel libffi-devel
-    sudo pip install --upgrade pip
+    sudo yum install gcc python3-devel.x86_64 openssl-devel libffi-devel
+    pip3 install --upgrade pip
 
 As the **new user**, `set up the needed environment`_ and select it from within the package directory::
 
