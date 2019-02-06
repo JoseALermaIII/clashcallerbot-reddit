@@ -86,61 +86,66 @@ From within the virtual environment, run::
 
 .. _set up the needed environment: https://docs.python.org/3.6/library/venv.html#module-venv
 
-Setup MySQL
------------
+Setup MariaDB
+-------------
 
 `Set up a MySQL database within an EBS volume`_ as the **default user**. The guide is for Ubuntu, but setup for Amazon
-Linux 2 is very similar (replace ``apt-get`` with ``yum`` and use ``sudo service mysqld [start|stop]`` to start or
-stop MySQL). Once the EBS volume is created and attached, the **default user** needs to run the following from within
-the EC2 instance to create an XFS filesystem at ``/vol``::
+Linux 2 is very similar (replace ``apt-get`` with ``yum``, ``mysql`` with ``mariadb``, and use
+``sudo systemctl [start|stop] mariadb`` to start or stop MariaDB). Mainly follow the steps for creating and
+attaching an EBS volume. Fear not, the remaining steps will be summarized in this tutorial.
+
+First, once the EBS volume has been created and attached, the **default user** needs to run the following from
+within the EC2 instance to create an XFS filesystem at ``/vol``::
 
     # Create XFS filesystem
-    sudo yum install xfsprogs mysql-server mysql-devel
+    sudo yum install xfsprogs mariadb-server mariadb-devel
     grep -q xfs /proc/filesystems || sudo modprobe xfs
-    sudo mkfs.xfs /dev/sdb # change to wherever volume is mounted
+    sudo mkfs.xfs /dev/sdf # change to wherever volume is mounted
 
     # Mount XFS filesystem
-    echo "/dev/sdb /vol xfs noatime 0 0" | sudo tee -a /etc/fstab
+    echo "/dev/sdf /vol xfs noatime 0 0" | sudo tee -a /etc/fstab
     sudo mkdir -m 000 /vol
     sudo mount /vol
 
 Now that MySQL is installed, it must be configured. ::
 
-    sudo service mysqld start
-    sudo service mysqld status    # Confirm it is running
+    sudo systemctl start mariadb
+    sudo systemctl status mariadb     # Confirm it is running
     sudo mysql_secure_installation    # Say 'y' to everything!
     sudo mysql -uroot -p"password"
 
-From within the MySQL prompt, ``mysql>``, the database can be set up. ::
+From within the MariaDB prompt, ``MariaDB [(none)]>``, the database can be set up. ::
 
     CREATE DATABASE db_name;
     USE db_name;
     CREATE TABLE message_table (id INT UNSIGNED NOT NULL AUTO_INCREMENT, permalink VARCHAR(100), message VARCHAR(100),
-    new_date DATETIME, userID VARCHAR(20), PRIMARY KEY(id));
+    new_date DATETIME, username VARCHAR(20), PRIMARY KEY(id));
     ALTER TABLE message_table AUTO_INCREMENT=1;
-    CREATE TABLE comment_table (id MEDIUMINT NOT NULL, list VARCHAR(35), PRIMARY KEY(id));
-    INSERT INTO comment_table VALUES (1, "'0'");
-    GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, INDEX, ALTER ON db_name.* TO 'botname'@localhost IDENTIFIED BY
-    'password';
-    QUIT
+    GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX, ALTER, CREATE TEMPORARY TABLES, LOCK TABLES ON
+    db_name.* TO 'botname'@localhost IDENTIFIED BY 'password';
+    QUIT;
 
-Make sure that MySQL is stopped with ``sudo service mysqld stop && sudo service mysqld status``, then move MySQL into
-the EBS volume. ::
+.. tip::
+
+    Alternatively, run the ``database.py`` script with the settings specified in :doc:`quickstart`.
+
+Make sure that MySQL is stopped with ``sudo systemctl stop mariadb && sudo systemctl status mariadb``, then move
+MariaDB into the EBS volume. ::
 
     sudo mkdir /vol/etc /vol/lib /vol/log
-    sudo mv /etc/my.cnf /vol/etc/
+    sudo mv /etc/my.cnf.d /vol/etc/
     sudo mv /var/lib/mysql /vol/lib/
-    sudo mv /var/log/mysqld.log /vol/log
+    sudo mv /var/log/mariadb /vol/log/
 
-    sudo ln -s /vol/etc/my.cnf /etc/my.cnf
-    sudo ln -s /vol/log/mysqld.log /var/log/mysqld.log
+    sudo ln -s /vol/etc/my.cnf.d /etc/my.cnf.d
+    sudo ln -s /vol/log/mariadb /var/log/mariadb
 
     sudo mkdir /var/lib/mysql
     echo "/vol/lib/mysql /var/lib/mysql none bind" | sudo tee -a /etc/fstab
     sudo mount /var/lib/mysql
 
-    sudo service mysqld start && sudo service mysqld status
-    sudo chkconfig --level 3 mysqld on  # set to start at boot
+    sudo systemctl start mariadb && sudo systemctl status mariadb
+    sudo systemctl enable mariadb  # set to start at boot
 
 .. _Set up a MySQL database within an EBS volume:
     https://aws.amazon.com/articles/running-mysql-on-amazon-ec2-with-ebs-elastic-block-store/
