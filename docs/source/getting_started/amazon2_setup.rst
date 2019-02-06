@@ -31,8 +31,7 @@ orchestration, but worth it.
       the root volume can be `changed to persist`_.
 
 `Configure`_ an :abbr:`EBS (Elastic Block Store)` to store the database. Went with 20 GB since that should be more
-than enough. Also went with magnetic storage because it costs less than SSD storage and the I/O speed is not
-needed right now.
+than enough. Also went with magnetic storage because it costs less than SSD storage and the I/O speed is not needed.
 
 .. tip::
 
@@ -165,8 +164,8 @@ Once all relevant files have been downloaded and configured, the bot can be star
 
 .. tip::
 
-    * The bot has to login to reddit at least once to refresh the oauth token. Amazon Linux does not have a web browser
-      installed by default, so run ``sudo yum install lynx`` as the **default user** before running the script.
+    * The bot has to login to reddit at least once to refresh the oauth token. Amazon Linux 2 does not have a web
+      browser installed by default, so run ``sudo yum install lynx`` as the **default user** before running the script.
 
 .. _bot's reddit metadata:
     https://praw.readthedocs.io/en/latest/getting_started/configuration/prawini.html#defining-additional-sites
