@@ -36,6 +36,8 @@ needed right now.
 
 .. tip::
 
+    * Adding tags helps keep instances organized, like
+      ``Name: ClashCallerBot, Category: EC2 t3.micro, Stack: Production``, etc
     * When connecting from Windows operating systems, I prefer `PuTTY`_/`KiTTY`_, but there is a `doc detailing setup`_.
 
 Next, `secure the EC2 instance`_. It is an old guide, so the only thing that
