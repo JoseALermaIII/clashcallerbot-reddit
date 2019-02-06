@@ -156,12 +156,17 @@ Setup ClashCallerBot
 Now that python, pip, and MySQL have been set up, the **new user** can download and setup the bot::
 
     source clashcallerbot-reddit/env/bin/activate    # set virtual environment, if needed
+    cd clashcallerbot-reddit  # go to desired source directory
     wget https://github.com/JoseALermaIII/clashcallerbot-reddit/raw/master/update.sh
     chmod +x ./update.sh
     ./update.sh
 
 Next, add the `bot's reddit metadata`_ to `praw-example.ini` and rename to `praw.ini`, then add the database's root and
 desired bot user credentials to `database-example.ini` and rename to `database.ini`.
+
+Then, all requirements can be installed via pip::
+
+    pip install -r requirements.txt
 
 Once all relevant files have been downloaded and configured, the bot can be started::
 
