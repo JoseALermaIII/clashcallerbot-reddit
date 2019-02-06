@@ -81,7 +81,7 @@ From within the virtual environment, run::
 
     pip install -U wheel
     pip install --upgrade pip
-    pip install praw
+    pip install praw==6.0.0  # Still on praw6.0.0, for now
     pip install mysql-connector
 
 .. _set up the needed environment: https://docs.python.org/3.6/library/venv.html#module-venv
