@@ -39,9 +39,9 @@ than enough. Also went with magnetic storage because it costs less than SSD stor
       ``Name: ClashCallerBot, Category: EC2 t3.micro, Stack: Production``, etc
     * When connecting from Windows operating systems, I prefer `PuTTY`_/`KiTTY`_, but there is a `doc detailing setup`_.
 
-Next, `secure the EC2 instance`_. It is an old guide, so the only thing that
-needs to be done is adding a new user (with limited access, by default) to run the bot. At this point, a
-`root volume snapshot can be made`_ to save progress, if persistence was not enabled previously.
+Next, `secure the EC2 instance`_. It is an old guide, so the only thing that needs to be done is adding a new user
+(with limited access, by default) to run the bot. At this point, a `root volume snapshot can be made`_ to save
+progress, if persistence was not enabled previously.
 
 .. tip::
 
