@@ -142,7 +142,8 @@ the EBS volume. ::
     sudo service mysqld start && sudo service mysqld status
     sudo chkconfig --level 3 mysqld on  # set to start at boot
 
-.. _Set up a MySQL database within an EBS volume: https://aws.amazon.com/articles/1663
+.. _Set up a MySQL database within an EBS volume:
+    https://aws.amazon.com/articles/running-mysql-on-amazon-ec2-with-ebs-elastic-block-store/
 
 Setup ClashCallerBot
 --------------------
