@@ -2,14 +2,14 @@ Installation
 ============
 
 This thing has to run 24/7. As a proof of concept, I set it up in an Ubuntu VM for the open alpha and a CentOS VM
-for the open beta. Production version was running on CloudLinux OS at one point, but has since moved to Amazon Linux
-AMI on AWS. If you are using a different OS, your mileage may vary.
+for the open beta. Production version was running on CloudLinux OS in a shared host at one point, but has since moved
+to AWS. If you are using a different OS, your mileage may vary.
 
 Deployment Options
 ------------------
 
 Believe me, the list of where I have not deployed it is shorter. I mostly went with virtual machines for the
-development, and tried putting the production version on a shared host. It has been migrated to an Amazon EC2
+development, and had the production version on a shared host for a bit. It has been migrated to an Amazon EC2
 instance in hopes of minimizing costs.
 
 .. toctree::
@@ -19,6 +19,7 @@ instance in hopes of minimizing costs.
     centos_setup
     no_root_setup
     amazon_setup
+    amazon2_setup
 
 
 Building Documentation

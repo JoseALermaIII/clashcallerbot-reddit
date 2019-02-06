@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Installation &mdash; clashcallerbot-reddit 2.6.6 documentation</title>
+  <title>Installation &mdash; clashcallerbot-reddit 2.6.7 documentation</title>
   
 
   
@@ -91,6 +91,7 @@
 <li class="toctree-l3"><a class="reference internal" href="centos_setup.html">CentOS 7.0 Setup</a></li>
 <li class="toctree-l3"><a class="reference internal" href="no_root_setup.html">No Root Setup</a></li>
 <li class="toctree-l3"><a class="reference internal" href="amazon_setup.html">Amazon Linux AMI Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="amazon2_setup.html">Amazon Linux 2 Setup</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#building-documentation">Building Documentation</a></li>
@@ -176,12 +177,12 @@
   <div class="section" id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
 <p>This thing has to run 24/7. As a proof of concept, I set it up in an Ubuntu VM for the open alpha and a CentOS VM
-for the open beta. Production version was running on CloudLinux OS at one point, but has since moved to Amazon Linux
-AMI on AWS. If you are using a different OS, your mileage may vary.</p>
+for the open beta. Production version was running on CloudLinux OS in a shared host at one point, but has since moved
+to AWS. If you are using a different OS, your mileage may vary.</p>
 <div class="section" id="deployment-options">
 <h2>Deployment Options<a class="headerlink" href="#deployment-options" title="Permalink to this headline">¶</a></h2>
 <p>Believe me, the list of where I have not deployed it is shorter. I mostly went with virtual machines for the
-development, and tried putting the production version on a shared host. It has been migrated to an Amazon EC2
+development, and had the production version on a shared host for a bit. It has been migrated to an Amazon EC2
 instance in hopes of minimizing costs.</p>
 <div class="toctree-wrapper compound">
 <ul>
@@ -193,6 +194,13 @@ instance in hopes of minimizing costs.</p>
 <li class="toctree-l2"><a class="reference internal" href="amazon_setup.html#setup-pip-and-python">Setup pip and python</a></li>
 <li class="toctree-l2"><a class="reference internal" href="amazon_setup.html#setup-mysql">Setup MySQL</a></li>
 <li class="toctree-l2"><a class="reference internal" href="amazon_setup.html#setup-clashcallerbot">Setup ClashCallerBot</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="amazon2_setup.html">Amazon Linux 2 Setup</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="amazon2_setup.html#setup-amazon-linux-2">Setup Amazon Linux 2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="amazon2_setup.html#setup-pip-and-python">Setup pip and python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="amazon2_setup.html#setup-mariadb">Setup MariaDB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="amazon2_setup.html#setup-clashcallerbot">Setup ClashCallerBot</a></li>
 </ul>
 </li>
 </ul>
