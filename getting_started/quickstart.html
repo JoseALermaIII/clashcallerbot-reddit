@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Quickstart &mdash; clashcallerbot-reddit 2.6.7 documentation</title>
+  <title>Quickstart &mdash; clashcallerbot-reddit 2.6.8 documentation</title>
   
 
   
@@ -210,8 +210,10 @@ will install the internal modules into the Python environment so that they can b
 desired bot user credentials to <cite>database-example.ini</cite> and rename to <cite>database.ini</cite>. Then, create a <code class="docutils literal notranslate"><span class="pre">logs</span></code> directory
 by entering <code class="docutils literal notranslate"><span class="pre">mkdir</span> <span class="pre">./logs</span></code> in a terminal window.</p>
 <p>Next, change the following line in <a class="reference internal" href="../clashcallerbotreddit.html#module-clashcallerbotreddit.database" title="clashcallerbotreddit.database"><code class="xref py py-mod docutils literal notranslate"><span class="pre">clashcallerbotreddit.database</span></code></a></p>
-<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>402
-403</pre></div></td><td class="code"><div class="highlight"><pre><span></span>        <span class="s2">&quot;&quot;&quot;Saves given comment data into message_data table.</span>
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>455
+456
+457</pre></div></td><td class="code"><div class="highlight"><pre><span></span>    <span class="c1"># Create the clashcaller database</span>
+    <span class="n">database</span> <span class="o">=</span> <span class="n">ClashCallerDatabase</span><span class="p">(</span><span class="n">config_file</span><span class="o">=</span><span class="n">config</span><span class="p">,</span> <span class="n">root_user</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 
 </pre></div>
 </td></tr></table></div>
@@ -251,8 +253,10 @@ do so, but <abbr title="Your Mileage May Vary">YMMV</abbr>.</p>
 desired bot user credentials to <cite>database-example.ini</cite> and rename to <cite>database.ini</cite>. Then, create a <code class="docutils literal notranslate"><span class="pre">logs</span></code> directory
 by entering <code class="docutils literal notranslate"><span class="pre">mkdir</span> <span class="pre">./logs</span></code> in a terminal window.</p>
 <p>Next, change the following line in <a class="reference internal" href="../clashcallerbotreddit.html#module-clashcallerbotreddit.database" title="clashcallerbotreddit.database"><code class="xref py py-mod docutils literal notranslate"><span class="pre">clashcallerbotreddit.database</span></code></a></p>
-<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>402
-403</pre></div></td><td class="code"><div class="highlight"><pre><span></span>        <span class="s2">&quot;&quot;&quot;Saves given comment data into message_data table.</span>
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>455
+456
+457</pre></div></td><td class="code"><div class="highlight"><pre><span></span>    <span class="c1"># Create the clashcaller database</span>
+    <span class="n">database</span> <span class="o">=</span> <span class="n">ClashCallerDatabase</span><span class="p">(</span><span class="n">config_file</span><span class="o">=</span><span class="n">config</span><span class="p">,</span> <span class="n">root_user</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 
 </pre></div>
 </td></tr></table></div>
