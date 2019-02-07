@@ -89,10 +89,10 @@ From within the virtual environment, run::
 Setup MariaDB
 -------------
 
-`Set up a MySQL database within an EBS volume`_ as the **default user**. The guide is for Ubuntu, but setup for Amazon
-Linux 2 is very similar (replace ``apt-get`` with ``yum``, ``mysql`` with ``mariadb``, and use
+`Set up a MySQL database within an EBS volume`_ as the **default user**. The guide is for MySQL and Ubuntu, but setup
+for MariaDB and Amazon Linux 2 is very similar (replace ``apt-get`` with ``yum``, ``mysql`` with ``mariadb``, and use
 ``sudo systemctl [start|stop] mariadb`` to start or stop MariaDB). Mainly follow the steps for creating and
-attaching an EBS volume. Fear not, the remaining steps will be summarized in this tutorial.
+attaching an EBS volume. Fear not, the remaining steps will be summarized in this guide.
 
 First, once the EBS volume has been created and attached, the **default user** needs to run the following from
 within the EC2 instance to create an XFS filesystem at ``/vol``::
