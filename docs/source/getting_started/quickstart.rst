@@ -41,9 +41,9 @@ Next, change the following line in :mod:`clashcallerbotreddit.database`
 
 .. literalinclude:: ../../../clashcallerbotreddit/database.py
     :linenos:
-    :lineno-start: 402
+    :lineno-start: 455
     :language: python
-    :lines: 402-403
+    :lines: 455-457
 
 to ``database = ClashCallerDatabase(config_file=config, root_user=True)``. This may get updated to be default later.
 
