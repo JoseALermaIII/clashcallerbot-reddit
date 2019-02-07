@@ -107,7 +107,7 @@ within the EC2 instance to create an XFS filesystem at ``/vol``::
     sudo mkdir -m 000 /vol
     sudo mount /vol
 
-Now that MySQL is installed, it must be configured. ::
+Now that MariaDB is installed, it must be configured. ::
 
     sudo systemctl start mariadb
     sudo systemctl status mariadb     # Confirm it is running
@@ -129,7 +129,7 @@ From within the MariaDB prompt, ``MariaDB [(none)]>``, the database can be set u
 
     Alternatively, run the ``database.py`` script with the settings specified in :doc:`quickstart`.
 
-Make sure that MySQL is stopped with ``sudo systemctl stop mariadb && sudo systemctl status mariadb``, then move
+Make sure that MariaDB is stopped with ``sudo systemctl stop mariadb && sudo systemctl status mariadb``, then move
 MariaDB into the EBS volume. ::
 
     sudo mkdir /vol/etc /vol/lib /vol/log
@@ -153,7 +153,7 @@ MariaDB into the EBS volume. ::
 Setup ClashCallerBot
 --------------------
 
-Now that python, pip, and MySQL have been set up, the **new user** can download and setup the bot::
+Now that python, pip, and MariaDB have been set up, the **new user** can download and setup the bot::
 
     source clashcallerbot-reddit/env/bin/activate    # set virtual environment, if needed
     cd clashcallerbot-reddit  # go to desired source directory
