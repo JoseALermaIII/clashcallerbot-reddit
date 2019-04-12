@@ -4,7 +4,7 @@ Quickstart
 This is what you'll need to run **clashcallerbot-reddit** :abbr:`ASAP (As Soon As Possible)`. **clashcallerbot-reddit**
 is developed on various Linux distros, so :doc:`installation` is assumed to be on Linux.
 
-We'll cover running installing into Python and running the scripts directly.
+We'll cover installing into Python and running the scripts directly.
 
 Prerequisites
 -------------
@@ -22,7 +22,7 @@ Prerequisites
 .. _MySQL: https://dev.mysql.com/doc/en/installing.html
 .. _MariaDB: https://mariadb.com/kb/en/library/where-to-download-mariadb/
 
-With these prerequisites met, **clashcallerbot-reddit** can be setup and run.
+With these prerequisites met, **clashcallerbot-reddit** can be set up and run.
 
 Python Installation
 -------------------
@@ -50,7 +50,7 @@ to ``database = ClashCallerDatabase(config_file=config, root_user=True)``. This 
 Starting
 ^^^^^^^^
 
-Once the database script is setup, **clashcallerbot-reddit** can be installed by entering::
+Once the database script is set up, **clashcallerbot-reddit** can be installed by entering::
 
     python3 setup.py install
 
@@ -82,7 +82,7 @@ Setup
     :start-after: ^^^^^
     :end-before: Starting
 
-Now, the MySQL-compatible database can be setup by running :mod:`clashcallerbotreddit.database` directly from within
+Now, the MySQL-compatible database can be set up by running :mod:`clashcallerbotreddit.database` directly from within
 terminal::
 
     python3 -m clashcallerbotreddit.database
@@ -93,7 +93,7 @@ terminal::
 Starting
 ^^^^^^^^
 
-Once the database is setup, the bot can be run by calling :mod:`clashcallerbotreddit.search` and
+Once the database is set up, the bot can be run by calling :mod:`clashcallerbotreddit.search` and
 :mod:`clashcallerbotreddit.reply` directly from within terminal::
 
     python3 -m clashcallerbotreddit.search && python3 -m clashcallerbotreddit.reply
@@ -140,4 +140,4 @@ A bash script is also provided for updating both scripts and can be run directly
 .. note::
 
     * Don't forget to set executable mode with ``chmod +x ./update.sh``.
-    * The ``-f`` and ``-q`` switch silence outputs to certain degrees.
+    * The ``-f`` and ``-q`` switches silence outputs to certain degrees.
